@@ -1,5 +1,10 @@
 package com.mygdx.game.server.model;
 
-public abstract class Entity {
+/**
+ * 
+ * @author elimonent
+ * Something which has a position and an associated sprite name.
+ */
+public abstract class Entity implements Drawable {
 
 }
