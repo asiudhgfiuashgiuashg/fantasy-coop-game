@@ -14,6 +14,9 @@ public class DrawMessage {
 	 * Uids are synchronized between client and server.
 	 */
 	protected String uid;
+	/**
+	 * position in global coordinates
+	 */
 	protected Vector2 position;
 	protected String spriteName;
 	/**
