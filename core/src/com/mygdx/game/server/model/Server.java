@@ -1,4 +1,4 @@
-package com.mygdx.game.server;
+package com.mygdx.game.server.model;
 
 /**
  * 
