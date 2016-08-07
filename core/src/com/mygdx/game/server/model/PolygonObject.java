@@ -10,7 +10,7 @@ import com.mygdx.game.util.CollideablePolygon;
 public abstract class PolygonObject {
 	protected CollideablePolygon polygon;
 	
-	PolygonObject(CollideablePolygon polygon) {
+	protected PolygonObject(CollideablePolygon polygon) {
 		this.polygon = polygon;
 	}
 	
