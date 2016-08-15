@@ -20,11 +20,12 @@ public class CollideablePolygon extends Polygon {
 	private static final Intersector INTERSECTOR = new Intersector();
 
 	public CollideablePolygon(float[] vertices) {
+		super(vertices);
 		if (!enoughVertexData(vertices)) {
 			throw new IllegalArgumentException("Not enough vertex data. Check if you have an odd number of floats or less than 6 floats.");
 		}
 		if (!areVerticesConvex(vertices)) {
-			throw new IllegalArgumentException("Vertices must be specified in counter-clockwise order and must specify a convex polygon");
+			throw new IllegalArgumentException("Vertices must be specified in counter-clockwise order and must specify a convex polygon.");
 		}
 	}
 
@@ -40,6 +41,7 @@ public class CollideablePolygon extends Polygon {
 	/**
 	 * Helper method to help enforce that vertices are convex.
 	 * Method used: http://stackoverflow.com/a/1881201
+	 * This method may give a false negative if the vertices are not specified in counterclockwise order.
 	 * @param vertices
 	 * @return whether polygon specified by these vertices is convex.
 	 */
