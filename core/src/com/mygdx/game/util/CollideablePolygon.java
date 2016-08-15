@@ -21,6 +21,16 @@ public class CollideablePolygon extends Polygon {
 
 	public CollideablePolygon(float[] vertices) {
 		super(vertices);
+		checkVerticesValidity(vertices);
+	}
+
+	/**
+	 * Check if a set of vertices specify a valid polygon.
+	 * A valid polygon is convex and specified counter-clockwise.
+	 * Throw an exception if the vertices are not valid.
+	 * @param vertices
+	 */
+	private void checkVerticesValidity(float[] vertices) {
 		if (!enoughVertexData(vertices)) {
 			throw new IllegalArgumentException("Not enough vertex data. Check if you have an odd number of floats or less than 6 floats.");
 		}
@@ -90,5 +100,11 @@ public class CollideablePolygon extends Polygon {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void setVertices(float[] vertices) {
+		checkVerticesValidity(vertices);
+		super.setVertices(vertices);
 	}
 }
