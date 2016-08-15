@@ -4,12 +4,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 
-import java.awt.geom.Point2D;
 
 /**
  * A Polygon which can detect collision with other polygons.
  * For collision detection to work, a CollideablePolygon must be convex and
- *  the vertices must be specified in counter-clockwise order.
+ * the vertices must be specified in counter-clockwise order.
  *
  * @author elimonent
  */
@@ -28,11 +27,12 @@ public class CollideablePolygon extends Polygon {
 	 * Check if a set of vertices specify a valid polygon.
 	 * A valid polygon is convex and specified counter-clockwise.
 	 * Throw an exception if the vertices are not valid.
+	 *
 	 * @param vertices
 	 */
 	private void checkVerticesValidity(float[] vertices) {
-		if (!enoughVertexData(vertices)) {
-			throw new IllegalArgumentException("Not enough vertex data. Check if you have an odd number of floats or less than 6 floats.");
+		if (!notOddNumberOf(vertices)) {
+			throw new IllegalArgumentException("The vertex array must have an even number of floats");
 		}
 		if (!areVerticesConvex(vertices)) {
 			throw new IllegalArgumentException("Vertices must be specified in counter-clockwise order and must specify a convex polygon.");
@@ -52,6 +52,7 @@ public class CollideablePolygon extends Polygon {
 	 * Helper method to help enforce that vertices are convex.
 	 * Method used: http://stackoverflow.com/a/1881201
 	 * This method may give a false negative if the vertices are not specified in counterclockwise order.
+	 *
 	 * @param vertices
 	 * @return whether polygon specified by these vertices is convex.
 	 */
@@ -77,8 +78,9 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * A helper method to allow graceful iteration through all consecutive edge pairs in areVerticesConvex() using index wrapping.
-	 *  AKA treating the linear array as a circular array.
-	 * @param i The virtual index
+	 * AKA treating the linear array as a circular array.
+	 *
+	 * @param i         The virtual index
 	 * @param arrLength The length of the array.
 	 * @return The actual index. == i if i < arrLength.
 	 */
@@ -87,18 +89,16 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * check that there are enough vertices and there isn't an odd number of floats in the array.
+	 * check that there aren't an odd number of floats in the array.
+	 *
 	 * @param vertices
 	 * @return
 	 */
-	private boolean enoughVertexData(float[] vertices) {
+	private boolean notOddNumberOf(float[] vertices) {
 		if (vertices.length % 2 == 1) { //odd #
 			return false;
 		}
-		//Need enough data for 3 vertices.
-		if (vertices.length < 6) {
-			return false;
-		}
+
 		return true;
 	}
 
