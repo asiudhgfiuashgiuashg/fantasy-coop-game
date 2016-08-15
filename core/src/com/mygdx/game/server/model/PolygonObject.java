@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.badlogic.gdx.math.Intersector;
 import com.mygdx.game.util.CollideablePolygon;
 
 /**
@@ -15,6 +16,6 @@ public abstract class PolygonObject {
 	}
 	
 	protected boolean collides(PolygonObject other) {
-		return other.polygon.collides(this.polygon);
+		return other.polygon.collides(this.polygon, new Intersector.MinimumTranslationVector());
 	}
 }
