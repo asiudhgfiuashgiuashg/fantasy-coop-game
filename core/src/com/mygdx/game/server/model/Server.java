@@ -25,6 +25,15 @@ public class Server implements Runnable {
 	private GameState state;
 	private Cutscene currCutscene;
 
+	private static Server instance;
+
+	/**
+	 * No one can call this since it is private.
+	 * Helps enforce singleton pattern.
+	 */
+	private Server() {
+
+	}
 
 	/**
 	 * The server loop
@@ -34,10 +43,21 @@ public class Server implements Runnable {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 
 	public void setState(GameState state) {
 		this.state = state;
+	}
+
+	/**
+	 * Instantiate/access the Server instance using this method.
+	 * @return the Server instance
+	 */
+	public static Server getInstance() {
+		if (null == instance) {
+			return new Server();
+		}
+		return instance;
 	}
 
 }
