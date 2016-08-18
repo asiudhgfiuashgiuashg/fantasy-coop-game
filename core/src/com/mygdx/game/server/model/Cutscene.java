@@ -11,6 +11,6 @@ package com.mygdx.game.server.model;
  */
 public abstract class Cutscene implements Actable {
 	protected void end() {
-		//set the global GameState back to GAME here.
+		Server.getInstance().setState(GameState.GAME);
 	}
 }
