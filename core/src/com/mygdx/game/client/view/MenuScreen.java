@@ -7,4 +7,5 @@ import com.badlogic.gdx.ScreenAdapter;
  * Created by elimonent on 8/18/16.
  */
 public class MenuScreen extends ScreenAdapter {
+
 }
