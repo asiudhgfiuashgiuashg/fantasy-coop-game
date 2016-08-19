@@ -5,5 +5,5 @@ package com.mygdx.game.client.controller;
  * Created by elimonent on 8/18/16.
  */
 public class ClientCommunicator {
-	
+
 }
