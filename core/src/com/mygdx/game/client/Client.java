@@ -31,4 +31,10 @@ public class Client extends Game {
 		console.draw();
 	}
 
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		console.refresh();
+	}
+
 }
