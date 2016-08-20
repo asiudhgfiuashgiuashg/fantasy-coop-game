@@ -7,6 +7,6 @@ import com.badlogic.gdx.ScreenAdapter;
  *
  * Created by elimonent on 8/18/16.
  */
-public class GameScreen extends ConsoleScreen {
+public class GameScreen extends ScreenAdapter {
 
 }
