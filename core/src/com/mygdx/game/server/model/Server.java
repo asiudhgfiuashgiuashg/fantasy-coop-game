@@ -1,6 +1,7 @@
 package com.mygdx.game.server.model;
 
 import com.mygdx.game.server.controller.ServerCommunicator;
+import com.mygdx.game.server.model.exceptions.AlreadyInitializedException;
 import com.mygdx.game.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -26,14 +27,19 @@ public class Server implements Runnable {
 	private Cutscene currCutscene;
 
 	private static Server instance;
+	private int port;
+	public static final int DEFAULT_PORT = 63332;
+	private boolean initialized; //whether or not the server has been initialized
 
 	/**
 	 * No one can call this since it is private.
 	 * Helps enforce singleton pattern.
 	 */
 	private Server() {
-
+		initialized = false;
 	}
+
+
 
 	/**
 	 * The server loop
@@ -55,9 +61,23 @@ public class Server implements Runnable {
 	 */
 	public static Server getInstance() {
 		if (null == instance) {
-			return new Server();
+			instance = new Server();
 		}
 		return instance;
+	}
+
+	/**
+	 * Setup and start the server instance.
+	 * @param port
+	 */
+	public void init(int port) throws AlreadyInitializedException {
+		if (!initialized) {
+			this.port = port;
+			initialized = true;
+		} else {
+			System.out.println("server was already initialized");
+			throw new AlreadyInitializedException(port);
+		}
 	}
 
 }

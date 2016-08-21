@@ -1,10 +1,13 @@
 package com.mygdx.game.util;
 
+import com.mygdx.game.server.model.Server;
+import com.mygdx.game.server.model.exceptions.AlreadyInitializedException;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
 
 /**
  * Public functions in this class are accessible via the developer console.
@@ -24,10 +27,26 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	}
 
 	/**
-	 * host a server on this computer
+	 * Host a server on this computer.
 	 * @param port
 	 */
 	public void startServer(int port) {
 		console.log("Starting server on port " + port + " ...");
+		Server server = Server.getInstance();
+
+		try {
+			server.init(port);
+			(new Thread(server)).run();
+			console.log("Server started", LogLevel.SUCCESS);
+		} catch (AlreadyInitializedException e) {
+			console.log(e.getMessage(), LogLevel.ERROR);
+		}
+	}
+
+	/**
+	 * Host a server on this computer listening on the default port.
+	 */
+	public void startServer() {
+		startServer(Server.DEFAULT_PORT);
 	}
 }
