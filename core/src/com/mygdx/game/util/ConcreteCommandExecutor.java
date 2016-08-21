@@ -2,6 +2,7 @@ package com.mygdx.game.util;
 
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.AlreadyInitializedException;
+import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 

@@ -2,6 +2,7 @@ package com.mygdx.game.server.model;
 
 import com.mygdx.game.server.controller.ServerCommunicator;
 import com.mygdx.game.server.model.exceptions.AlreadyInitializedException;
+import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -46,9 +47,20 @@ public class Server implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		/*
+		 * Check if the server is initialized, and if it's not, throw an exception.
+		 */
+		try {
+			if (!initialized) {
+				throw new ServerNotInitializedException();
+			}
+		} catch (ServerNotInitializedException e) {
+			Thread t = Thread.currentThread();
+			t.getUncaughtExceptionHandler().uncaughtException(t, e);
+		}
 	}
+
+
 
 
 	public void setState(GameState state) {
