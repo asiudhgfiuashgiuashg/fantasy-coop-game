@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.client.view.MenuScreen;
+import com.mygdx.game.util.ConcreteCommandExecutor;
 import com.strongjoshua.console.GUIConsole;
 
 /**
@@ -19,7 +20,7 @@ public class Client extends Game {
 	
 	@Override
 	public void create () {
-		console = new GUIConsole();
+		setupConsole();
 		setScreen(new MenuScreen());
 	}
 
@@ -35,6 +36,13 @@ public class Client extends Game {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		console.refresh();
+	}
+
+	private void setupConsole() {
+		console = new GUIConsole();
+		console.setCommandExecutor(new ConcreteCommandExecutor());
+		console.setPositionPercent(0, 55);
+		console.setSizePercent(100, 45);
 	}
 
 }
