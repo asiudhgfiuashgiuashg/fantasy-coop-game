@@ -37,7 +37,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 
 		try {
 			server.init(port);
-			(new Thread(server)).run();
+			(new Thread(server)).start();
 			console.log("Server started", LogLevel.SUCCESS);
 		} catch (AlreadyInitializedException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
@@ -49,5 +49,13 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 */
 	public void startServer() {
 		startServer(Server.DEFAULT_PORT);
+	}
+
+	/**
+	 * Stop the server running on this computer.
+	 */
+	public void stopServer() {
+		console.log("Stopping server");
+		Server.getInstance().stop();
 	}
 }

@@ -7,7 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.util.ConcreteCommandExecutor;
-import com.strongjoshua.console.GUIConsole;
+import com.mygdx.game.util.SingletonGUIConsole;
 
 /**
  * The main game loop for the client application.
@@ -16,7 +16,7 @@ import com.strongjoshua.console.GUIConsole;
  *
  */
 public class Client extends Game {
-	private GUIConsole console;
+	private SingletonGUIConsole console;
 	
 	@Override
 	public void create () {
@@ -39,7 +39,7 @@ public class Client extends Game {
 	}
 
 	private void setupConsole() {
-		console = new GUIConsole();
+		console = SingletonGUIConsole.getInstance();
 		console.setCommandExecutor(new ConcreteCommandExecutor());
 		console.setPositionPercent(0, 55);
 		console.setSizePercent(100, 45);
