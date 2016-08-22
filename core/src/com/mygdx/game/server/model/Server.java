@@ -1,8 +1,7 @@
 package com.mygdx.game.server.model;
 
-import com.mygdx.game.client.Client;
 import com.mygdx.game.server.controller.ServerCommunicator;
-import com.mygdx.game.server.model.exceptions.AlreadyInitializedException;
+import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.util.SingletonGUIConsole;
@@ -118,12 +117,12 @@ public class Server implements Runnable {
 	 * Setup and start the server instance.
 	 * @param port
 	 */
-	public void init(int port) throws AlreadyInitializedException {
+	public void init(int port) throws ServerAlreadyInitializedException {
 		if (!initialized) {
 			this.port = port;
 			initialized = true;
 		} else {
-			throw new AlreadyInitializedException(port);
+			throw new ServerAlreadyInitializedException(port);
 		}
 	}
 

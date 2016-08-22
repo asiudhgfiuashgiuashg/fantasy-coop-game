@@ -4,14 +4,14 @@ package com.mygdx.game.server.model.exceptions;
  * Throw this exception if the Server singleton was already initialized when init() was called.
  * Created by elimonent on 8/21/16.
  */
-public class AlreadyInitializedException extends Exception {
+public class ServerAlreadyInitializedException extends Exception {
 	private int port; //The port that the server was already running on
 
 	/**
 	 *
 	 * @param port The port that the server was already running on
 	 */
-	public AlreadyInitializedException(int port) {
+	public ServerAlreadyInitializedException(int port) {
 		this.port = port;
 	}
 
