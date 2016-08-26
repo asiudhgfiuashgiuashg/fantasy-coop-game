@@ -1,5 +1,7 @@
 package com.mygdx.game.server.model;
 
+import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.LobbyManager;
@@ -161,7 +163,15 @@ public class Server implements Runnable {
 	 * add the listeners that will process the various network updates from clients
 	 */
 	private void addKryoServerLobbyListeners() {
-		//TODO
+		server.addListener(new NewConnectionReporter());
+	}
+
+	/**
+	 * get the kryonet server (used for all network comms)
+	 * @return
+	 */
+	public com.esotericsoftware.kryonet.Server getServer() {
+		return server;
 	}
 
 }

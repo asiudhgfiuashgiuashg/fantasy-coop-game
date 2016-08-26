@@ -1,5 +1,6 @@
 package com.mygdx.game.util;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
@@ -73,6 +74,14 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void disconnect() {
 		console.log("Disconnecting from server");
 		gameClient.disconnect();
+	}
+
+	//TODO MAKE IT SO THIS CANT BE CALLED IF A SERVER ISNT RUNNING
+	public void listConnectedClients() {
+		console.log("Connected clients: ");
+		for (Connection connection: Server.getInstance().getServer().getConnections()) {
+			console.log(connection.toString());
+		}
 	}
 
 }
