@@ -35,7 +35,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			gameClient.setupClientAndConnect(ip, port);
 			console.log("Connected to server", LogLevel.SUCCESS);
 		} catch (IOException e) {
-			e.printStackTrace();
+			console.log(e.getMessage(), LogLevel.ERROR);
 		} catch (AlreadyConnectedException e) {
 			console.log("Already connected to a server!", LogLevel.ERROR);
 		}

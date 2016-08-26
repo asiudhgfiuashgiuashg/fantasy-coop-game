@@ -2,6 +2,7 @@ package com.mygdx.game.server.model;
 
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
+import com.mygdx.game.server.controller.listeners.OnPlayerJoinedListener;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.LobbyManager;
@@ -46,6 +47,10 @@ public class Server implements Runnable {
 	private AtomicBoolean running = new AtomicBoolean(); //whether the server is running or not.
 							 //flip this boolean to false to stop the server.
 
+	private final List<Listener> lobbyListeners = new ArrayList<Listener>(); //used to keep track of lobby listeners so they can be removed upon leaving the lobbys
+	private final List<Listener> inGameListeners = new ArrayList<Listener>(); //used to keep track of ingame listers so they can be removed upon leaving in-game
+	private final List<Listener> generalListeners = new ArrayList<Listener>();//keep track of listeners that are around for the entire life of the server
+																			  // and don't need to be removed upon transitioning from lobby to in-game or vice-versa
 	/**
 	 * No one can call this since it is private.
 	 * Helps enforce singleton pattern.
@@ -160,11 +165,26 @@ public class Server implements Runnable {
 	}
 
 	/**
-	 * add the listeners that will process the various network updates from clients
+	 * Add the listeners that will process the various network updates from clients in the lobby.
+	 * Also add listeners that will need to be there for the entire lifetime of the server.
 	 */
 	private void addKryoServerLobbyListeners() {
-		server.addListener(new NewConnectionReporter());
+		NewConnectionReporter connectionReporter = new NewConnectionReporter();
+		server.addListener(connectionReporter);
+		lobbyListeners.add(connectionReporter);
+
+		OnPlayerJoinedListener playerJoinedListener = new OnPlayerJoinedListener(lobbyManager);
+		server.addListener(playerJoinedListener);
+		lobbyListeners.add(playerJoinedListener);
+
 	}
+
+	private void removeKryoServerLobbyListeners() {
+		for (Listener listener: lobbyListeners) {
+			server.removeListener(listener);
+		}
+	}
+
 
 	/**
 	 * get the kryonet server (used for all network comms)
