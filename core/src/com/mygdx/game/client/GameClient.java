@@ -14,7 +14,7 @@ import com.mygdx.game.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
-import java.nio.channels.AlreadyConnectedException;
+import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 
 
 /**
@@ -28,6 +28,7 @@ public class GameClient extends Game {
 
 	private Client client; //communication with server will be done through this object.
 	private static int CONNECT_TIMEOUT = 5000; //timeout for connecting client to server.
+	private boolean connected = false; //connected to server?
 
 	@Override
 	public void create () {
@@ -59,14 +60,20 @@ public class GameClient extends Game {
 	/**
 	 * connect to the server and enter the lobby screen
 	 */
-	public void setupClientAndConnect(String ip, int tcpPort) throws IOException {
-		if (getScreen().getClass().equals(LobbyScreen.class)) {
+	public void setupClientAndConnect(String ip, int tcpPort) throws AlreadyConnectedException {
+		if (connected) {
 			throw new AlreadyConnectedException();
 		}
 		client = new Client();
 		client.start();
-		client.connect(CONNECT_TIMEOUT, ip, tcpPort);
-		setScreen(new LobbyScreen());
+		try {
+			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
+			connected = true;
+			console.log("Connected to server", LogLevel.SUCCESS);
+			setScreen(new LobbyScreen());
+		} catch (IOException e) {
+			console.log(e.getMessage(), LogLevel.ERROR);
+		}
 	}
 
 	/**
@@ -74,6 +81,7 @@ public class GameClient extends Game {
 	 */
 	public void disconnect() {
 		client.close();
+		connected = false;
 		setScreen(new MenuScreen());
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
@@ -88,5 +96,9 @@ public class GameClient extends Game {
 			getScreen().dispose();
 		}
 		super.setScreen(screen);
+	}
+
+	public boolean isConnected() {
+		return connected;
 	}
 }

@@ -1,6 +1,7 @@
 package com.mygdx.game.server.model;
 
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
 import com.mygdx.game.server.controller.listeners.OnPlayerJoinedListener;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
@@ -12,6 +13,7 @@ import com.strongjoshua.console.LogLevel;
 
 
 import java.io.IOException;
+import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -126,10 +128,15 @@ public class Server implements Runnable {
 	}
 
 	/**
-	 * Setup and start the server instance.
+	 * Setup the kryo server and start it (on a new thread).
+	 * Setup the Server server and start it (on a different new thread).
 	 * @param port
+	 * @param gameClient
 	 */
-	public void init(int port) throws ServerAlreadyInitializedException {
+	public void init(int port, GameClient gameClient) throws ServerAlreadyInitializedException, AlreadyConnectedException {
+		if (gameClient.isConnected()) {
+			throw new AlreadyConnectedException();
+		}
 		if (!initialized) {
 			this.port = port;
 			initialized = true;
@@ -140,10 +147,17 @@ public class Server implements Runnable {
 		server.start();
 		try {
 			server.bind(port);
+			SingletonGUIConsole.getInstance().log("Server started", LogLevel.SUCCESS);
+			setupLobby();
+
+			(new Thread(this)).start();
+			gameClient.setupClientAndConnect("127.0.0.1", port); // Connect the hoster's client to the locally-hosted server.
+			// Someone should not be able to host a server without participating in the hosted game.
 		} catch (IOException e) {
 			SingletonGUIConsole.getInstance().log(e.getMessage(), LogLevel.ERROR);
 		}
-		setupLobby();
+
+
 	}
 
 	/**
@@ -179,8 +193,20 @@ public class Server implements Runnable {
 
 	}
 
+	/**
+	 * use this in the transition between lobby and in-game
+	 */
 	private void removeKryoServerLobbyListeners() {
 		for (Listener listener: lobbyListeners) {
+			server.removeListener(listener);
+		}
+	}
+
+	/**
+	 * use this when leaving the in-game state
+	 */
+	private void removeKryServerGameListeners() {
+		for (Listener listener: inGameListeners) {
 			server.removeListener(listener);
 		}
 	}

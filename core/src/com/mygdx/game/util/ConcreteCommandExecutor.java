@@ -7,10 +7,8 @@ import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.channels.AlreadyConnectedException;
+
+import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 
 
 /**
@@ -23,7 +21,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	private GameClient gameClient; //need this reference to order the gameClient to
 									//  do things like connect to the server or change screens based on console commands
 
-	private boolean serverStarted = false; //used to restrict usage of methods applying to the serverstart
+	private boolean serverStarted = false; //used to restrict usage of methods applying to the
+
 
 	public ConcreteCommandExecutor(GameClient gameClient) {
 		this.gameClient = gameClient;
@@ -33,9 +32,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		console.log("Attempting to connect to " + ip + ":" + port);
 		try {
 			gameClient.setupClientAndConnect(ip, port);
-			console.log("Connected to server", LogLevel.SUCCESS);
-		} catch (IOException e) {
-			console.log(e.getMessage(), LogLevel.ERROR);
+
 		} catch (AlreadyConnectedException e) {
 			console.log("Already connected to a server!", LogLevel.ERROR);
 		}
@@ -50,14 +47,12 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		Server server = Server.getInstance();
 
 		try {
-			server.init(port);
-			(new Thread(server)).start();
-			console.log("Server started", LogLevel.SUCCESS);
+			server.init(port, gameClient);
 			serverStarted = true;
-			connect("127.0.0.1", port); // Connect the hoster's client to the locally-hosted server.
-										// Someone should not be able to host a server without participating in the hosted game.
 		} catch (ServerAlreadyInitializedException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
+		} catch (AlreadyConnectedException e) {
+			console.log(e.getMessage() + "--" + "You can't start a server when you are \n already connected to one!", LogLevel.ERROR);
 		}
 	}
 
@@ -97,5 +92,4 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			console.log("No server running", LogLevel.ERROR);
 		}
 	}
-
 }

@@ -22,4 +22,17 @@ public class LobbyManager {
 	public void addLobbyPlayer(LobbyPlayer player) {
 		lobbyPlayers.add(player);
 	}
+
+	/**
+	 * See if all the players in the lobby are ready to start the game
+	 * @return
+	 */
+	public boolean getReady() {
+		for (LobbyPlayer lobbyPlayer: lobbyPlayers) {
+			if (!lobbyPlayer.ready.get()) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
