@@ -22,12 +22,14 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	private GameClient gameClient; //need this reference to order the gameClient to
 									//  do things like connect to the server or change screens based on console commands
 
+	private boolean serverStarted = false; //used to restrict usage of methods applying to the serverstart
+
 	public ConcreteCommandExecutor(GameClient gameClient) {
 		this.gameClient = gameClient;
 	}
 
 	public void connect(String ip, int port) {
-		console.log("Attempting to connect to" + ip + ":" + port);
+		console.log("Attempting to connect to " + ip + ":" + port);
 		try {
 			gameClient.setupClientAndConnect(ip, port);
 			console.log("Connected to server", LogLevel.SUCCESS);
@@ -37,7 +39,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	}
 
 	/**
-	 * Host a server on this computer.
+	 * Host a server on this computer, on a separate thread.
 	 * @param port
 	 */
 	public void startServer(int port) {
@@ -48,6 +50,9 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			server.init(port);
 			(new Thread(server)).start();
 			console.log("Server started", LogLevel.SUCCESS);
+			serverStarted = true;
+			connect("127.0.0.1", port); // Connect the hoster's client to the locally-hosted server.
+										// Someone should not be able to host a server without participating in the hosted game.
 		} catch (ServerAlreadyInitializedException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
 		}
@@ -66,6 +71,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void stopServer() {
 		console.log("Stopping server");
 		Server.getInstance().stop();
+		serverStarted = false;
 	}
 
 	/**
@@ -76,11 +82,16 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		gameClient.disconnect();
 	}
 
-	//TODO MAKE IT SO THIS CANT BE CALLED IF A SERVER ISNT RUNNING
+
 	public void listConnectedClients() {
-		console.log("Connected clients: ");
-		for (Connection connection: Server.getInstance().getServer().getConnections()) {
-			console.log(connection.toString());
+		if (serverStarted) {
+			console.log("Connected clients: ");
+			for (Connection connection : Server.getInstance().getServer().getConnections()) {
+				console.log(connection.toString()
+						+ " " + connection.getRemoteAddressTCP());
+			}
+		} else {
+			console.log("No server running", LogLevel.ERROR);
 		}
 	}
 

@@ -174,4 +174,8 @@ public class Server implements Runnable {
 		return server;
 	}
 
+	public boolean isRunning() {
+		return running.get();
+	}
+
 }
