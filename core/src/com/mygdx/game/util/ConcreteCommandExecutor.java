@@ -1,10 +1,12 @@
 package com.mygdx.game.util;
 
+import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -16,14 +18,21 @@ import java.net.UnknownHostException;
  * Created by elimonent on 8/21/16.
  */
 public class ConcreteCommandExecutor extends CommandExecutor {
+	private GameClient gameClient; //need this reference to order the gameClient to
+									//  do things like connect to the server or change screens based on console commands
+
+	public ConcreteCommandExecutor(GameClient gameClient) {
+		this.gameClient = gameClient;
+	}
+
 	public void connect(String ip, int port) {
 		console.log("Attempting to connect to" + ip + ":" + port);
 		try {
-			InetAddress iNetIP = InetAddress.getByName(ip);
-		} catch (UnknownHostException e) {
-			console.log(e.getMessage(), LogLevel.ERROR);
+			gameClient.setupClientAndConnect(ip, port);
+			console.log("Connected to server", LogLevel.SUCCESS);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		//TODO
 	}
 
 	/**
@@ -57,4 +66,13 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		console.log("Stopping server");
 		Server.getInstance().stop();
 	}
+
+	/**
+	 * Disconnect the client from a server.
+	 */
+	public void disconnect() {
+		console.log("Disconnecting from server");
+		gameClient.disconnect();
+	}
+
 }

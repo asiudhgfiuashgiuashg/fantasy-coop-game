@@ -1,12 +1,14 @@
 package com.mygdx.game.server.model;
 
-import com.mygdx.game.server.controller.ServerCommunicator;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
+import com.mygdx.game.server.model.lobby.LobbyManager;
 import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,9 +25,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Server implements Runnable {
 
+	private LobbyManager lobbyManager;
+
 	private final List<Player> players = new ArrayList<Player>();
 	private GameMap map; // The current game map.
-	private final ServerCommunicator communicator = new ServerCommunicator();
+	private com.esotericsoftware.kryonet.Server server; //used for sending and receiving.
 	private final float TICKRATE = .05f; //How often the server updates the game world (approximate) in seconds.
 	private GameState state;
 	private Cutscene currCutscene;
@@ -79,6 +83,7 @@ public class Server implements Runnable {
 			prevTime = currTime;
 
 			//TODO update game simulation using elapsedTime here
+			//TODO send outgoing updates to the ServerCommunicator here
 
 			/*
 			 * Now sleep until the next tick (approximately).
@@ -124,6 +129,14 @@ public class Server implements Runnable {
 		} else {
 			throw new ServerAlreadyInitializedException(port);
 		}
+		server = new com.esotericsoftware.kryonet.Server();
+		server.start();
+		try {
+			server.bind(port);
+		} catch (IOException e) {
+			SingletonGUIConsole.getInstance().log(e.getMessage(), LogLevel.ERROR);
+		}
+		setupLobby();
 	}
 
 	/**
@@ -132,6 +145,23 @@ public class Server implements Runnable {
 	public void stop() {
 		initialized = false;
 		running.set(false); //will cause run loop to stop
+	}
+
+
+	/**
+	 * get the server ready to receive players into its lobby.
+	 */
+	private void setupLobby() {
+		setState(GameState.LOBBY);
+		lobbyManager = new LobbyManager();
+		addKryoServerLobbyListeners();
+	}
+
+	/**
+	 * add the listeners that will process the various network updates from clients
+	 */
+	private void addKryoServerLobbyListeners() {
+		//TODO
 	}
 
 }
