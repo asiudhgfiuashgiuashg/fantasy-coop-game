@@ -14,6 +14,7 @@ import com.mygdx.game.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
+import java.nio.channels.AlreadyConnectedException;
 
 
 /**
@@ -59,6 +60,9 @@ public class GameClient extends Game {
 	 * connect to the server and enter the lobby screen
 	 */
 	public void setupClientAndConnect(String ip, int tcpPort) throws IOException {
+		if (getScreen().getClass().equals(LobbyScreen.class)) {
+			throw new AlreadyConnectedException();
+		}
 		client = new Client();
 		client.start();
 		client.connect(CONNECT_TIMEOUT, ip, tcpPort);

@@ -10,6 +10,7 @@ import com.strongjoshua.console.LogLevel;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.channels.AlreadyConnectedException;
 
 
 /**
@@ -35,6 +36,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			console.log("Connected to server", LogLevel.SUCCESS);
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (AlreadyConnectedException e) {
+			console.log("Already connected to a server!", LogLevel.ERROR);
 		}
 	}
 
