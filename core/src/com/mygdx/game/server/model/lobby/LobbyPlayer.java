@@ -11,6 +11,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class LobbyPlayer {
 	private Connection connection; //uniquely identifies the player and used to send messages to them
 	private PlayerClassEnum playerClass;
+	private String username;
+
 	public final AtomicBoolean ready = new AtomicBoolean(false); // Whether or not this player is ready to start.
 	                                                             // This is Atomic because the Server thread will access it
 	                                                             //  and also the listeners on the Kryo Server thread, so 2 different threads.

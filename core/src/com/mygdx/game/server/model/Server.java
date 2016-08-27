@@ -2,6 +2,7 @@ package com.mygdx.game.server.model;
 
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.GameClient;
+import com.mygdx.game.server.controller.listeners.LobbyListener;
 import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
 import com.mygdx.game.server.controller.listeners.OnPlayerJoinedListener;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
@@ -138,14 +139,12 @@ public class Server implements Runnable {
 		if (gameClient.isConnected()) {
 			throw new AlreadyConnectedException();
 		}
-		if (!initialized) {
-			this.port = port;
-			initialized = true;
-		} else {
+		if (initialized) {
 			throw new ServerAlreadyInitializedException(port);
 		}
 		server = new com.esotericsoftware.kryonet.Server();
 		server.start();
+		this.port = port;
 		try {
 			server.bind(port);
 			Registrar registrar = new Registrar(); //Kyro serialization library requires that classes that will be serialized are registered to this endpoint.
@@ -153,6 +152,7 @@ public class Server implements Runnable {
 			SingletonGUIConsole.getInstance().log("Server started", LogLevel.SUCCESS);
 			setupLobby();
 
+			initialized = true;
 			(new Thread(this)).start();
 			gameClient.setupClientAndConnect("127.0.0.1", port); // Connect the hoster's client to the locally-hosted server.
 			// Someone should not be able to host a server without participating in the hosted game.
@@ -195,6 +195,10 @@ public class Server implements Runnable {
 		server.addListener(playerJoinedListener);
 		lobbyListeners.add(playerJoinedListener);
 
+		LobbyListener generalLobbyListener = new LobbyListener();
+		server.addListener(generalLobbyListener);
+		lobbyListeners.add(generalLobbyListener);
+
 	}
 
 	/**
@@ -209,7 +213,7 @@ public class Server implements Runnable {
 	/**
 	 * use this when leaving the in-game state
 	 */
-	private void removeKryServerGameListeners() {
+	private void removeKryoServerGameListeners() {
 		for (Listener listener: inGameListeners) {
 			server.removeListener(listener);
 		}

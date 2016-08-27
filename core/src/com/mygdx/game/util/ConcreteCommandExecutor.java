@@ -4,6 +4,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
+import com.mygdx.game.server.model.lobby.PlayerClassEnum;
+import com.mygdx.game.util.network.messages.SelectClassMessage;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 
@@ -95,5 +97,14 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 
 	public void currentScreen() {
 		console.log("Current screen: " + gameClient.getScreen().getClass());
+	}
+
+	public void requestClass(String className) {
+		PlayerClassEnum playerClass = PlayerClassEnum.valueOf(className);
+		try {
+			gameClient.getClient().sendTCP(new SelectClassMessage(playerClass));
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 }

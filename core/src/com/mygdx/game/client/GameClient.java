@@ -105,4 +105,8 @@ public class GameClient extends Game {
 	public boolean isConnected() {
 		return connected;
 	}
+
+	public Client getClient() {
+		return client;
+	}
 }
