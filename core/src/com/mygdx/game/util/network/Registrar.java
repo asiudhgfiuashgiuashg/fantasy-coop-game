@@ -2,7 +2,6 @@ package com.mygdx.game.util.network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-import com.mygdx.game.util.SingletonGUIConsole;
 import com.mygdx.game.util.network.messages.Serializeable;
 import org.reflections.Reflections;
 
@@ -26,7 +25,6 @@ public class Registrar {
 
 
 		for (Class<? extends Serializeable> aClass: reflections.getSubTypesOf(Serializeable.class)) {
-			System.out.println("Registered class: " + aClass.getSimpleName());
 			kryo.register(aClass);
 		}
 	}
