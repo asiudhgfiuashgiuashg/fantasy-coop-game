@@ -92,4 +92,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			console.log("No server running", LogLevel.ERROR);
 		}
 	}
+
+	public void currentScreen() {
+		console.log("Current screen: " + gameClient.getScreen().getClass());
+	}
 }
