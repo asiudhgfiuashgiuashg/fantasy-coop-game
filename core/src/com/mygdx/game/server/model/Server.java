@@ -9,6 +9,7 @@ import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.LobbyManager;
 import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.util.SingletonGUIConsole;
+import com.mygdx.game.util.network.Registrar;
 import com.strongjoshua.console.LogLevel;
 
 
@@ -147,6 +148,8 @@ public class Server implements Runnable {
 		server.start();
 		try {
 			server.bind(port);
+			Registrar registrar = new Registrar(); //Kyro serialization library requires that classes that will be serialized are registered to this endpoint.
+			registrar.register(server);
 			SingletonGUIConsole.getInstance().log("Server started", LogLevel.SUCCESS);
 			setupLobby();
 
@@ -155,6 +158,7 @@ public class Server implements Runnable {
 			// Someone should not be able to host a server without participating in the hosted game.
 		} catch (IOException e) {
 			SingletonGUIConsole.getInstance().log(e.getMessage(), LogLevel.ERROR);
+			e.printStackTrace();
 		}
 
 

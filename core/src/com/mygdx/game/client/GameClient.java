@@ -11,6 +11,7 @@ import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.util.ConcreteCommandExecutor;
 import com.mygdx.game.util.SingletonGUIConsole;
+import com.mygdx.game.util.network.Registrar;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
@@ -67,6 +68,9 @@ public class GameClient extends Game {
 		client = new Client();
 		client.start();
 		try {
+			Registrar registrar = new Registrar(); //Kyro serialization library requires that classes that will be serialized are registered to this endpoint.
+			registrar.register(client);
+
 			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
 			connected = true;
 			console.log("Connected to server", LogLevel.SUCCESS);
