@@ -6,12 +6,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.util.ConcreteCommandExecutor;
 import com.mygdx.game.util.SingletonGUIConsole;
-import com.mygdx.game.util.network.Registrar;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
@@ -66,11 +66,10 @@ public class GameClient extends Game {
 			throw new AlreadyConnectedException();
 		}
 		client = new Client();
+		Kryo kryo = client.getKryo();
+		kryo.setRegistrationRequired(false); //automatic registration of objects in kryo (which enables them to be serialized/deserialized)
 		client.start();
 		try {
-			Registrar registrar = new Registrar(); //Kyro serialization library requires that classes that will be serialized are registered to this endpoint.
-			registrar.register(client);
-
 			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
 			connected = true;
 			console.log("Connected to server", LogLevel.SUCCESS);

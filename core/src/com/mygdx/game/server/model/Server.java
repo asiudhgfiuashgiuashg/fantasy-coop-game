@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.controller.listeners.LobbyListener;
@@ -10,7 +11,6 @@ import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.LobbyManager;
 import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.util.SingletonGUIConsole;
-import com.mygdx.game.util.network.Registrar;
 import com.strongjoshua.console.LogLevel;
 
 
@@ -143,12 +143,12 @@ public class Server implements Runnable {
 			throw new ServerAlreadyInitializedException(port);
 		}
 		server = new com.esotericsoftware.kryonet.Server();
+		Kryo kryo = server.getKryo();
+		kryo.setRegistrationRequired(false); //automatic registration of objects in kryo (which enables them to be serialized/deserialized)
 		server.start();
 		this.port = port;
 		try {
 			server.bind(port);
-			Registrar registrar = new Registrar(); //Kyro serialization library requires that classes that will be serialized are registered to this endpoint.
-			registrar.register(server);
 			SingletonGUIConsole.getInstance().log("Server started", LogLevel.SUCCESS);
 			setupLobby();
 
