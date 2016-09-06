@@ -4,9 +4,11 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.server.model.lobby.LobbyManager;
+import com.mygdx.game.server.model.lobby.LobbyPlayer;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
 import com.mygdx.game.util.SingletonGUIConsole;
 import com.mygdx.game.util.network.messages.lobby.ClassAssignmentMsg;
+import com.mygdx.game.util.network.messages.lobby.OtherClassAssignmentMsg;
 import com.mygdx.game.util.network.messages.lobby.SelectClassMessage;
 
 /**
@@ -26,11 +28,15 @@ public class LobbyListener extends Listener.ReflectionListener {
 	public void received(Connection connection, SelectClassMessage message) {
 		console.log("Received a class change request from " + connection);
 		console.log("Requested class: " + message.getPlayerClass());
-		//check if this class is available, and send a class assignment message if it is.
+
+		//check if this class is available, and send a class assignment message to everyone if it is.
 		PlayerClassEnum requestedClass = message.getPlayerClass();
 		if (lobbyManager.classNotTakenYet(requestedClass)) {
-			lobbyManager.getPlayerByConnection(connection).playerClass = requestedClass;
-			server.sendToAllTCP(new ClassAssignmentMsg(requestedClass)); //let everyone know that this lobby player has been assigned this class (which they requested)
+			LobbyPlayer player = lobbyManager.getPlayerByConnection(connection);
+			player.playerClass = requestedClass;
+			server.sendToAllExceptTCP(connection.getID(),
+					new OtherClassAssignmentMsg(requestedClass, player.uid)); //let everyone else know that this lobby player has been assigned this class (which they requested)
+			server.sendToTCP(connection.getID(), new ClassAssignmentMsg(player.playerClass));
 			SingletonGUIConsole.getInstance().log("Assigned " + requestedClass + " to " + connection);
 		}
 	}

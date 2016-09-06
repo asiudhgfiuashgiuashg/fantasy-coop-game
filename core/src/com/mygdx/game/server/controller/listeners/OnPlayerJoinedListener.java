@@ -31,7 +31,7 @@ public class OnPlayerJoinedListener extends Listener {
 		}
 		LobbyPlayer newLobbyPlayer = new LobbyPlayer(connection);
 		lobbyManager.addLobbyPlayer(newLobbyPlayer);
-		//Send everyone the uid of the player who just connected to the lobby.
+		//Send everyone else the uid of the player who just connected to the lobby.
 		//This uid will be referenced when providing info updates like username in the lobby's future
 		LobbyPlayerInfoMsg playerInfoMsg = new LobbyPlayerInfoMsg(newLobbyPlayer.uid, null, null);
 		server.sendToAllExceptTCP(connection.getID(), playerInfoMsg);

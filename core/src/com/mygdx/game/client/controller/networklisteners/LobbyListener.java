@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.util.SingletonGUIConsole;
 import com.mygdx.game.util.network.messages.lobby.ClassAssignmentMsg;
+import com.mygdx.game.util.network.messages.lobby.OtherClassAssignmentMsg;
 import com.mygdx.game.util.network.messages.lobby.LobbyPlayerInfoMsg;
 
 /**
@@ -13,11 +14,17 @@ import com.mygdx.game.util.network.messages.lobby.LobbyPlayerInfoMsg;
  */
 public class LobbyListener extends Listener.ReflectionListener {
     private SingletonGUIConsole console = SingletonGUIConsole.getInstance();
-    public void received(Connection connection, ClassAssignmentMsg msg) {
-        console.log("Got a class assignment message for some lobby player");
+    public void received(Connection connection, OtherClassAssignmentMsg msg) {
+        console.log("Got a class assignment message for some lobby player besides myself: "
+                + msg.getPlayerClass() + "/" + "uid:" + msg.getUid());
     }
 
     public void received(Connection connection, LobbyPlayerInfoMsg infoMsg) {
         console.log("New player joined lobby with uid " + infoMsg.uid);
+    }
+
+    public void received(Connection connection, ClassAssignmentMsg msg) {
+        console.log("Got a class assignment for myself: " + msg.getPlayerClass());
+
     }
 }
