@@ -1,4 +1,4 @@
-package com.mygdx.game.util.network.messages;
+package com.mygdx.game.util.network.messages.lobby;
 
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
 

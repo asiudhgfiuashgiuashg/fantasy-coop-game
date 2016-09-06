@@ -1,6 +1,10 @@
 package com.mygdx.game.server.model.lobby;
 
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
+import com.esotericsoftware.kryonet.Connection;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -17,7 +21,7 @@ public class LobbyManager {
 	}
 
 	/**
-	 * add a new player to the list of lobbyPlayers and perform updates to the view as necessary.
+	 * add a new player to the list of lobbyPlayers and do related things
 	 */
 	public void addLobbyPlayer(LobbyPlayer player) {
 		lobbyPlayers.add(player);
@@ -34,5 +38,27 @@ public class LobbyManager {
 			}
 		}
 		return true;
+	}
+
+    public boolean classNotTakenYet(PlayerClassEnum requestedClass) {
+    	for (LobbyPlayer player: lobbyPlayers) {
+			if (player.playerClass == requestedClass) {
+				return false;
+			}
+		}
+		return true;
+    }
+
+	public LobbyPlayer getPlayerByConnection(Connection connection) {
+		for (LobbyPlayer player: lobbyPlayers) {
+			if (player.connection.equals(connection)) {
+				return player;
+			}
+		}
+		return null;
+	}
+
+	public List<LobbyPlayer> getLobbyPlayers() {
+		return Collections.unmodifiableList(lobbyPlayers);
 	}
 }

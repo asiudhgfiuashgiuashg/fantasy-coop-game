@@ -191,11 +191,11 @@ public class Server implements Runnable {
 		server.addListener(connectionReporter);
 		lobbyListeners.add(connectionReporter);
 
-		OnPlayerJoinedListener playerJoinedListener = new OnPlayerJoinedListener(lobbyManager);
+		OnPlayerJoinedListener playerJoinedListener = new OnPlayerJoinedListener(lobbyManager, server);
 		server.addListener(playerJoinedListener);
 		lobbyListeners.add(playerJoinedListener);
 
-		LobbyListener generalLobbyListener = new LobbyListener();
+		LobbyListener generalLobbyListener = new LobbyListener(lobbyManager, server);
 		server.addListener(generalLobbyListener);
 		lobbyListeners.add(generalLobbyListener);
 

@@ -31,6 +31,13 @@ public class SingletonGUIConsole extends GUIConsole {
 		}
 	}
 
+	@Override
+	public void draw() {
+		synchronized (logLock) { //don't draw while another thread is modifying logs
+			super.draw();
+		}
+	}
+
 
 	public static SingletonGUIConsole getInstance() {
 		synchronized (instanceLock) {

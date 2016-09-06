@@ -5,7 +5,7 @@ import com.mygdx.game.client.GameClient;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
-import com.mygdx.game.util.network.messages.SelectClassMessage;
+import com.mygdx.game.util.network.messages.lobby.SelectClassMessage;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 

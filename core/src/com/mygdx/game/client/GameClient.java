@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.util.ConcreteCommandExecutor;
@@ -15,6 +16,9 @@ import com.mygdx.game.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 
 
@@ -30,6 +34,7 @@ public class GameClient extends Game {
 	private Client client; //communication with server will be done through this object.
 	private static int CONNECT_TIMEOUT = 5000; //timeout for connecting client to server.
 	private boolean connected = false; //connected to server?
+	private final List<LobbyListener> lobbyListeners = new ArrayList<LobbyListener>(); //holds listeners that need disposed of when leaving the lobby
 
 	@Override
 	public void create () {
@@ -68,6 +73,7 @@ public class GameClient extends Game {
 		client = new Client();
 		Kryo kryo = client.getKryo();
 		kryo.setRegistrationRequired(false); //automatic registration of objects in kryo (which enables them to be serialized/deserialized)
+		registerKryoLobbyListeners();
 		client.start();
 		try {
 			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
@@ -99,6 +105,17 @@ public class GameClient extends Game {
 			getScreen().dispose();
 		}
 		super.setScreen(screen);
+	}
+
+	/**
+	 * These listeners will react to server messages
+	 */
+	private void registerKryoLobbyListeners() {
+		LobbyListener lobbyListener = new LobbyListener();
+		console.log("Added lobby listener");
+		client.addListener(lobbyListener);
+		lobbyListeners.add(lobbyListener); //keep track of this listener so we can destroy it later
+
 	}
 
 	public boolean isConnected() {
