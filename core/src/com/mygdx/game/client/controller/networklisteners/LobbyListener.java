@@ -2,6 +2,7 @@ package com.mygdx.game.client.controller.networklisteners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
@@ -13,7 +14,12 @@ import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
  * Created by elimonent on 8/27/2016.
  */
 public class LobbyListener extends Listener.ReflectionListener {
+    private final ClientLobbyManager lobbyManager;
     private SingletonGUIConsole console = SingletonGUIConsole.getInstance();
+
+    public LobbyListener(ClientLobbyManager lobbyManager) {
+        this.lobbyManager = lobbyManager; //will be used to allow the controller (this listener) to modify the model (the lobbyManager)
+    }
     public void received(Connection connection, OtherClassAssignmentMsg msg) {
         console.log("Got a class assignment message for some lobby player besides myself: "
                 + msg.getPlayerClass() + "/" + "uid:" + msg.getUid());
