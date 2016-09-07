@@ -1,6 +1,6 @@
 package com.mygdx.game.server.model.trigger;
 
-import com.mygdx.game.util.CollideablePolygon;
+import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
  * A trigger which causes a cutscene to occur (when the player enters the trigger area).

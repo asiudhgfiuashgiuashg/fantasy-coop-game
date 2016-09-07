@@ -8,9 +8,9 @@ import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
 import com.mygdx.game.server.controller.listeners.OnPlayerJoinedListener;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
-import com.mygdx.game.server.model.lobby.LobbyManager;
+import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.player.Player;
-import com.mygdx.game.util.SingletonGUIConsole;
+import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 
@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class Server implements Runnable {
 
-	private LobbyManager lobbyManager;
+	private ServerLobbyManager serverLobbyManager;
 
 	private final List<Player> players = new ArrayList<Player>();
 	private GameMap map; // The current game map.
@@ -178,7 +178,7 @@ public class Server implements Runnable {
 	 */
 	private void setupLobby() {
 		setState(GameState.LOBBY);
-		lobbyManager = new LobbyManager();
+		serverLobbyManager = new ServerLobbyManager();
 		addKryoServerLobbyListeners();
 	}
 
@@ -191,11 +191,11 @@ public class Server implements Runnable {
 		server.addListener(connectionReporter);
 		lobbyListeners.add(connectionReporter);
 
-		OnPlayerJoinedListener playerJoinedListener = new OnPlayerJoinedListener(lobbyManager, server);
+		OnPlayerJoinedListener playerJoinedListener = new OnPlayerJoinedListener(serverLobbyManager, server);
 		server.addListener(playerJoinedListener);
 		lobbyListeners.add(playerJoinedListener);
 
-		LobbyListener generalLobbyListener = new LobbyListener(lobbyManager, server);
+		LobbyListener generalLobbyListener = new LobbyListener(serverLobbyManager, server);
 		server.addListener(generalLobbyListener);
 		lobbyListeners.add(generalLobbyListener);
 

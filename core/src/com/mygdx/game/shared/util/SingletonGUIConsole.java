@@ -1,7 +1,5 @@
-package com.mygdx.game.util;
+package com.mygdx.game.shared.util;
 
-import com.esotericsoftware.kryonet.Client;
-import com.mygdx.game.client.GameClient;
 import com.strongjoshua.console.GUIConsole;
 import com.strongjoshua.console.LogLevel;
 

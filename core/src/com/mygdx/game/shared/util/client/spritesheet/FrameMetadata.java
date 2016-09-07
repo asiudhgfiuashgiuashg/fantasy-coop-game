@@ -1,4 +1,4 @@
-package com.mygdx.game.util.client.spritesheet;
+package com.mygdx.game.shared.util.client.spritesheet;
 
 /**
  * represents the frame metadata from the aseprite generated data

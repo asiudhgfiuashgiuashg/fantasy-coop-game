@@ -1,9 +1,6 @@
-package com.mygdx.game.util.client.spritesheet;
+package com.mygdx.game.shared.util.client.spritesheet;
 
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
 
 /**
  * 

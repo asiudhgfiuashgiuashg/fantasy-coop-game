@@ -2,10 +2,10 @@ package com.mygdx.game.client.controller.networklisteners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.game.util.SingletonGUIConsole;
-import com.mygdx.game.util.network.messages.lobby.ClassAssignmentMsg;
-import com.mygdx.game.util.network.messages.lobby.OtherClassAssignmentMsg;
-import com.mygdx.game.util.network.messages.lobby.LobbyPlayerInfoMsg;
+import com.mygdx.game.shared.util.SingletonGUIConsole;
+import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
 
 /**
  * General listener that the client uses to demultiplex network messages from the server
@@ -20,7 +20,7 @@ public class LobbyListener extends Listener.ReflectionListener {
     }
 
     public void received(Connection connection, LobbyPlayerInfoMsg infoMsg) {
-        console.log("New player joined lobby with uid " + infoMsg.uid);
+        console.log("Another player is in your lobby with uid " + infoMsg.uid);
     }
 
     public void received(Connection connection, ClassAssignmentMsg msg) {

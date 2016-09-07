@@ -11,8 +11,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
-import com.mygdx.game.util.ConcreteCommandExecutor;
-import com.mygdx.game.util.SingletonGUIConsole;
+import com.mygdx.game.shared.util.ConcreteCommandExecutor;
+import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;

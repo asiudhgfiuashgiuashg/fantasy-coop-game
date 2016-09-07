@@ -2,7 +2,7 @@ package com.mygdx.game.server.controller.listeners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.game.util.SingletonGUIConsole;
+import com.mygdx.game.shared.util.SingletonGUIConsole;
 
 /**
  * Listens for new connections and reports them in the in-game console.
