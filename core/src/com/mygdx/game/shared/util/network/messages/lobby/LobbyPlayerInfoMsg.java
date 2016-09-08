@@ -3,6 +3,7 @@ package com.mygdx.game.shared.util.network.messages.lobby;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
 
 /**
+ * Sent Server -> Client after the client connects to describe a player who is in the lobby
  * Created by elimonent on 8/28/2016.
  */
 public class LobbyPlayerInfoMsg {

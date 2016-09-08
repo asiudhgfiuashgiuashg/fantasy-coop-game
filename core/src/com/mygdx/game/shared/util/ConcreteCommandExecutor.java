@@ -1,7 +1,8 @@
 package com.mygdx.game.shared.util;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.mygdx.game.client.GameClient;
+import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
@@ -30,10 +31,10 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		this.gameClient = gameClient;
 	}
 
-	public void connect(String ip, int port) {
+	public void connect(String ip, int port, String username) {
 		console.log("Attempting to connect to " + ip + ":" + port);
 		try {
-			gameClient.setupClientAndConnect(ip, port);
+			gameClient.setupClientAndConnect(ip, port, username);
 
 		} catch (AlreadyConnectedException e) {
 			console.log("Already connected to a server!", LogLevel.ERROR);
@@ -43,13 +44,14 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	/**
 	 * Host a server on this computer, on a separate thread.
 	 * @param port
+	 * @param username the username to connect to your server with
 	 */
-	public void startServer(int port) {
+	public void startServer(int port, String username) {
 		console.log("Starting server on port " + port + " ...");
 		Server server = Server.getInstance();
 
 		try {
-			server.init(port, gameClient);
+			server.init(port, gameClient, username);
 			serverStarted = true;
 		} catch (ServerAlreadyInitializedException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
@@ -61,8 +63,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	/**
 	 * Host a server on this computer listening on the default port.
 	 */
-	public void startServer() {
-		startServer(Server.DEFAULT_PORT);
+	public void startServer(String username) {
+		startServer(Server.DEFAULT_PORT, username);
 	}
 
 	/**
@@ -82,8 +84,10 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		gameClient.disconnect();
 	}
 
-
-	public void listConnectedClients() {
+	/**
+	 * list the clients connected to server
+	 */
+	public void listServerClients() {
 		if (serverStarted) {
 			console.log("Connected clients: ");
 			for (Connection connection : Server.getInstance().getServer().getConnections()) {
@@ -99,12 +103,25 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		console.log("Current screen: " + gameClient.getScreen().getClass());
 	}
 
+	/**
+	 * request a class from the server
+	 * @param className
+	 */
 	public void requestClass(String className) {
 		PlayerClassEnum playerClass = PlayerClassEnum.valueOf(className);
 		try {
 			gameClient.getClient().sendTCP(new SelectClassMessage(playerClass));
 		} catch (Throwable e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * list players that client knows are in lobby
+	 */
+	public void listPlayers() {
+		for (ClientLobbyPlayer lobbyPlayer : gameClient.getLobbyManager().getLobbyPlayers()) {
+			console.log(lobbyPlayer.toString());
 		}
 	}
 }

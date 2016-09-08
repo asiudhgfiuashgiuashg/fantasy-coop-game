@@ -21,4 +21,26 @@ public abstract class LobbyPlayer {
     public int getUid() {
         return uid;
     }
+
+    /**
+     *
+     * @param other
+     * @return whether uids are equal.
+     */
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof LobbyPlayer)) {
+            return false;
+        }
+        LobbyPlayer theOther = (LobbyPlayer) other;
+        return theOther.getUid() == this.getUid();
+    }
+
+    @Override
+    public int hashCode() {
+        return 37 * getUid();
+    }
 }

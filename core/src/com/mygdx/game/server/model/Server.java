@@ -2,7 +2,7 @@ package com.mygdx.game.server.model;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.game.client.GameClient;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.server.controller.listeners.LobbyListener;
 import com.mygdx.game.server.controller.listeners.NewConnectionReporter;
 import com.mygdx.game.server.controller.listeners.OnPlayerJoinedListener;
@@ -132,10 +132,12 @@ public class Server implements Runnable {
 	/**
 	 * Setup the kryo server and start it (on a new thread).
 	 * Setup the Server server and start it (on a different new thread).
+	 * Setup the client and connect it to the server.
 	 * @param port
 	 * @param gameClient
+	 * @param username the username to setup the client with
 	 */
-	public void init(int port, GameClient gameClient) throws ServerAlreadyInitializedException, AlreadyConnectedException {
+	public void init(int port, GameClient gameClient, String username) throws ServerAlreadyInitializedException, AlreadyConnectedException {
 		if (gameClient.isConnected()) {
 			throw new AlreadyConnectedException();
 		}
@@ -154,7 +156,7 @@ public class Server implements Runnable {
 
 			initialized = true;
 			(new Thread(this)).start();
-			gameClient.setupClientAndConnect("127.0.0.1", port); // Connect the hoster's client to the locally-hosted server.
+			gameClient.setupClientAndConnect("127.0.0.1", port, username); // Connect the hoster's client to the locally-hosted server.
 			// Someone should not be able to host a server without participating in the hosted game.
 		} catch (IOException e) {
 			SingletonGUIConsole.getInstance().log(e.getMessage(), LogLevel.ERROR);

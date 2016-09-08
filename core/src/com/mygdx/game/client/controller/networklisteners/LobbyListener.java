@@ -3,6 +3,7 @@ package com.mygdx.game.client.controller.networklisteners;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
+import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
@@ -20,15 +21,32 @@ public class LobbyListener extends Listener.ReflectionListener {
     public LobbyListener(ClientLobbyManager lobbyManager) {
         this.lobbyManager = lobbyManager; //will be used to allow the controller (this listener) to modify the model (the lobbyManager)
     }
+
+    /**
+     * receive info about another player's class assignment
+     */
     public void received(Connection connection, OtherClassAssignmentMsg msg) {
         console.log("Got a class assignment message for some lobby player besides myself: "
                 + msg.getPlayerClass() + "/" + "uid:" + msg.getUid());
+        lobbyManager.getByUid(msg.getUid()).playerClass = msg.getPlayerClass();
     }
 
+    /**
+     * receive info about a new player or player who was there before you.
+     * @param connection
+     * @param infoMsg
+     */
     public void received(Connection connection, LobbyPlayerInfoMsg infoMsg) {
-        console.log("Another player is in your lobby with uid " + infoMsg.uid);
+        console.log("Added player to lobby with uid " + infoMsg.uid);
+        ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg.uid, infoMsg.username, infoMsg.playerClass);
+        lobbyManager.addLobbyPlayer(lobbyPlayer);
     }
 
+    /**
+     * get info about your own class assignment, usually in response to choosing a class in the gui
+     * @param connection
+     * @param msg
+     */
     public void received(Connection connection, ClassAssignmentMsg msg) {
         console.log("Got a class assignment for myself: " + msg.getPlayerClass());
 

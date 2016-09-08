@@ -1,4 +1,4 @@
-package com.mygdx.game.client;
+package com.mygdx.game.client.model;
 
 
 import com.badlogic.gdx.Game;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.client.controller.networklisteners.LobbyListener;
+import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
@@ -33,8 +34,10 @@ public class GameClient extends Game {
 
 	private Client client; //communication with server will be done through this object.
 	private static int CONNECT_TIMEOUT = 5000; //timeout for connecting client to server.
-	private boolean connected = false; //connected to server?
 	private final List<LobbyListener> lobbyListeners = new ArrayList<LobbyListener>(); //holds listeners that need disposed of when leaving the lobby
+
+	private String username = "PLACEHOLDER"; //client's username
+	private ClientLobbyManager lobbyManager;
 
 	@Override
 	public void create () {
@@ -66,20 +69,22 @@ public class GameClient extends Game {
 	/**
 	 * connect to the server and enter the lobby screen
 	 */
-	public void setupClientAndConnect(String ip, int tcpPort) throws AlreadyConnectedException {
-		if (connected) {
+	public void setupClientAndConnect(String ip, int tcpPort, String username) throws AlreadyConnectedException {
+		if (null != client && client.isConnected() == true) {
 			throw new AlreadyConnectedException();
 		}
+		this.username = username;
 		client = new Client();
 		Kryo kryo = client.getKryo();
 		kryo.setRegistrationRequired(false); //automatic registration of objects in kryo (which enables them to be serialized/deserialized)
+		lobbyManager = new ClientLobbyManager(username, client);
 		registerKryoLobbyListeners();
 		client.start();
 		try {
 			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
-			connected = true;
 			console.log("Connected to server", LogLevel.SUCCESS);
 			setScreen(new LobbyScreen());
+			lobbyManager.sendUsername();
 		} catch (IOException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
 		}
@@ -90,7 +95,6 @@ public class GameClient extends Game {
 	 */
 	public void disconnect() {
 		client.close();
-		connected = false;
 		setScreen(new MenuScreen());
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
@@ -111,7 +115,7 @@ public class GameClient extends Game {
 	 * These listeners will react to server messages
 	 */
 	private void registerKryoLobbyListeners() {
-		LobbyListener lobbyListener = new LobbyListener();
+		LobbyListener lobbyListener = new LobbyListener(lobbyManager);
 		console.log("Added lobby listener");
 		client.addListener(lobbyListener);
 		lobbyListeners.add(lobbyListener); //keep track of this listener so we can destroy it later
@@ -119,10 +123,14 @@ public class GameClient extends Game {
 	}
 
 	public boolean isConnected() {
-		return connected;
+		return !(null == client) && client.isConnected();
 	}
 
 	public Client getClient() {
 		return client;
+	}
+
+	public ClientLobbyManager getLobbyManager() {
+		return lobbyManager;
 	}
 }
