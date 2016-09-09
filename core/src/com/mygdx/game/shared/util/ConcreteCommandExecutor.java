@@ -7,6 +7,7 @@ import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
+import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
 import com.mygdx.game.shared.util.network.messages.lobby.SelectClassMessage;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
@@ -91,9 +92,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void serverListPlayers() {
 		if (serverStarted) {
 			console.log("Connected clients: ");
-			for (Connection connection : Server.getInstance().getServer().getConnections()) {
-				console.log(connection.toString()
-						+ " " + connection.getRemoteAddressTCP());
+			for (ServerLobbyPlayer lobbyPlayer: Server.getInstance().getLobbyManager().getLobbyPlayers()) {
+				console.log(lobbyPlayer.toString());
 			}
 		} else {
 			console.log("No server running", LogLevel.ERROR);

@@ -38,14 +38,6 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      */
     @Override
     public void addLobbyPlayer(ClientLobbyPlayer player) {
- /*       if (getLobbyPlayers().contains(player)) { //update
-            ClientLobbyPlayer lobbyPlayer = getLobbyPlayers().get(getLobbyPlayers().indexOf(player));
-            lobbyPlayer.username = player.username;
-            lobbyPlayer.playerClass = player.playerClass;
-        } else { //add
-            getLobbyPlayers().add(player);
-        }*/
-
         super.addLobbyPlayer(player);
         //update client lobby view here
     }

@@ -26,8 +26,7 @@ public class LobbyListener extends Listener.ReflectionListener {
 		this.server = server;
 	}
 	public void received(Connection connection, SelectClassMessage message) {
-		console.log("Received a class change request from " + connection);
-		console.log("Requested class: " + message.getPlayerClass());
+		console.log("Received a class change request from " + connection + " for " + message.getPlayerClass());
 
 		//check if this class is available, and send a class assignment message to everyone if it is.
 		PlayerClassEnum requestedClass = message.getPlayerClass();
@@ -62,5 +61,9 @@ public class LobbyListener extends Listener.ReflectionListener {
 		player.ready.set(readyMsg.ready); //save
 		readyMsg.uid = player.getUid();
 		server.sendToAllExceptTCP(connection.getID(), readyMsg); //propagate
+		//if everyone is ready, start the game
+		if (serverLobbyManager.getReady()) {
+			serverLobbyManager.onAllReady();
+		}
 	}
 }
