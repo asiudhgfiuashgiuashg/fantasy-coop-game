@@ -27,7 +27,7 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 	 * See if all the players in the lobby are ready to start the game
 	 * @return
 	 */
-	public boolean getReady() {
+	public boolean getReadyAndClassesSelected() {
 		for (ServerLobbyPlayer lobbyPlayer: lobbyPlayers) {
 			if (!lobbyPlayer.ready.get() || null == lobbyPlayer.playerClass) {
 				return false;

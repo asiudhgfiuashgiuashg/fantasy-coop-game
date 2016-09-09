@@ -37,6 +37,7 @@ public class LobbyListener extends Listener.ReflectionListener {
 					new OtherClassAssignmentMsg(requestedClass, player.getUid())); //let everyone else know that this lobby player has been assigned this class (which they requested)
 			server.sendToTCP(connection.getID(), new ClassAssignmentMsg(player.playerClass));
 			SingletonGUIConsole.getInstance().log("Assigned " + requestedClass + " to " + connection);
+			tryToStartGame();
 		}
 	}
 
@@ -61,8 +62,14 @@ public class LobbyListener extends Listener.ReflectionListener {
 		player.ready.set(readyMsg.ready); //save
 		readyMsg.uid = player.getUid();
 		server.sendToAllExceptTCP(connection.getID(), readyMsg); //propagate
-		//if everyone is ready, start the game
-		if (serverLobbyManager.getReady()) {
+		tryToStartGame();
+	}
+
+	/**
+	 * if everyone is ready and has their classes selected, start the game
+	 */
+	private void tryToStartGame() {
+		if (serverLobbyManager.getReadyAndClassesSelected()) {
 			serverLobbyManager.onAllReady();
 		}
 	}
