@@ -8,6 +8,7 @@ import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.UsernameChoiceMsg;
 
 /**
  * General listener that the client uses to demultiplex network messages from the server
@@ -49,6 +50,11 @@ public class LobbyListener extends Listener.ReflectionListener {
      */
     public void received(Connection connection, ClassAssignmentMsg msg) {
         console.log("Got a class assignment for myself: " + msg.getPlayerClass());
+        lobbyManager.getLocalLobbyPlayer().playerClass = msg.getPlayerClass();
+    }
 
+    public void received(Connection connection, UsernameChoiceMsg usernameChoiceMsg) {
+        ClientLobbyPlayer lobbyPlayer = lobbyManager.getByUid(usernameChoiceMsg.uid);
+        lobbyPlayer.username = usernameChoiceMsg.username;
     }
 }

@@ -4,12 +4,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
+import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
 import com.mygdx.game.shared.model.LobbyPlayer;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
-import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.SelectClassMessage;
+import com.mygdx.game.shared.util.network.messages.lobby.UsernameChoiceMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.*;
 
 /**
  * General listener for lobby network messages.
@@ -39,5 +39,16 @@ public class LobbyListener extends Listener.ReflectionListener {
 			server.sendToTCP(connection.getID(), new ClassAssignmentMsg(player.playerClass));
 			SingletonGUIConsole.getInstance().log("Assigned " + requestedClass + " to " + connection);
 		}
+	}
+
+	/**
+	 * A client has sent us their username! Propagate and save it.
+	 * @param connection
+	 * @param usernameChoiceMsg
+	 */
+	public void received(Connection connection, ChooseUsernameMsg usernameChoiceMsg) {
+		ServerLobbyPlayer player = serverLobbyManager.getPlayerByConnection(connection);
+		player.username = usernameChoiceMsg.getUsername();
+		server.sendToAllExceptTCP(connection.getID(), new UsernameChoiceMsg(player.getUid(), player.username));
 	}
 }

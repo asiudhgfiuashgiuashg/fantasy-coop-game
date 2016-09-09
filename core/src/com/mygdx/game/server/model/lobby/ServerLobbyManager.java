@@ -35,8 +35,7 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 	}
 
 
-
-	public LobbyPlayer getPlayerByConnection(Connection connection) {
+	public ServerLobbyPlayer getPlayerByConnection(Connection connection) {
 		for (ServerLobbyPlayer player: lobbyPlayers) {
 			if (player.connection.equals(connection)) {
 				return player;

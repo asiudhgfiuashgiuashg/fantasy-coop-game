@@ -1,9 +1,8 @@
 package com.mygdx.game.client.model.lobby;
 
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.shared.model.LobbyManager;
-import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMessage;
+import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMsg;
 
 import java.util.ArrayList;
 
@@ -63,6 +62,10 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      * send the local client's chosen username to the server after connecting
      */
     public void sendUsername() {
-        kryoClient.sendTCP(new ChooseUsernameMessage(localLobbyPlayer.username));
+        kryoClient.sendTCP(new ChooseUsernameMsg(localLobbyPlayer.username));
+    }
+
+    public ClientLobbyPlayer getLocalLobbyPlayer() {
+        return localLobbyPlayer;
     }
 }
