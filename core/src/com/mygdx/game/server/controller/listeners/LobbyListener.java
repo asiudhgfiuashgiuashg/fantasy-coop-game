@@ -65,6 +65,10 @@ public class LobbyListener extends Listener.ReflectionListener {
 		tryToStartGame();
 	}
 
+	public void received(Connection connection, ChatMessageMsg chatMsg) {
+
+	}
+
 	/**
 	 * if everyone is ready and has their classes selected, start the game
 	 */
