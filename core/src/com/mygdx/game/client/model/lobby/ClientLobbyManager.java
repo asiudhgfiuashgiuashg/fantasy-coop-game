@@ -3,6 +3,7 @@ package com.mygdx.game.client.model.lobby;
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.shared.model.LobbyManager;
 import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.ReadyStatusMsg;
 
 import java.util.ArrayList;
 
@@ -67,5 +68,16 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
 
     public ClientLobbyPlayer getLocalLobbyPlayer() {
         return localLobbyPlayer;
+    }
+
+    /**
+     * Set local player's status to ready.
+     * Send Network message to server that player is ready.
+     * Update portion of view which reflects readyness
+     */
+    public void setAndSendReady(boolean ready) {
+        localLobbyPlayer.ready.set(ready);
+        kryoClient.sendTCP(new ReadyStatusMsg(ready));
+        //TODO update view
     }
 }

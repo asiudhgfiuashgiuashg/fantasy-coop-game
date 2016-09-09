@@ -51,4 +51,16 @@ public class LobbyListener extends Listener.ReflectionListener {
 		player.username = usernameChoiceMsg.getUsername();
 		server.sendToAllExceptTCP(connection.getID(), new UsernameChoiceMsg(player.getUid(), player.username));
 	}
+
+	/**
+	 * A client has changed their ready state! Propagate and save it.
+	 * @param connection
+	 * @param  readyMsg
+	 */
+	public void received(Connection connection, ReadyStatusMsg readyMsg) {
+		ServerLobbyPlayer player = serverLobbyManager.getPlayerByConnection(connection);
+		player.ready.set(readyMsg.ready); //save
+		readyMsg.uid = player.getUid();
+		server.sendToAllExceptTCP(connection.getID(), readyMsg); //propagate
+	}
 }

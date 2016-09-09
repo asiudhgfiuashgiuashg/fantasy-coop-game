@@ -5,10 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
-import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.UsernameChoiceMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.*;
 
 /**
  * General listener that the client uses to demultiplex network messages from the server
@@ -56,5 +53,10 @@ public class LobbyListener extends Listener.ReflectionListener {
     public void received(Connection connection, UsernameChoiceMsg usernameChoiceMsg) {
         ClientLobbyPlayer lobbyPlayer = lobbyManager.getByUid(usernameChoiceMsg.uid);
         lobbyPlayer.username = usernameChoiceMsg.username;
+    }
+
+    public void received(Connection connection, ReadyStatusMsg readyMsg) {
+        ClientLobbyPlayer lobbyPlayer = lobbyManager.getByUid(readyMsg.uid); //find out who the uid refers to
+        lobbyPlayer.ready.set(readyMsg.ready);
     }
 }

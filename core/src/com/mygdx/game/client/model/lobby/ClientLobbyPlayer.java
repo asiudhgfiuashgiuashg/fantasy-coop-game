@@ -29,6 +29,6 @@ public class ClientLobbyPlayer extends LobbyPlayer {
      */
     @Override
     public String toString() {
-        return username + " uid: " + uid + " class: " + playerClass;
+        return username + " / uid: " + uid + " / class: " + playerClass + " / ready status: " + ready;
     }
 }
