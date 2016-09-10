@@ -66,7 +66,9 @@ public class LobbyListener extends Listener.ReflectionListener {
 	}
 
 	public void received(Connection connection, ChatMessageMsg chatMsg) {
-
+		serverLobbyManager.addChatMessage(chatMsg);
+		chatMsg.uid = serverLobbyManager.getPlayerByConnection(connection).getUid();
+		server.sendToAllExceptTCP(connection.getID(), chatMsg);
 	}
 
 	/**

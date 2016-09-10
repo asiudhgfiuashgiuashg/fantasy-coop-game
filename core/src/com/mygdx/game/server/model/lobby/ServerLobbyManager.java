@@ -5,9 +5,11 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.shared.model.LobbyManager;
 import com.mygdx.game.shared.model.LobbyPlayer;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.GameStartMsg;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Logic and state for player's connecting, chatting, choosing classes, readying up.
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 
 	private Server server;
+
 	public ServerLobbyManager(Server server) {
 		lobbyPlayers = new ArrayList<ServerLobbyPlayer>();
 		this.server = server;

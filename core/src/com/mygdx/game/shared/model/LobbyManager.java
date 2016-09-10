@@ -1,7 +1,9 @@
 package com.mygdx.game.shared.model;
 
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import java.util.List;
  */
 public abstract class LobbyManager<T extends LobbyPlayer> {
     protected List<T> lobbyPlayers;
+    protected final List<ChatMessageMsg> chatMsgs = new ArrayList<ChatMessageMsg>();
 
     /**
      * add a new player to the list of lobbyPlayers and do related things
@@ -34,5 +37,13 @@ public abstract class LobbyManager<T extends LobbyPlayer> {
             }
         }
         return true;
+    }
+
+    public void addChatMessage(ChatMessageMsg chatMsg) {
+        this.chatMsgs.add(chatMsg);
+    }
+
+    public List<ChatMessageMsg> getChatMessages() {
+        return Collections.unmodifiableList(chatMsgs);
     }
 }

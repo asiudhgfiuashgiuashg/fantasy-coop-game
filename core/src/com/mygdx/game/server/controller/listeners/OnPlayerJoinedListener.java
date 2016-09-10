@@ -7,6 +7,7 @@ import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
 import com.mygdx.game.shared.model.LobbyPlayer;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
 
 /**
@@ -36,5 +37,9 @@ public class OnPlayerJoinedListener extends Listener {
 		//This uid will be referenced when providing info updates like username in the lobby's future
 		LobbyPlayerInfoMsg playerInfoMsg = new LobbyPlayerInfoMsg(newLobbyPlayer.getUid(), null, null);
 		server.sendToAllExceptTCP(connection.getID(), playerInfoMsg);
+		//send the newly-connected player all previous chat messages.
+		for (ChatMessageMsg chatMsg: serverLobbyManager.getChatMessages()) {
+			server.sendToTCP(connection.getID(), chatMsg);
+		}
 	}
 }

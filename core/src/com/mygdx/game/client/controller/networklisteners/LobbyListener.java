@@ -81,4 +81,11 @@ public class LobbyListener extends Listener.ReflectionListener {
     public void received(Connection connection, GameStartMsg gameStartMsg) {
         gameClient.transitionToInGame();
     }
+
+    public void received(Connection connection, ChatMessageMsg chatMsg) {
+        String username = lobbyManager.getByUid(chatMsg.uid).username;
+        String chatBoxStr = username + ": " + chatMsg.message;
+        console.log("CHAT: " + chatBoxStr);
+        gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
+    }
 }

@@ -2,6 +2,7 @@ package com.mygdx.game.client.model.lobby;
 
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.shared.model.LobbyManager;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.ReadyStatusMsg;
 
@@ -71,5 +72,15 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
         localLobbyPlayer.ready.set(ready);
         kryoClient.sendTCP(new ReadyStatusMsg(ready));
         //TODO update view
+    }
+
+    /**
+     * save message and also update chat box (view)
+     * @param msg
+     */
+    @Override
+    public void addChatMessage(ChatMessageMsg msg) {
+        super.addChatMessage(msg);
+        //TODO display message on screen
     }
 }
