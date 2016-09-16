@@ -14,4 +14,10 @@ public class CutsceneTrigger extends Trigger {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public void act() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

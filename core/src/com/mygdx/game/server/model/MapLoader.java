@@ -127,6 +127,8 @@ public class MapLoader {
 				loadStaticEntities(layer);
 			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
 				loadDynamicEntities(layer);
+			} else if (name.equals(MapLoaderConstants.TRIGGERS_LAYER_NAME)) {
+				loadTriggers(layer);
 			}
 		}
 	}
@@ -173,10 +175,10 @@ public class MapLoader {
 	}
 
 	/**
-	 * Load dynamic entities from static entity layer.
+	 * Load dynamic entities from dynamic entity layer.
 	 * 
 	 * @param layer
-	 *            static entity layer XML element
+	 *            dynamic entity layer XML element
 	 * @throws ClassNotFoundException
 	 *             if dynamic entity name is not a Java class
 	 * @throws IllegalAccessException
@@ -211,7 +213,10 @@ public class MapLoader {
 			// Use reflection to create dynamic entity
 			Class c = Class.forName(name);
 			Object o = c.newInstance();
-
+			
+			((Entity) o).setPosition(new Vector2(x, y));
+			((Entity) o).setVisLayer(visLayer);;
+			
 			// Add it to the game map
 			if (o instanceof Enemy) {
 				Enemy enemy = (Enemy) o;
@@ -225,12 +230,51 @@ public class MapLoader {
 			} else if (o instanceof Projectile) {
 				Projectile proj = (Projectile) o;
 				map.addProjectile(proj);
-			} else if (o instanceof Trigger) {
-				Trigger trig = (Trigger) o;
-				map.addTrigger(trig);
 			} else if (o instanceof StaticEntity) {
 				StaticEntity ent = (StaticEntity) o;
 				map.addStaticEntity(ent);
+			} else {
+				throw new MapLoaderException();
+			}
+		}
+	}
+
+	/**
+	 * Load dynamic entities from trigger layer.
+	 * 
+	 * @param layer
+	 *            trigger layer XML element
+	 * @throws ClassNotFoundException
+	 *             if dynamic entity name is not a Java class
+	 * @throws IllegalAccessException
+	 *             if there is a problem with reflection
+	 * @throws InstantiationException
+	 *             if the entity cannot be instantiated
+	 * @throws MapLoaderException
+	 *             if the entity is not a valid class type
+	 */
+	private void loadTriggers(Element layer)
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
+		for (Element trigger : layer.getChildrenByName("object")) {
+			// Trigger name (used for reflection)
+			String name = trigger.get("name");
+
+			// Trigger position, width, height
+			float x = trigger.getFloatAttribute("x");
+			float y = trigger.getFloatAttribute("y");
+			float width = trigger.getFloatAttribute("width");
+			float height = trigger.getFloatAttribute("height");
+
+			// Use reflection to create trigger
+			Class c = Class.forName(name);
+			Object o = c.newInstance();
+			
+			// Construct hitbox and add it to the game map
+			if (o instanceof Trigger) {
+				Trigger trig = (Trigger) o;
+				float[] vertices = {x, y, x + width, y, x + width, y + height, x, y + height};
+				trig.polygon = new CollideablePolygon(vertices);
+				map.addTrigger(trig);
 			} else {
 				throw new MapLoaderException();
 			}

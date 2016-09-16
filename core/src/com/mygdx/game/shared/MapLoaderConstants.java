@@ -9,4 +9,5 @@ package com.mygdx.game.shared;
 public class MapLoaderConstants {
 	public static final String STATIC_ENTITIES_LAYER_NAME = "Static Entities";
 	public static final String DYNAMIC_ENTITIES_LAYER_NAME = "Dynamic Entities";
+	public static final String TRIGGERS_LAYER_NAME = "Triggers";
 }

@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model.trigger;
 
+import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
@@ -9,7 +10,7 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  * @author elimonent
  *
  */
-public abstract class Trigger extends PolygonObject {
+public abstract class Trigger extends PolygonObject implements Actable {
 
 	protected Trigger(CollideablePolygon polygon) {
 		super(polygon);
