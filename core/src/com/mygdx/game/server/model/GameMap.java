@@ -27,5 +27,63 @@ public class GameMap {
 	 */
 	public GameMap(String name) {
 		this.name = name;
+		enemies = new Array<Enemy>();
+		nonEnemyCharacters = new Array<NonEnemyCharacter>();
+		activeSpells = new Array<ActiveSpell>();
+		projectiles = new Array<Projectile>();
+		triggers = new Array<Trigger>();
+		staticEntities = new Array<StaticEntity>();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Array<Enemy> getEnemies() {
+		return enemies;
+	}
+	
+	public void addEnemy(Enemy enemy) {
+		enemies.add(enemy);
+	}
+
+	public Array<NonEnemyCharacter> getNonEnemyCharacters() {
+		return nonEnemyCharacters;
+	}
+	
+	public void addNonEnemyCharacter(NonEnemyCharacter nec) {
+		nonEnemyCharacters.add(nec);
+	}
+
+	public Array<ActiveSpell> getActiveSpells() {
+		return activeSpells;
+	}
+	
+	public void addActiveSpell(ActiveSpell spell) {
+		activeSpells.add(spell);
+	}
+
+	public Array<Projectile> getProjectiles() {
+		return projectiles;
+	}
+	
+	public void addProjectile(Projectile proj) {
+		projectiles.add(proj);
+	}
+
+	public Array<Trigger> getTriggers() {
+		return triggers;
+	}
+	
+	public void addTrigger(Trigger trig) {
+		triggers.add(trig);
+	}
+	
+	public Array<StaticEntity> getStaticEntities() {
+		return staticEntities;
+	}
+	
+	public void addStaticEntity(StaticEntity ent) {
+		staticEntities.add(ent);
 	}
 }

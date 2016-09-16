@@ -234,4 +234,21 @@ public class Server implements Runnable {
 		return running.get();
 	}
 
+
+	/**
+	 * Gets the current game map
+	 * @return
+	 */
+	public GameMap getMap() {
+		return map;
+	}
+
+	/**
+	 * Sets the current game map
+	 * @param map 
+	 */
+	public void setMap(GameMap map) {
+		this.map = map;
+	}
+	
 }

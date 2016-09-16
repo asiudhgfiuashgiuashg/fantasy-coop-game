@@ -28,9 +28,79 @@ public abstract class Entity extends PolygonObject implements Drawable {
 	 * position in global coordinates
 	 */
 	protected Vector2 position;
+	/**
+	 * Name of entity's sprite
+	 */
 	protected String spriteName;
 	/**
 	 * the layer that this Entity resides in (affects how it is drawn on client)
 	 */
 	protected int visLayer;
+
+	/**
+	 * Gets the entity's position
+	 * @return
+	 */
+	public Vector2 getPosition() {
+		return position;
+	}
+
+	/**
+	 * Sets the entity's position along with its hitbox's position
+	 * 
+	 * @param position
+	 */
+	public void setPosition(Vector2 position) {
+		this.position = position;
+
+		// Bind hitbox position to entity position
+		this.polygon.setPosition(position.x, position.y);
+	}
+
+	/**
+	 * Gets the name of the entity's sprite
+	 * 
+	 * @return spriteName
+	 */
+	public String getSpriteName() {
+		return spriteName;
+	}
+
+	/**
+	 * Sets the name of the entity's sprite
+	 * 
+	 * @param spriteName
+	 */
+	public void setSpriteName(String spriteName) {
+		this.spriteName = spriteName;
+	}
+
+	/**
+	 * Gets entity's current visibility layer
+	 * 
+	 * @return visLayer
+	 */
+	public int getVisLayer() {
+		return visLayer;
+	}
+
+	/**
+	 * Sets entity's visibility layer
+	 * 
+	 * @param visLayer
+	 *            -1, 0, or 1
+	 */
+	public void setVisLayer(int visLayer) {
+		this.visLayer = visLayer;
+	}
+
+	/**
+	 * Gets entity's uid
+	 * 
+	 * @return uid
+	 */
+	public String getUid() {
+		return uid;
+	}
+
 }
