@@ -10,6 +10,7 @@ import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.player.Player;
+import com.mygdx.game.shared.model.LobbyManager;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
@@ -180,7 +181,7 @@ public class Server implements Runnable {
 	 */
 	private void setupLobby() {
 		setState(GameState.LOBBY);
-		serverLobbyManager = new ServerLobbyManager();
+		serverLobbyManager = new ServerLobbyManager(server);
 		addKryoServerLobbyListeners();
 	}
 
@@ -234,7 +235,6 @@ public class Server implements Runnable {
 		return running.get();
 	}
 
-
 	/**
 	 * Gets the current game map
 	 * @return
@@ -251,4 +251,7 @@ public class Server implements Runnable {
 		this.map = map;
 	}
 	
+	public ServerLobbyManager getLobbyManager() {
+		return serverLobbyManager;
+	}
 }

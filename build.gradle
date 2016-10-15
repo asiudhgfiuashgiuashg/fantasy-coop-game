@@ -55,7 +55,6 @@ project(":core") {
         compile group: 'com.esotericsoftware', name: 'kryonet', version: '2.22.0-RC1'
         compile group: 'javassist', name: 'javassist', version: '3.12.1.GA'
         compile group: 'com.google.guava', name: 'guava', version: '19.0'
-        compile group: 'org.reflections', name: 'reflections-maven', version: '0.9.9-RC2'
     }
 }
 

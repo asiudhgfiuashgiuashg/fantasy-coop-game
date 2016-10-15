@@ -26,8 +26,7 @@ public class LobbyListener extends Listener.ReflectionListener {
 		this.server = server;
 	}
 	public void received(Connection connection, SelectClassMessage message) {
-		console.log("Received a class change request from " + connection);
-		console.log("Requested class: " + message.getPlayerClass());
+		console.log("Received a class change request from " + connection + " for " + message.getPlayerClass());
 
 		//check if this class is available, and send a class assignment message to everyone if it is.
 		PlayerClassEnum requestedClass = message.getPlayerClass();
@@ -38,6 +37,7 @@ public class LobbyListener extends Listener.ReflectionListener {
 					new OtherClassAssignmentMsg(requestedClass, player.getUid())); //let everyone else know that this lobby player has been assigned this class (which they requested)
 			server.sendToTCP(connection.getID(), new ClassAssignmentMsg(player.playerClass));
 			SingletonGUIConsole.getInstance().log("Assigned " + requestedClass + " to " + connection);
+			tryToStartGame();
 		}
 	}
 
@@ -50,5 +50,33 @@ public class LobbyListener extends Listener.ReflectionListener {
 		ServerLobbyPlayer player = serverLobbyManager.getPlayerByConnection(connection);
 		player.username = usernameChoiceMsg.getUsername();
 		server.sendToAllExceptTCP(connection.getID(), new UsernameChoiceMsg(player.getUid(), player.username));
+	}
+
+	/**
+	 * A client has changed their ready state! Propagate and save it.
+	 * @param connection
+	 * @param  readyMsg
+	 */
+	public void received(Connection connection, ReadyStatusMsg readyMsg) {
+		ServerLobbyPlayer player = serverLobbyManager.getPlayerByConnection(connection);
+		player.ready.set(readyMsg.ready); //save
+		readyMsg.uid = player.getUid();
+		server.sendToAllExceptTCP(connection.getID(), readyMsg); //propagate
+		tryToStartGame();
+	}
+
+	public void received(Connection connection, ChatMessageMsg chatMsg) {
+		serverLobbyManager.addChatMessage(chatMsg);
+		chatMsg.uid = serverLobbyManager.getPlayerByConnection(connection).getUid();
+		server.sendToAllExceptTCP(connection.getID(), chatMsg);
+	}
+
+	/**
+	 * if everyone is ready and has their classes selected, start the game
+	 */
+	private void tryToStartGame() {
+		if (serverLobbyManager.getReadyAndClassesSelected()) {
+			serverLobbyManager.onAllReady();
+		}
 	}
 }

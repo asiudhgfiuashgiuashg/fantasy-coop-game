@@ -2,7 +2,9 @@ package com.mygdx.game.client.model.lobby;
 
 import com.esotericsoftware.kryonet.Client;
 import com.mygdx.game.shared.model.LobbyManager;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.ReadyStatusMsg;
 
 import java.util.ArrayList;
 
@@ -37,14 +39,6 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      */
     @Override
     public void addLobbyPlayer(ClientLobbyPlayer player) {
- /*       if (getLobbyPlayers().contains(player)) { //update
-            ClientLobbyPlayer lobbyPlayer = getLobbyPlayers().get(getLobbyPlayers().indexOf(player));
-            lobbyPlayer.username = player.username;
-            lobbyPlayer.playerClass = player.playerClass;
-        } else { //add
-            getLobbyPlayers().add(player);
-        }*/
-
         super.addLobbyPlayer(player);
         //update client lobby view here
     }
@@ -67,5 +61,26 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
 
     public ClientLobbyPlayer getLocalLobbyPlayer() {
         return localLobbyPlayer;
+    }
+
+    /**
+     * Set local player's status to ready.
+     * Send Network message to server that player is ready.
+     * Update portion of view which reflects readyness
+     */
+    public void setAndSendReady(boolean ready) {
+        localLobbyPlayer.ready.set(ready);
+        kryoClient.sendTCP(new ReadyStatusMsg(ready));
+        //TODO update view
+    }
+
+    /**
+     * save message and also update chat box (view)
+     * @param msg
+     */
+    @Override
+    public void addChatMessage(ChatMessageMsg msg) {
+        super.addChatMessage(msg);
+        //TODO display message on screen
     }
 }

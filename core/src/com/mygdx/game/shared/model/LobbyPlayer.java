@@ -43,4 +43,13 @@ public abstract class LobbyPlayer {
     public int hashCode() {
         return 37 * getUid();
     }
+
+    /**
+     * for printing to console
+     * @return
+     */
+    @Override
+    public String toString() {
+        return username + " / uid: " + uid + " / class: " + playerClass + " / ready status: " + ready;
+    }
 }

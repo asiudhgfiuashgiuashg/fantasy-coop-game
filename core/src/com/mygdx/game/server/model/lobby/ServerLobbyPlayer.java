@@ -21,5 +21,4 @@ public class ServerLobbyPlayer extends LobbyPlayer {
 		 this.uid = uidIncrementor;
 		 uidIncrementor++;
 	 }
-
 }

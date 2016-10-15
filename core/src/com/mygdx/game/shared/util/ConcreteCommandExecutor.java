@@ -2,10 +2,13 @@ package com.mygdx.game.shared.util;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.Server;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.lobby.PlayerClassEnum;
+import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
+import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
 import com.mygdx.game.shared.util.network.messages.lobby.SelectClassMessage;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
@@ -87,12 +90,11 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	/**
 	 * list the clients connected to server
 	 */
-	public void listServerClients() {
+	public void serverListPlayers() {
 		if (serverStarted) {
 			console.log("Connected clients: ");
-			for (Connection connection : Server.getInstance().getServer().getConnections()) {
-				console.log(connection.toString()
-						+ " " + connection.getRemoteAddressTCP());
+			for (ServerLobbyPlayer lobbyPlayer: Server.getInstance().getLobbyManager().getLobbyPlayers()) {
+				console.log(lobbyPlayer.toString());
 			}
 		} else {
 			console.log("No server running", LogLevel.ERROR);
@@ -119,9 +121,33 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	/**
 	 * list players that client knows are in lobby
 	 */
-	public void listPlayers() {
+	public void clientListPlayers() {
 		for (ClientLobbyPlayer lobbyPlayer : gameClient.getLobbyManager().getLobbyPlayers()) {
 			console.log(lobbyPlayer.toString());
 		}
+	}
+
+	/**
+	 * send ready message to server
+	 * and lobby update view
+	 */
+	public void ready() {
+		gameClient.getLobbyManager().setAndSendReady(true);
+	}
+
+	/**
+	 * send unready message to server
+	 * and update lobby view
+	 */
+	public void unready() {
+		gameClient.getLobbyManager().setAndSendReady(false);
+	}
+
+	/**
+	 * send a chat message
+	 * @param msg the message to send
+	 */
+	public void message(String msg) {
+		gameClient.getClient().sendTCP(new ChatMessageMsg(msg));
 	}
 }

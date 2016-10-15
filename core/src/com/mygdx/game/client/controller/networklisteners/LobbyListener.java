@@ -2,13 +2,11 @@ package com.mygdx.game.client.controller.networklisteners;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
-import com.mygdx.game.shared.util.network.messages.lobby.ClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.OtherClassAssignmentMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.LobbyPlayerInfoMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.UsernameChoiceMsg;
+import com.mygdx.game.shared.util.network.messages.lobby.*;
 
 /**
  * General listener that the client uses to demultiplex network messages from the server
@@ -16,11 +14,13 @@ import com.mygdx.game.shared.util.network.messages.lobby.UsernameChoiceMsg;
  * Created by elimonent on 8/27/2016.
  */
 public class LobbyListener extends Listener.ReflectionListener {
-    private final ClientLobbyManager lobbyManager;
-    private SingletonGUIConsole console = SingletonGUIConsole.getInstance();
+    private final ClientLobbyManager lobbyManager; // server messages will cause a change in the lobbyManager often
+    private final GameClient gameClient; // need a reference to this to change state upon getting a game start message from server
+    private SingletonGUIConsole console = SingletonGUIConsole.getInstance(); // for logging
 
-    public LobbyListener(ClientLobbyManager lobbyManager) {
+    public LobbyListener(ClientLobbyManager lobbyManager, GameClient gameClient) {
         this.lobbyManager = lobbyManager; //will be used to allow the controller (this listener) to modify the model (the lobbyManager)
+        this.gameClient = gameClient;
     }
 
     /**
@@ -53,8 +53,39 @@ public class LobbyListener extends Listener.ReflectionListener {
         lobbyManager.getLocalLobbyPlayer().playerClass = msg.getPlayerClass();
     }
 
+    /**
+     * update a lobby player's username
+     * @param connection
+     * @param usernameChoiceMsg
+     */
     public void received(Connection connection, UsernameChoiceMsg usernameChoiceMsg) {
         ClientLobbyPlayer lobbyPlayer = lobbyManager.getByUid(usernameChoiceMsg.uid);
         lobbyPlayer.username = usernameChoiceMsg.username;
+    }
+
+    /**
+     * update a lobby player's ready state
+     * @param connection
+     * @param readyMsg
+     */
+    public void received(Connection connection, ReadyStatusMsg readyMsg) {
+        ClientLobbyPlayer lobbyPlayer = lobbyManager.getByUid(readyMsg.uid); //find out who the uid refers to
+        lobbyPlayer.ready.set(readyMsg.ready);
+    }
+
+    /**
+     * exit the lobby and start the game
+     * @param connection
+     * @param gameStartMsg
+     */
+    public void received(Connection connection, GameStartMsg gameStartMsg) {
+        gameClient.transitionToInGame();
+    }
+
+    public void received(Connection connection, ChatMessageMsg chatMsg) {
+        String username = lobbyManager.getByUid(chatMsg.uid).username;
+        String chatBoxStr = username + ": " + chatMsg.message;
+        console.log("CHAT: " + chatBoxStr);
+        gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
     }
 }

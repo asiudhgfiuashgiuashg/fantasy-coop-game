@@ -8,8 +8,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
+import com.mygdx.game.client.view.GameScreen;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
 import com.mygdx.game.server.model.GameMap;
@@ -139,11 +141,17 @@ public class GameClient extends Game {
 	 * These listeners will react to server messages
 	 */
 	private void registerKryoLobbyListeners() {
-		LobbyListener lobbyListener = new LobbyListener(lobbyManager);
+		LobbyListener lobbyListener = new LobbyListener(lobbyManager, this);
 		console.log("Added lobby listener");
 		client.addListener(lobbyListener);
 		lobbyListeners.add(lobbyListener); //keep track of this listener so we can destroy it later
 
+	}
+
+	public void removeKryoLobbyListeners() {
+		for (Listener listener: lobbyListeners) {
+			client.removeListener(listener);
+		}
 	}
 
 	public boolean isConnected() {
@@ -156,5 +164,10 @@ public class GameClient extends Game {
 
 	public ClientLobbyManager getLobbyManager() {
 		return lobbyManager;
+	}
+
+	public void transitionToInGame() {
+		setScreen(new GameScreen());
+		console.log("Transitioned to in-game from lobby");
 	}
 }

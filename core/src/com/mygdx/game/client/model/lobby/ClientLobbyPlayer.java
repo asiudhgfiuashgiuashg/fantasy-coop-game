@@ -22,13 +22,4 @@ public class ClientLobbyPlayer extends LobbyPlayer {
         this.username = username;
         this.playerClass = null;
     }
-
-    /**
-     * for printing to console
-     * @return
-     */
-    @Override
-    public String toString() {
-        return username + " uid: " + uid + " class: " + playerClass;
-    }
 }
