@@ -103,4 +103,9 @@ public abstract class Entity extends PolygonObject implements Drawable {
 		return uid;
 	}
 
+	@Override
+	public String toString() {
+		return "Entity [uid=" + uid + ", position=" + position + ", spriteName=" + spriteName + ", visLayer=" + visLayer
+				+ "]";
+	}
 }

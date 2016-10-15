@@ -1,7 +1,9 @@
 package com.mygdx.game.server.model;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -32,7 +34,10 @@ public class MapLoader {
 	public void loadMap(String fileName) throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, MapLoaderException {
 
-		Element root = XML.parse(new FileHandle(fileName));
+		FileHandle file = Gdx.files.internal(fileName);
+		if (file == null)
+			throw new FileNotFoundException(fileName + "doesn't exist.");
+		Element root = XML.parse(file);
 
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
@@ -96,12 +101,13 @@ public class MapLoader {
 				Element polygon = null;
 				if ((polygon = object.getChildByName("polygon")) != null) {
 					// Borrowed code from libgdx BaseTmxMapLoader.java
+					// With fix to vertices coordinates
 					String[] points = polygon.getAttribute("points").split(" ");
 					float[] vertices = new float[points.length * 2];
 					for (int i = 0; i < points.length; i++) {
 						String[] point = points[i].split(",");
-						vertices[i * 2] = Float.parseFloat(point[0]);
-						vertices[i * 2 + 1] = Float.parseFloat(point[1]);
+						vertices[i * 2] = Float.parseFloat(point[0]) + object.getFloatAttribute("x");
+						vertices[i * 2 + 1] = object.getFloatAttribute("y") - Float.parseFloat(point[1]);
 					}
 					CollideablePolygon p = new CollideablePolygon(vertices);
 
@@ -213,10 +219,11 @@ public class MapLoader {
 			// Use reflection to create dynamic entity
 			Class c = Class.forName(name);
 			Object o = c.newInstance();
-			
+
 			((Entity) o).setPosition(new Vector2(x, y));
-			((Entity) o).setVisLayer(visLayer);;
-			
+			((Entity) o).setVisLayer(visLayer);
+			;
+
 			// Add it to the game map
 			if (o instanceof Enemy) {
 				Enemy enemy = (Enemy) o;
@@ -268,11 +275,11 @@ public class MapLoader {
 			// Use reflection to create trigger
 			Class c = Class.forName(name);
 			Object o = c.newInstance();
-			
+
 			// Construct hitbox and add it to the game map
 			if (o instanceof Trigger) {
 				Trigger trig = (Trigger) o;
-				float[] vertices = {x, y, x + width, y, x + width, y + height, x, y + height};
+				float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
 				trig.polygon = new CollideablePolygon(vertices);
 				map.addTrigger(trig);
 			} else {

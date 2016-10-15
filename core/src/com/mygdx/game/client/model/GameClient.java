@@ -12,6 +12,10 @@ import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
+import com.mygdx.game.server.model.GameMap;
+import com.mygdx.game.server.model.MapLoader;
+import com.mygdx.game.server.model.Server;
+import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
@@ -43,6 +47,26 @@ public class GameClient extends Game {
 	public void create () {
 		setupConsole();
 		setScreen(new MenuScreen());
+		
+		MapLoader loader = new MapLoader();
+		try {
+			loader.loadMap("validMap.tmx");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MapLoaderException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -47,6 +47,9 @@ public class CollideablePolygon extends Polygon {
 			throw new IllegalArgumentException("The vertex array must have an even number of floats");
 		}
 		if (!areVerticesConvex(vertices)) {
+			for (int i = 0; i < vertices.length; i++) {
+				System.out.println(vertices[i]);
+			}
 			throw new IllegalArgumentException(
 					"Vertices must be specified in counter-clockwise order and must specify a convex polygon.");
 		}
