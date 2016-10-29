@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" nextobjectid="13">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="32" tileheight="32" nextobjectid="14">
  <tileset firstgid="1" name="sewer_tileset" tilewidth="32" tileheight="32" tilecount="36" columns="6">
   <image source="sewer_tileset.png" width="192" height="217"/>
   <tile id="9">
@@ -14,14 +14,14 @@
   <tile id="24">
    <objectgroup draworder="index">
     <object id="13" x="12.5" y="23.875">
-     <polygon points="0.25,-0.75 10.125,3.75 9.5,-15.125 6,-5.25"/>
+     <polygon points="0.25,-0.75 10.125,3.75 9.5,-15.125 3.09091,-6.70455"/>
     </object>
    </objectgroup>
   </tile>
   <tile id="27">
    <objectgroup draworder="index">
-    <object id="10" x="10.25" y="21.75">
-     <polygon points="0,0 12.375,0.25 12.75,-12.25 1.25,-15.125 -3.625,-7.125"/>
+    <object id="11" x="10.7273" y="21.6364">
+     <polygon points="0,0 10.6364,2.18182 15.2727,-3.09091 13.0909,-15.7273 2.63636,-17.3636 -5,-10.1818"/>
     </object>
    </objectgroup>
   </tile>
@@ -55,10 +55,10 @@
 </data>
  </layer>
  <objectgroup name="Dynamic Entities">
-  <object id="7" name="SpiderBoss" gid="82" x="63.3333" y="222.333" width="32" height="32"/>
+  <object id="7" name="SpiderBoss" type="Enemy" gid="82" x="63.3333" y="222.333" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Static Entities">
-  <object id="6" name="Awning" gid="28" x="171" y="259.667" width="32" height="32">
+  <object id="6" gid="28" x="171" y="259.667" width="32" height="32">
    <properties>
     <property name="visLayer" type="int" value="1"/>
    </properties>
@@ -66,5 +66,6 @@
  </objectgroup>
  <objectgroup name="Triggers">
   <object id="9" name="BossTrigger" x="170" y="138.666" width="50.6667" height="35.3333"/>
+  <object id="13" x="25.3333" y="256" width="44.6667" height="46.6667"/>
  </objectgroup>
 </map>

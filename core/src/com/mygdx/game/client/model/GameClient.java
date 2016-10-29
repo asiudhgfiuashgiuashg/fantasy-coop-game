@@ -69,6 +69,7 @@ public class GameClient extends Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println(Server.getInstance().getMap().getStaticEntities());
 	}
 
 	@Override

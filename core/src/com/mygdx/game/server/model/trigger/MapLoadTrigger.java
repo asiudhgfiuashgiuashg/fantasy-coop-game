@@ -9,9 +9,9 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public class MapLoadTrigger extends Trigger {
 
-	protected MapLoadTrigger(CollideablePolygon polygon) {
+	public MapLoadTrigger(CollideablePolygon polygon, String name) {
 		super(polygon);
-		// TODO Auto-generated constructor stub
+		// TODO load map of name
 	}
 
 	@Override

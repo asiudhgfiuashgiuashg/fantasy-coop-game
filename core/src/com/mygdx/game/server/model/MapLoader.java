@@ -2,6 +2,8 @@ package com.mygdx.game.server.model;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -9,6 +11,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.mygdx.game.server.model.entity.StaticEntity;
+import com.mygdx.game.server.model.entity.enemy.Enemy;
+import com.mygdx.game.server.model.entity.enemy.SpiderBoss;
+import com.mygdx.game.server.model.trigger.CutsceneTrigger;
+import com.mygdx.game.server.model.trigger.MapLoadTrigger;
 import com.mygdx.game.server.model.trigger.Trigger;
 import com.mygdx.game.shared.MapLoaderConstants;
 import com.mygdx.game.shared.UniqueIDAssigner;
@@ -128,7 +135,7 @@ public class MapLoader {
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
 
 		for (Element layer : root.getChildrenByName("objectgroup")) {
-			String name = layer.getName();
+			String name = layer.getAttribute("name");
 			if (name.equals(MapLoaderConstants.STATIC_ENTITIES_LAYER_NAME)) {
 				loadStaticEntities(layer);
 			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
@@ -197,8 +204,9 @@ public class MapLoader {
 	private void loadDynamicEntities(Element layer)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
 		for (Element entity : layer.getChildrenByName("object")) {
-			// Entity name (used for reflection)
+			// Entity name and type (used for reflection)
 			String name = entity.get("name");
+			String type = entity.get("type");
 
 			// Entity position
 			float x = entity.getFloatAttribute("x");
@@ -215,14 +223,28 @@ public class MapLoader {
 					visLayer = visLayerProp.getIntAttribute("value");
 				}
 			}
-
+			
+			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE
+						 + MapLoaderConstants.ENEMY_PACKAGE + name);
+				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, String.class, int.class);
+				cons.newInstance(parameters);
+			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
+				
+			} else {
+				throw new MapLoaderException();
+			}
+			
 			// Use reflection to create dynamic entity
-			Class c = Class.forName(name);
+			Class c = Class.forName("com.mygdx.game.server.model.SpiderBoss");
+			Constructor cons = c.getConstructor(parameterTypes)
+			cons.newInstance(all the parameters)
+			/* Need to figure out how to handle hitboxes and construction */
+			
 			Object o = c.newInstance();
 
 			((Entity) o).setPosition(new Vector2(x, y));
 			((Entity) o).setVisLayer(visLayer);
-			;
 
 			// Add it to the game map
 			if (o instanceof Enemy) {
@@ -231,17 +253,6 @@ public class MapLoader {
 			} else if (o instanceof NonEnemyCharacter) {
 				NonEnemyCharacter nec = (NonEnemyCharacter) o;
 				map.addNonEnemyCharacter(nec);
-			} else if (o instanceof ActiveSpell) {
-				ActiveSpell spell = (ActiveSpell) o;
-				map.addActiveSpell(spell);
-			} else if (o instanceof Projectile) {
-				Projectile proj = (Projectile) o;
-				map.addProjectile(proj);
-			} else if (o instanceof StaticEntity) {
-				StaticEntity ent = (StaticEntity) o;
-				map.addStaticEntity(ent);
-			} else {
-				throw new MapLoaderException();
 			}
 		}
 	}
@@ -251,20 +262,14 @@ public class MapLoader {
 	 * 
 	 * @param layer
 	 *            trigger layer XML element
-	 * @throws ClassNotFoundException
-	 *             if dynamic entity name is not a Java class
-	 * @throws IllegalAccessException
-	 *             if there is a problem with reflection
-	 * @throws InstantiationException
-	 *             if the entity cannot be instantiated
-	 * @throws MapLoaderException
-	 *             if the entity is not a valid class type
+	 * @throws various reflection-related exceptions
 	 */
-	private void loadTriggers(Element layer)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
+	private void loadTriggers(Element layer) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		for (Element trigger : layer.getChildrenByName("object")) {
-			// Trigger name (used for reflection)
+			// Trigger name and type (used for reflection, instantiation)
 			String name = trigger.get("name");
+			String type = trigger.get("type");
 
 			// Trigger position, width, height
 			float x = trigger.getFloatAttribute("x");
@@ -272,19 +277,25 @@ public class MapLoader {
 			float width = trigger.getFloatAttribute("width");
 			float height = trigger.getFloatAttribute("height");
 
-			// Use reflection to create trigger
-			Class c = Class.forName(name);
-			Object o = c.newInstance();
+			Trigger trig;
+			float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
+			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
-			// Construct hitbox and add it to the game map
-			if (o instanceof Trigger) {
-				Trigger trig = (Trigger) o;
-				float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
-				trig.polygon = new CollideablePolygon(vertices);
-				map.addTrigger(trig);
+			// Check for special classes of triggers
+			if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
+				trig = new CutsceneTrigger(hitbox, name);
+			} else if (type.equals(MapLoaderConstants.MAPLOAD_TRIGGER_TYPE)) {
+				trig = new MapLoadTrigger(hitbox, name);
 			} else {
-				throw new MapLoaderException();
+				// Use reflection to create trigger
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.TRIGGER_PACKAGE + name);
+				Constructor<?> cons = c.getConstructor(CollideablePolygon.class);
+				Object o;
+				o = cons.newInstance(hitbox);
+				trig = (Trigger) o;
 			}
+
+			map.addTrigger(trig);
 		}
 	}
 

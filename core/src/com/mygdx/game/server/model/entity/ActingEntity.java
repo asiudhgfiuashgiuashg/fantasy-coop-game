@@ -1,6 +1,7 @@
-package com.mygdx.game.server.model;
+package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
@@ -11,8 +12,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class ActingEntity extends Entity implements Actable {
 
-	protected ActingEntity(String uid, Vector2 position, String spriteName, int visLayer, CollideablePolygon polygon) {
-		super(uid, position, spriteName, visLayer, polygon);
+	protected ActingEntity(String uid, Vector2 position, String spriteName, int visLayer) {
+		super(uid, position, spriteName, visLayer);
 	}
 	
 }

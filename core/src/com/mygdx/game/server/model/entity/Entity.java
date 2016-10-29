@@ -1,6 +1,8 @@
-package com.mygdx.game.server.model;
+package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.Drawable;
+import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
@@ -12,8 +14,7 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class Entity extends PolygonObject implements Drawable {
 
-	protected Entity(String uid, Vector2 position, String spriteName, int visLayer, CollideablePolygon polygon) {
-		super(polygon);
+	protected Entity(String uid, Vector2 position, String spriteName, int visLayer) {
 		this.uid = uid;
 		this.position = position;
 		this.spriteName = spriteName;

@@ -1,6 +1,10 @@
 package com.mygdx.game.server.model;
 
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.server.model.entity.Projectile;
+import com.mygdx.game.server.model.entity.StaticEntity;
+import com.mygdx.game.server.model.entity.enemy.Enemy;
+import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.Trigger;
 
 /**
@@ -13,7 +17,7 @@ import com.mygdx.game.server.model.trigger.Trigger;
 public class GameMap {
 	private String name;
 	private Array<Enemy> enemies;
-	private Array<NonEnemyCharacter> nonEnemyCharacters;
+	private Array<Friendly> friendlies;
 	private Array<ActiveSpell> activeSpells;
 	private Array<Projectile> projectiles;
 	private Array<Trigger> triggers;
@@ -28,7 +32,7 @@ public class GameMap {
 	public GameMap(String name) {
 		this.name = name;
 		enemies = new Array<Enemy>();
-		nonEnemyCharacters = new Array<NonEnemyCharacter>();
+		friendlies = new Array<Friendly>();
 		activeSpells = new Array<ActiveSpell>();
 		projectiles = new Array<Projectile>();
 		triggers = new Array<Trigger>();
@@ -47,12 +51,12 @@ public class GameMap {
 		enemies.add(enemy);
 	}
 
-	public Array<NonEnemyCharacter> getNonEnemyCharacters() {
-		return nonEnemyCharacters;
+	public Array<Friendly> getFriendlies() {
+		return friendlies;
 	}
 	
-	public void addNonEnemyCharacter(NonEnemyCharacter nec) {
-		nonEnemyCharacters.add(nec);
+	public void addFriendly(Friendly friendly) {
+		friendlies.add(friendly);
 	}
 
 	public Array<ActiveSpell> getActiveSpells() {
@@ -76,6 +80,7 @@ public class GameMap {
 	}
 	
 	public void addTrigger(Trigger trig) {
+		System.out.print("trig added");
 		triggers.add(trig);
 	}
 	

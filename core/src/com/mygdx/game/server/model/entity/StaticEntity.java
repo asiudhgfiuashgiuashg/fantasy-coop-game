@@ -1,6 +1,7 @@
-package com.mygdx.game.server.model;
+package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.DrawMessage;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
@@ -15,7 +16,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 public class StaticEntity extends Entity {
 
 	public StaticEntity(String uid, Vector2 position, int visLayer, CollideablePolygon polygon) {
-		super(uid, position, null, visLayer, polygon);
+		super(uid, position, null, visLayer);
+		this.polygon = polygon;
 	}
 
 	@Override

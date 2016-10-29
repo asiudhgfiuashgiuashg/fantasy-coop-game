@@ -1,12 +1,13 @@
-package com.mygdx.game.server.model;
+package com.mygdx.game.server.model.entity.enemy;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.DrawMessage;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 public class SpiderBoss extends Enemy {
 
-	protected SpiderBoss(String uid, Vector2 position, String spriteName, int visLayer, CollideablePolygon polygon) {
-		super(uid, position, spriteName, visLayer, polygon);
+	protected SpiderBoss(String uid, Vector2 position, String spriteName, int visLayer) {
+		super(uid, position, spriteName, visLayer);
 	}
 
 	@Override

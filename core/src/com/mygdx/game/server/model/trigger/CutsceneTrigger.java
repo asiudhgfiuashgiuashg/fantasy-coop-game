@@ -9,9 +9,9 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public class CutsceneTrigger extends Trigger {
 
-	protected CutsceneTrigger(CollideablePolygon polygon) {
+	public CutsceneTrigger(CollideablePolygon polygon, String name) {
 		super(polygon);
-		// TODO Auto-generated constructor stub
+		// TODO load cutscene of name
 	}
 
 	@Override

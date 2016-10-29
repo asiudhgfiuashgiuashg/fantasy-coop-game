@@ -1,6 +1,6 @@
 package com.mygdx.game.shared;
 
-import com.mygdx.game.server.model.Entity;
+import com.mygdx.game.server.model.entity.Entity;
 
 /**
  * Generates unique id's for dynamic entities and static entities. Only the
