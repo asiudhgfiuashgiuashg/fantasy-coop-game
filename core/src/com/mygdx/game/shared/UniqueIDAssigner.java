@@ -30,8 +30,8 @@ public class UniqueIDAssigner {
 	 *            entity
 	 * @return uid
 	 */
-	public static String generateDynamicEntityUID(Entity e) {
-		String uid = String.join(DELIMITER, DYNAMIC, e.getClass().getName(), Integer.toString(counter));
+	public static String generateDynamicEntityUID(String name) {
+		String uid = String.join(DELIMITER, DYNAMIC, name, Integer.toString(counter));
 
 		counter++;
 		return uid;

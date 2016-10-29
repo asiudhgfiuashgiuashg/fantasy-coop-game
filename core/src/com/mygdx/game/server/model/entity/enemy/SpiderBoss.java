@@ -6,8 +6,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 
 public class SpiderBoss extends Enemy {
 
-	protected SpiderBoss(String uid, Vector2 position, String spriteName, int visLayer) {
-		super(uid, position, spriteName, visLayer);
+	protected SpiderBoss(String uid, Vector2 position, int visLayer) {
+		super(uid, position, visLayer);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.enemy.SpiderBoss;
+import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.CutsceneTrigger;
 import com.mygdx.game.server.model.trigger.MapLoadTrigger;
 import com.mygdx.game.server.model.trigger.Trigger;
@@ -37,9 +38,12 @@ public class MapLoader {
 	 *            .tmx Tiled map
 	 * @throws IOException
 	 *             if fileName is invalid
+	 * @throws various
+	 *             reflection-related exceptions
 	 */
 	public void loadMap(String fileName) throws IOException, ClassNotFoundException, InstantiationException,
-			IllegalAccessException, MapLoaderException {
+			IllegalAccessException, MapLoaderException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
 
 		FileHandle file = Gdx.files.internal(fileName);
 		if (file == null)
@@ -130,9 +134,12 @@ public class MapLoader {
 	 * 
 	 * @param root
 	 *            XML root of .tmx file
+	 * @throws various
+	 *             reflection-related exceptions
 	 */
 	private void loadLayers(Element root)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		for (Element layer : root.getChildrenByName("objectgroup")) {
 			String name = layer.getAttribute("name");
@@ -192,17 +199,14 @@ public class MapLoader {
 	 * 
 	 * @param layer
 	 *            dynamic entity layer XML element
-	 * @throws ClassNotFoundException
-	 *             if dynamic entity name is not a Java class
-	 * @throws IllegalAccessException
-	 *             if there is a problem with reflection
-	 * @throws InstantiationException
-	 *             if the entity cannot be instantiated
 	 * @throws MapLoaderException
 	 *             if the entity is not a valid class type
+	 * @throws various
+	 *             reflection-related exceptions
 	 */
 	private void loadDynamicEntities(Element layer)
-			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException {
+			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		for (Element entity : layer.getChildrenByName("object")) {
 			// Entity name and type (used for reflection)
 			String name = entity.get("name");
@@ -223,36 +227,24 @@ public class MapLoader {
 					visLayer = visLayerProp.getIntAttribute("value");
 				}
 			}
-			
+
+			// Generate uid
+			String uid = UniqueIDAssigner.generateDynamicEntityUID(name);
+
+			// Use reflection to instantiate and add to game map
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE
-						 + MapLoaderConstants.ENEMY_PACKAGE + name);
-				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, String.class, int.class);
-				cons.newInstance(parameters);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.ENEMY_PACKAGE + name);
+				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
+				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
+				map.addEnemy(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
-				
+				Class<?> c = Class
+						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
+				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
+				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
+				map.addFriendly(friendly);
 			} else {
 				throw new MapLoaderException();
-			}
-			
-			// Use reflection to create dynamic entity
-			Class c = Class.forName("com.mygdx.game.server.model.SpiderBoss");
-			Constructor cons = c.getConstructor(parameterTypes)
-			cons.newInstance(all the parameters)
-			/* Need to figure out how to handle hitboxes and construction */
-			
-			Object o = c.newInstance();
-
-			((Entity) o).setPosition(new Vector2(x, y));
-			((Entity) o).setVisLayer(visLayer);
-
-			// Add it to the game map
-			if (o instanceof Enemy) {
-				Enemy enemy = (Enemy) o;
-				map.addEnemy(enemy);
-			} else if (o instanceof NonEnemyCharacter) {
-				NonEnemyCharacter nec = (NonEnemyCharacter) o;
-				map.addNonEnemyCharacter(nec);
 			}
 		}
 	}
@@ -262,7 +254,8 @@ public class MapLoader {
 	 * 
 	 * @param layer
 	 *            trigger layer XML element
-	 * @throws various reflection-related exceptions
+	 * @throws various
+	 *             reflection-related exceptions
 	 */
 	private void loadTriggers(Element layer) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {

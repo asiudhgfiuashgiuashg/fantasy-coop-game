@@ -14,10 +14,9 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class Entity extends PolygonObject implements Drawable {
 
-	protected Entity(String uid, Vector2 position, String spriteName, int visLayer) {
+	protected Entity(String uid, Vector2 position, int visLayer) {
 		this.uid = uid;
 		this.position = position;
-		this.spriteName = spriteName;
 		this.visLayer = visLayer;
 	}
 
@@ -30,7 +29,7 @@ public abstract class Entity extends PolygonObject implements Drawable {
 	 */
 	protected Vector2 position;
 	/**
-	 * Name of entity's sprite
+	 * Name of entity's sprite (if dynamic)
 	 */
 	protected String spriteName;
 	/**

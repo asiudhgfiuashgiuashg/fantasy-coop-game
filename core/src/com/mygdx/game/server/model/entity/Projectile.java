@@ -5,8 +5,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 
 public abstract class Projectile extends ActingEntity {
 	
-	protected Projectile(String uid, Vector2 position, String spriteName, int visLayer) {
-		super(uid, position, spriteName, visLayer);
+	protected Projectile(String uid, Vector2 position, int visLayer) {
+		super(uid, position, visLayer);
 	}
 
 	/**

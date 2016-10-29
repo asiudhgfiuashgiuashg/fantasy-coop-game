@@ -16,7 +16,7 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 public class StaticEntity extends Entity {
 
 	public StaticEntity(String uid, Vector2 position, int visLayer, CollideablePolygon polygon) {
-		super(uid, position, null, visLayer);
+		super(uid, position, visLayer);
 		this.polygon = polygon;
 	}
 

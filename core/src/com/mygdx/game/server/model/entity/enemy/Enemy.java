@@ -11,8 +11,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class Enemy extends DamageableEntity {
 
-	protected Enemy(String uid, Vector2 position, String spriteName, int visLayer) {
-		super(uid, position, spriteName, visLayer);
+	protected Enemy(String uid, Vector2 position, int visLayer) {
+		super(uid, position, visLayer);
 	}
 
 }

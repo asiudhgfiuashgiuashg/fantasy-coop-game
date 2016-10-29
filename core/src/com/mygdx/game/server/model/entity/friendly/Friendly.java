@@ -11,8 +11,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class Friendly extends DamageableEntity {
 
-	protected Friendly(String uid, Vector2 position, String spriteName, int visLayer) {
-		super(uid, position, spriteName, visLayer);
+	protected Friendly(String uid, Vector2 position, int visLayer) {
+		super(uid, position, visLayer);
 	}
 
 }

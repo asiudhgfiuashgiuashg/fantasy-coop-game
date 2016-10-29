@@ -12,8 +12,8 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  */
 public abstract class ActingEntity extends Entity implements Actable {
 
-	protected ActingEntity(String uid, Vector2 position, String spriteName, int visLayer) {
-		super(uid, position, spriteName, visLayer);
+	protected ActingEntity(String uid, Vector2 position, int visLayer) {
+		super(uid, position, visLayer);
 	}
 	
 }
