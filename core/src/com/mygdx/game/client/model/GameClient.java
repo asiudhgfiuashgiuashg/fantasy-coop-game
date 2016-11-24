@@ -23,6 +23,7 @@ import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +68,10 @@ public class GameClient extends Game {
 			e.printStackTrace();
 		} catch (MapLoaderException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		System.out.println(Server.getInstance().getMap().getStaticEntities());

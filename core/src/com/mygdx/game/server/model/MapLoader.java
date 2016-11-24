@@ -46,8 +46,8 @@ public class MapLoader {
 			NoSuchMethodException, SecurityException {
 
 		FileHandle file = Gdx.files.internal(fileName);
-		if (file == null)
-			throw new FileNotFoundException(fileName + "doesn't exist.");
+		if (null == file || !file.exists())
+			throw new FileNotFoundException(fileName + " doesn't exist.");
 		Element root = XML.parse(file);
 
 		// TODO: trim .tmx from mapName
