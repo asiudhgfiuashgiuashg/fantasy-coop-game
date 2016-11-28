@@ -233,8 +233,9 @@ public class MapLoader {
 
 			// Use reflection to instantiate and add to game map
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.ENEMY_PACKAGE + name);
-				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
+				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class);
+				cons.setAccessible(true); // need to call this for non-public constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
 				map.addEnemy(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
