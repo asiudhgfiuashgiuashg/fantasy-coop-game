@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -23,11 +25,16 @@ import com.mygdx.game.shared.UniqueIDAssigner;
 import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
+/**
+ * Loads the portions of the map that the server cares about
+ */
 public class MapLoader {
 	private static final XmlReader XML = new XmlReader();
+	private static final String DEFAULT_STATIC_ENTITY_NAME = "DEFAULT_NAME";
 
 	/** Temporary variables for use during loading */
-	private Array<Tile> tiles;
+	private Map<Integer, Tile> tiles; // used to lookup tiles by gid since not every tile will be loaded server side,
+										//  only those with hitboxes needed to be loaded
 	private String mapName;
 	private GameMap map;
 
@@ -53,7 +60,7 @@ public class MapLoader {
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
 		map = new GameMap(mapName);
-		tiles = new Array<Tile>();
+		tiles = new HashMap<Integer, Tile>();
 
 		loadTileSets(root);
 		loadLayers(root);
@@ -85,9 +92,10 @@ public class MapLoader {
 	 *            tileset XML element
 	 */
 	private void loadTileSet(Element tileset) {
-		int gid = tileset.getIntAttribute("firstgid");
+		int firstGid = tileset.getIntAttribute("firstgid");
+		System.out.println("loading tileset gid " + firstGid);
 		for (Element tile : tileset.getChildrenByName("tile")) {
-			loadTile(tile, gid);
+			loadTile(tile, firstGid);
 		}
 	}
 
@@ -99,7 +107,7 @@ public class MapLoader {
 	 * @param gid
 	 *            global id of tileset containing this tile
 	 */
-	private void loadTile(Element tile, int gid) {
+	private void loadTile(Element tile, int firstGid) {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
@@ -122,8 +130,10 @@ public class MapLoader {
 					}
 					CollideablePolygon p = new CollideablePolygon(vertices);
 
-					// Append the tile to the list
-					tiles.add(new Tile(gid + id, p));
+					// Store tile in map
+					int tileGid = firstGid + id;
+					tiles.put(tileGid, new Tile(p));
+					System.out.println("stored hitbox tile " + tileGid + " " + firstGid);
 				}
 			}
 		}
@@ -144,7 +154,7 @@ public class MapLoader {
 		for (Element layer : root.getChildrenByName("objectgroup")) {
 			String name = layer.getAttribute("name");
 			if (name.equals(MapLoaderConstants.STATIC_ENTITIES_LAYER_NAME)) {
-				loadStaticEntities(layer);
+			loadStaticEntities(layer);
 			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
 				loadDynamicEntities(layer);
 			} else if (name.equals(MapLoaderConstants.TRIGGERS_LAYER_NAME)) {
@@ -167,7 +177,7 @@ public class MapLoader {
 			int tileGid = entity.getIntAttribute("gid");
 
 			// Entity name
-			String name = entity.get("name");
+			String name = entity.get("name", DEFAULT_STATIC_ENTITY_NAME);
 
 			// Entity position
 			float x = entity.getFloatAttribute("x");
@@ -187,10 +197,16 @@ public class MapLoader {
 
 			// create new StaticEntity and add it to GameMap
 			String uid = UniqueIDAssigner.generateStaticEntityUID(name, mapName, id);
+			System.out.println("gid: " + tileGid);
+			System.out.println(tiles);
+			Tile tile = tiles.get(tileGid);
+			CollideablePolygon hitboxPolygon = null;
+			if (null != tile) {
+				hitboxPolygon = new CollideablePolygon(tile.hitbox);
+			}
 
-			CollideablePolygon hitbox = new CollideablePolygon(tiles.get(tileGid).hitbox);
-
-			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, hitbox));
+			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, hitboxPolygon));
+			System.out.println("added entity");
 		}
 	}
 
@@ -301,11 +317,6 @@ public class MapLoader {
 	 *
 	 */
 	private class Tile {
-		/**
-		 * As specified by Tiled, a tile's global id (gid) is the gid of its
-		 * tileset plus its local id.
-		 */
-		public int gid;
 		/** Tile hitbox, with no position */
 		public CollideablePolygon hitbox;
 
@@ -317,8 +328,7 @@ public class MapLoader {
 		 * @param hitbox
 		 *            polygonal hitbox
 		 */
-		public Tile(int gid, CollideablePolygon hitbox) {
-			this.gid = gid;
+		public Tile(CollideablePolygon hitbox) {
 			this.hitbox = hitbox;
 		}
 	}
