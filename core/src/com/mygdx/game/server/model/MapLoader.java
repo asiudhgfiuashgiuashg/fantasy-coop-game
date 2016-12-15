@@ -294,6 +294,7 @@ public class MapLoader {
 
 			// Check for special classes of triggers
 			// if a trigger's type is given, then use it to choose what generic trigger type to instantiate
+			// Use the name as an instantiation parameter for a generic tr
 			if (type != null) {
 				if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
 					trig = new CutsceneTrigger(hitbox, name);

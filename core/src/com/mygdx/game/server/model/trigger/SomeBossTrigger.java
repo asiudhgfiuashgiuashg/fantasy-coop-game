@@ -2,9 +2,9 @@ package com.mygdx.game.server.model.trigger;
 
 import com.mygdx.game.shared.util.CollideablePolygon;
 
-public class BossTrigger extends Trigger {
+public class SomeBossTrigger extends Trigger {
 
-	public BossTrigger(CollideablePolygon polygon) {
+	public SomeBossTrigger(CollideablePolygon polygon) {
 		super(polygon);
 		// TODO Auto-generated constructor stub
 	}
