@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.server.model.entity.StaticEntity;
@@ -93,7 +94,6 @@ public class MapLoader {
 	 */
 	private void loadTileSet(Element tileset) {
 		int firstGid = tileset.getIntAttribute("firstgid");
-		System.out.println("loading tileset gid " + firstGid);
 		for (Element tile : tileset.getChildrenByName("tile")) {
 			loadTile(tile, firstGid);
 		}
@@ -133,7 +133,6 @@ public class MapLoader {
 					// Store tile in map
 					int tileGid = firstGid + id;
 					tiles.put(tileGid, new Tile(p));
-					System.out.println("stored hitbox tile " + tileGid + " " + firstGid);
 				}
 			}
 		}
@@ -197,8 +196,6 @@ public class MapLoader {
 
 			// create new StaticEntity and add it to GameMap
 			String uid = UniqueIDAssigner.generateStaticEntityUID(name, mapName, id);
-			System.out.println("gid: " + tileGid);
-			System.out.println(tiles);
 			Tile tile = tiles.get(tileGid);
 			CollideablePolygon hitboxPolygon = null;
 			if (null != tile) {
@@ -206,7 +203,6 @@ public class MapLoader {
 			}
 
 			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, hitboxPolygon));
-			System.out.println("added entity");
 		}
 	}
 
@@ -279,7 +275,12 @@ public class MapLoader {
 		for (Element trigger : layer.getChildrenByName("object")) {
 			// Trigger name and type (used for reflection, instantiation)
 			String name = trigger.get("name");
-			String type = trigger.get("type");
+			String type;
+			try {
+				type = trigger.get("type");
+			} catch (GdxRuntimeException e) {
+				type = null;
+			}
 
 			// Trigger position, width, height
 			float x = trigger.getFloatAttribute("x");
@@ -287,25 +288,33 @@ public class MapLoader {
 			float width = trigger.getFloatAttribute("width");
 			float height = trigger.getFloatAttribute("height");
 
-			Trigger trig;
+			Trigger trig = null;
 			float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
 			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
 			// Check for special classes of triggers
-			if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
-				trig = new CutsceneTrigger(hitbox, name);
-			} else if (type.equals(MapLoaderConstants.MAPLOAD_TRIGGER_TYPE)) {
-				trig = new MapLoadTrigger(hitbox, name);
+			// if a trigger's type is given, then use it to choose what generic trigger type to instantiate
+			if (type != null) {
+				if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
+					trig = new CutsceneTrigger(hitbox, name);
+				} else if (type.equals(MapLoaderConstants.MAPLOAD_TRIGGER_TYPE)) {
+					trig = new MapLoadTrigger(hitbox, name);
+				}
+			// if a trigger's type is not given, then use the name field to figure out what class to instantiate
 			} else {
 				// Use reflection to create trigger
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.TRIGGER_PACKAGE + name);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.TRIGGER_PACKAGE + "." + name);
 				Constructor<?> cons = c.getConstructor(CollideablePolygon.class);
 				Object o;
 				o = cons.newInstance(hitbox);
 				trig = (Trigger) o;
 			}
+			if (null == trigger) {
+				throw new IllegalArgumentException("Invalid Trigger: name: " + trigger.get("name") + " type: " + trigger.get("type"));
+			} else {
+				map.addTrigger(trig);
+			}
 
-			map.addTrigger(trig);
 		}
 	}
 
