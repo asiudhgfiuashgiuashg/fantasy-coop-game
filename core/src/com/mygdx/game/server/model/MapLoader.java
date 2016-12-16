@@ -54,8 +54,10 @@ public class MapLoader {
 			NoSuchMethodException, SecurityException {
 
 		FileHandle file = Gdx.files.internal(fileName);
-		if (null == file || !file.exists())
+		if (null == file || !file.exists()) {
 			throw new FileNotFoundException(fileName + " doesn't exist.");
+		}
+
 		Element root = XML.parse(file);
 
 		// TODO: trim .tmx from mapName
@@ -269,6 +271,8 @@ public class MapLoader {
 	 *            trigger layer XML element
 	 * @throws various
 	 *             reflection-related exceptions
+	 *     TODO - make it so that trigger constructors can have arbitrary parameters
+	 *              (which will be specified in Tiled)
 	 */
 	private void loadTriggers(Element layer) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
