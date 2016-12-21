@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -55,7 +56,7 @@ public class ClientTmxLoader {
     }
 
     /**
-     * loads  a til
+     * loads  a tileset - including tile hitboxes and textures
      * @param tilesetXml
      * @return
      */
@@ -66,7 +67,17 @@ public class ClientTmxLoader {
                 ("source");
         FileHandle file = Gdx.files.internal(imageSrcFilename);
 
-        //TODO
+        PolygonTileSet tileSet = new PolygonTileSet();
+        tileSet.setName(tilesetXml.getAttribute("name"));
+        Log.debug("Loading polygon tileset with name" + tileSet.getName());
+
+        // tiles have a globally unique id (gid). The gid of each tile in a
+        // set is firstgid of the set + tile index. So the first tile in the
+        // set will have a gid of firstgid, the second a gid of firstgid + 1,
+        // etc.
+        int firstGid = tilesetXml.getInt("firstgid");
+
+        //TODO instantiate tiles in tileset
         return null;
     }
 }
