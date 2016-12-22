@@ -49,6 +49,11 @@ public class ClientTmxLoader extends TmxMapLoader {
         return tiledMap;
     }
 
+    /**
+     * borrowed from superclass
+     * An ImageResolver takes in an image name and returns a texture region
+     * for that image.
+     */
     private ImageResolver getImageResolver(FileHandle mapFile) {
         Array<FileHandle> textureFiles = null;
         try {
