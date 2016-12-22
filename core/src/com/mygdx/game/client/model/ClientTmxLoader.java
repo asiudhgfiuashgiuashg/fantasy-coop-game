@@ -2,10 +2,13 @@ package com.mygdx.game.client.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.esotericsoftware.minlog.Log;
@@ -60,16 +63,19 @@ public class ClientTmxLoader {
      * @param tilesetXml
      * @return
      */
-    private PolygonTileSet loadTileSet(Element tilesetXml) {
+    private TiledMapTileSet loadTileSet(Element tilesetXml) {
         // the image for this tileset is in an element called "image" within
         // the tileset element
         String imageSrcFilename = tilesetXml.getChildByName("image").get
                 ("source");
-        FileHandle file = Gdx.files.internal(imageSrcFilename);
+        FileHandle imgSrcFile = Gdx.files.internal(imageSrcFilename);
 
-        PolygonTileSet tileSet = new PolygonTileSet();
+        TiledMapTileSet tileSet = new TiledMapTileSet();
         tileSet.setName(tilesetXml.getAttribute("name"));
-        Log.debug("Loading polygon tileset with name" + tileSet.getName());
+        Log.debug("Loading tileset with name" + tileSet.getName());
+
+
+        //load info needed to instantiate tiles
 
         // tiles have a globally unique id (gid). The gid of each tile in a
         // set is firstgid of the set + tile index. So the first tile in the
@@ -77,7 +83,33 @@ public class ClientTmxLoader {
         // etc.
         int firstGid = tilesetXml.getInt("firstgid");
 
-        //TODO instantiate tiles in tileset
+        // width and height of tiles in pixels (needed to create
+        // TextureRegions for each tile)
+        int tileWidth = tilesetXml.getInt("tilewidth");
+        int tileHeight = tilesetXml.getInt("tileheight");
+
+        int tileCount = tilesetXml.getInt("tilecount");
+        int numCols = tilesetXml.getInt("columns");
+        int numRows = ((int) Math.ceil(((float) tileCount / numCols)));
+
+        Texture tilesetTexture = new Texture(imgSrcFile); //TODO garbage
+        // collect this
+
+        // TODO detect if a tile should be animated and instantiate an
+        // AnimatedTiledMapTile instead of a StaticTiledMapTile
+        for (int gid = firstGid; gid < firstGid + tileCount; gid++) {
+            int localTileIndex = gid - firstGid;
+            int textureRegionX = (localTileIndex % numCols) * tileWidth;
+            int textureRegionY = (localTileIndex / numCols) * tileHeight;
+
+            TextureRegion tileTextureRegion = new TextureRegion
+                    (tilesetTexture, textureRegionX, textureRegionY,
+                            tileWidth, tileHeight);
+
+            StaticTiledMapTile mapTile = new StaticTiledMapTile
+                    (tileTextureRegion);
+            mapTile.setId(gid);
+        }
         return null;
     }
 }
