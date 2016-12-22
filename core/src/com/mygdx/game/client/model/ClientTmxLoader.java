@@ -3,21 +3,15 @@ package com.mygdx.game.client.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.ImageResolver;
-import com.badlogic.gdx.maps.MapLayers;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSets;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
-import com.esotericsoftware.minlog.Log;
+import com.mygdx.game.shared.model.TilePolygonLoader;
+import com.mygdx.game.shared.util.CollideablePolygon;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -28,9 +22,9 @@ public class ClientTmxLoader extends TmxMapLoader {
     private static final XmlReader XML = new XmlReader();
 
     @Override
-    public TiledMap load(String fileName) {
+    public ClientTiledMap load(String fileName) {
         FileHandle mapFile = Gdx.files.internal(fileName);
-        TiledMap tiledMap = new TiledMap();
+        ClientTiledMap tiledMap = new ClientTiledMap();
         try {
             this.root = XML.parse(mapFile);
         } catch (IOException e) {
@@ -44,12 +38,28 @@ public class ClientTmxLoader extends TmxMapLoader {
             loadTileSet(tiledMap, tilesetElement, mapFile, imageResolver);
         }
         // load tile layer
-        loadTileLayer(tiledMap, root.getChildByName("layer")); //
         // "Tile Layer 1" is what Tiled names the tile layer
+        loadTileLayer(tiledMap, root.getChildByName("layer"));
 
-        // TODO load in polygon hitboxes associated with some tiles
+
+        loadPolygons(tiledMap);
+
         // TODO instantiate static and dynamic entities
         return tiledMap;
+    }
+
+    private void loadPolygons(ClientTiledMap tiledMap) {
+        for (Element tilesetXml: root.getChildrenByName("tileset")) {
+            int firstGid = tilesetXml.getInt("firstgid", 1);
+            for (Element tileXml: tilesetXml.getChildrenByName("tile")) {
+                int localId = tileXml.getInt("id"); // local to the tileset
+                int tileGid = firstGid + localId;
+                // extract the hitbox
+                CollideablePolygon tileHitbox = TilePolygonLoader.loadTilePolygon
+                        (tileXml);
+                tiledMap.gidToPolygonMap.put(tileGid, tileHitbox);
+            }
+        }
     }
 
     /**

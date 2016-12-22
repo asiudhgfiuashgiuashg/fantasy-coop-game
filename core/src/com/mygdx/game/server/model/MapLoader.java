@@ -10,13 +10,11 @@ import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
-import com.mygdx.game.server.model.entity.enemy.SpiderBoss;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.CutsceneTrigger;
 import com.mygdx.game.server.model.trigger.MapLoadTrigger;
@@ -24,6 +22,7 @@ import com.mygdx.game.server.model.trigger.Trigger;
 import com.mygdx.game.shared.MapLoaderConstants;
 import com.mygdx.game.shared.UniqueIDAssigner;
 import com.mygdx.game.shared.exceptions.MapLoaderException;
+import com.mygdx.game.shared.model.TilePolygonLoader;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
@@ -113,31 +112,12 @@ public class MapLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		// Load tiles that have polygon hitboxes
-		for (Element objGroup : tile.getChildrenByName("objectgroup")) {
-			// The first child named "object" is considered the hitbox
-			Element object = null;
-			if ((object = objGroup.getChildByName("object")) != null) {
-				// The first child named "polygon" is the actual polygon hitbox
-				Element polygon = null;
-				if ((polygon = object.getChildByName("polygon")) != null) {
-					// Borrowed code from libgdx BaseTmxMapLoader.java
-					// With fix to vertices coordinates
-					String[] points = polygon.getAttribute("points").split(" ");
-					float[] vertices = new float[points.length * 2];
-					for (int i = 0; i < points.length; i++) {
-						String[] point = points[i].split(",");
-						vertices[i * 2] = Float.parseFloat(point[0]) + object.getFloatAttribute("x");
-						vertices[i * 2 + 1] = object.getFloatAttribute("y") - Float.parseFloat(point[1]);
-					}
-					CollideablePolygon p = new CollideablePolygon(vertices);
+		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile);
 
-					// Store tile in map
-					int tileGid = firstGid + id;
-					tiles.put(tileGid, new Tile(p));
-				}
-			}
-		}
+		// Store tile in map
+		int tileGid = firstGid + id;
+		tiles.put(tileGid, new MapLoader.Tile(tilePolygon));
+
 	}
 
 	/**
