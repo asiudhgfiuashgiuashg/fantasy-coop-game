@@ -43,6 +43,9 @@ public class ClientTmxLoader extends TmxMapLoader {
         for (Element tilesetElement : root.getChildrenByName("tileset")) {
             loadTileSet(tiledMap, tilesetElement, mapFile, imageResolver);
         }
+        // load tile layer
+        loadTileLayer(tiledMap, root.getChildByName("layer")); //
+        // "Tile Layer 1" is what Tiled names the tile layer
 
         // TODO load in polygon hitboxes associated with some tiles
         // TODO instantiate static and dynamic entities
