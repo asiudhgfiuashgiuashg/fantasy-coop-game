@@ -6,9 +6,14 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.GameScreen;
@@ -45,36 +50,17 @@ public class GameClient extends Game {
 
 	private String username = "PLACEHOLDER"; //client's username
 	private ClientLobbyManager lobbyManager;
+	private TiledMap clientMap;
+	private SpriteBatch batch;
 
 	@Override
 	public void create () {
+		batch = new SpriteBatch();
 		setupConsole();
 		setScreen(new MenuScreen());
 		
-		MapLoader loader = new MapLoader();
-		try {
-			loader.loadMap("validMap.tmx");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MapLoaderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		System.out.println(Server.getInstance().getMap().getStaticEntities());
+		clientMap = new ClientTmxLoader().load("validMap.tmx");
+
 	}
 
 	@Override
@@ -83,6 +69,11 @@ public class GameClient extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		console.draw();
+
+		batch.begin();
+		// do the drawing here
+		// for example, batch.draw(textureregion, x, y);
+		batch.end();
 	}
 
 	@Override

@@ -27,7 +27,7 @@
   </tile>
  </tileset>
  <tileset firstgid="37" name="another_tileset" tilewidth="32" tileheight="32" tilecount="48" columns="8">
-  <image source="../../../../../../../Program Files/Tiled/examples/tmw_desert_spacing.png" width="265" height="199"/>
+  <image source="tmw_desert_spacing.png" width="265" height="199"/>
   <tile id="18">
    <objectgroup draworder="index">
     <object id="1" x="15" y="19" width="13" height="10"/>
