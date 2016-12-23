@@ -6,31 +6,23 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.minlog.Log;
 import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
+import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.client.view.GameScreen;
 import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
-import com.mygdx.game.server.model.GameMap;
-import com.mygdx.game.server.model.MapLoader;
-import com.mygdx.game.server.model.Server;
-import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +46,23 @@ public class GameClient extends Game {
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
 	private SpriteBatch batch;
+	private CustomTiledMapRenderer renderer;
+	private OrthographicCamera camera;
 
+	private static final int SCREEN_WIDTH = 800;
+	private static final int SCREEN_HEIGHT = 600;
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		setupConsole();
 		setScreen(new MenuScreen());
-		
-		clientMap = new ClientTmxLoader().load("validMap.tmx");
 
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+		camera.update();
+
+		clientMap = new ClientTmxLoader().load("validMap.tmx");
+		renderer = new CustomTiledMapRenderer(clientMap, 2.5f);
 	}
 
 	@Override
@@ -70,12 +70,15 @@ public class GameClient extends Game {
 		super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		console.draw();
+
 
 		batch.begin();
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
+		renderer.setView(camera);
+		renderer.render();
 		batch.end();
+		console.draw();
 	}
 
 	@Override
