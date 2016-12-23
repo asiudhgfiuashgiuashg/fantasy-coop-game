@@ -28,6 +28,7 @@ public class CustomTiledMapRenderer extends
 	 * doesn't render:
 	 * - gui
 	 * - developer console
+	 *  TODO respect vislayers when rendering
 	 */
 	@Override
 	public void render() {
