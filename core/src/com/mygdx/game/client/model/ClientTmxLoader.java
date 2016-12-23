@@ -84,9 +84,11 @@ public class ClientTmxLoader extends TmxMapLoader {
                     // casting is gross but we need to do it here if we want
                     // to use libgdx's included objectgroup loading instead
                     // of doing it ourselves.
+                    float tileHeight = root.getFloat("tileheight");
+                    float mapHeight = root.getFloat("height") * tileHeight;
                     StaticEntity staticEntity = new StaticEntity(tiledMap
                             .gidToPolygonMap.get(tileMapObject.getTile()
-                                    .getId()), tileMapObject);
+                                    .getId()), tileMapObject, mapHeight);
                     tiledMap.staticEntities.add(staticEntity);
                     GameClient.console.log("loaded static entity - " +
                             tileMapObject.getName() + " - pos: " + staticEntity

@@ -15,7 +15,7 @@ import java.util.Iterator;
  */
 public class StaticEntity extends MapEntity {
 	private CollideablePolygon hitbox; // used for collision checking
-	private TiledMapTileMapObject tileMapObject; // used for drawing
+	public TiledMapTileMapObject tileMapObject; // used for drawing
 
 	/**
 	 *
@@ -24,9 +24,11 @@ public class StaticEntity extends MapEntity {
 	 *                         visually. Used to obtain x and y position
 	 *                         which was loaded in from tiled into
 	 *                         tileMapObject.
+	 * @param mapHeight needed to flip Tiled y axis (points down) to match
+	 *                     libgdx y axis (points up)
 	 */
 	public StaticEntity(CollideablePolygon hitbox, TiledMapTileMapObject
-			tileMapObject) {
+			tileMapObject, float mapHeight) {
 		this.hitbox = hitbox;
 		this.tileMapObject = tileMapObject;
 
@@ -35,7 +37,10 @@ public class StaticEntity extends MapEntity {
 		// and y position of each static entity as properties, so we can
 		// extract it into this static entity.
 		float xPos = tileMapObject.getProperties().get("x", Float.class);
-		float yPos = tileMapObject.getProperties().get("y", Float.class);
+		// flip y axis
+		float yPos = mapHeight + tileMapObject.getProperties()
+				.get("y", Float.class);
+		//for some reason yPos needs negated or the y values are flipped..
 		this.position = new Vector2(xPos, yPos);
 	}
 

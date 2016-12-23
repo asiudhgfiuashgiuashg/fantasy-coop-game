@@ -62,7 +62,7 @@ public class GameClient extends Game {
 		camera.update();
 
 		clientMap = new ClientTmxLoader().load("validMap.tmx");
-		renderer = new CustomTiledMapRenderer(clientMap, 2.5f);
+		renderer = new CustomTiledMapRenderer(clientMap, 2f);
 	}
 
 	@Override

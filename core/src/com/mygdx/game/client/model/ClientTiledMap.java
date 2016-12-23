@@ -18,6 +18,6 @@ import java.util.Map;
 public class ClientTiledMap extends TiledMap {
 	protected final Map<Integer, CollideablePolygon> gidToPolygonMap = new
 	HashMap<Integer, CollideablePolygon>();
-	protected final List<StaticEntity>  staticEntities = new
+	public final List<StaticEntity>  staticEntities = new
 			ArrayList<StaticEntity>();
 }
