@@ -65,14 +65,14 @@
   </object>
   <object id="18" name="static_rock" gid="68" x="174.5" y="257" width="32" height="32">
    <properties>
-    <property name="visLayer" value="1"/>
+    <property name="visLayer" value="0"/>
    </properties>
   </object>
   <object id="19" gid="1" x="262.667" y="64" width="32" height="32"/>
   <object id="20" gid="7" x="230" y="94.6667" width="32" height="32"/>
   <object id="21" gid="28" x="196.333" y="244.667" width="32" height="32">
    <properties>
-    <property name="visLayer" value="0"/>
+    <property name="visLayer" value="1"/>
    </properties>
   </object>
  </objectgroup>

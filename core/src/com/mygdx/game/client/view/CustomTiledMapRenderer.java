@@ -2,13 +2,10 @@ package com.mygdx.game.client.view;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
@@ -54,22 +51,35 @@ public class CustomTiledMapRenderer extends
 		beginRender();
 		TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers()
 				.get("Tile Layer 1");
-		renderTileLayer(tileLayer);
-		renderStaticEntities();
-		// TODO render dynamic entities
+		renderTileLayer(tileLayer); // render tiles before entities so tiles
+		// are on the bottom
+		renderEntities();
+
 		endRender();
 	}
 
-	private void renderStaticEntities() {
-		for (StaticEntity staticEntity: ((ClientTiledMap) map).staticEntities) {
-			TiledMapTileMapObject tileMapObject = staticEntity.tileMapObject;
-			TextureRegion toDraw = tileMapObject.getTile().getTextureRegion();
+	/**
+	 * draw static and dynamic entities
+	 *  TODO render dynamic entities
+	 */
+	private void renderEntities() {
+		renderEntityList(layerNegOneEntities);
+		renderEntityList(layerZeroEntities);
+		renderEntityList(layerOneEntities);
+	}
 
-			batch.draw(toDraw, staticEntity.getPos().x * unitScale, staticEntity
-					.getPos().y * unitScale, toDraw.getRegionWidth() *
-					unitScale, toDraw.getRegionHeight() * unitScale);
+	private void renderEntityList(List<MapEntity> entityList) {
+		for (MapEntity entity: entityList) {
+			renderEntity(entity);
 		}
+	}
 
+	private void renderEntity(MapEntity staticEntity) {
+		TextureRegion toDraw = staticEntity.getTextureRegion();
+
+		batch.draw(toDraw, staticEntity.getPos().x * unitScale, staticEntity
+				.getPos().y * unitScale, toDraw.getRegionWidth() *
+				unitScale, toDraw.getRegionHeight() * unitScale);
 	}
 
 	public CustomTiledMapRenderer(ClientTiledMap map) {
@@ -104,6 +114,13 @@ public class CustomTiledMapRenderer extends
 	private void populateEntitiesLists() {
 		for (MapEntity entity: ((ClientTiledMap) map).staticEntities) {
 			int visLayer = entity.getVisLayer();
+			if (-1 == visLayer) {
+				layerNegOneEntities.add(entity);
+			} else if (0 == visLayer) {
+				layerZeroEntities.add(entity);
+			} else if (1 == visLayer) {
+				layerOneEntities.add(entity);
+			}
 		}
 	}
 

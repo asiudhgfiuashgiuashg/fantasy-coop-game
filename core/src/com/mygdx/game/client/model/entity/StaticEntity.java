@@ -1,5 +1,6 @@
 package com.mygdx.game.client.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.client.model.GameClient;
@@ -53,7 +54,16 @@ public class StaticEntity extends MapEntity {
 		this.position = new Vector2(xPos, yPos);
 	}
 
-	public Vector2 getPos() {
-		return this.position;
+
+	/**
+	 * Used by CustomTiledMapRenderer
+	 *
+	 * @return the textureregion that the renderer should draw do NOT return
+	 * tileMapObject.getTextureRegion() - this won't work if the tile is
+	 * animated
+	 */
+	@Override
+	public TextureRegion getTextureRegion() {
+		return tileMapObject.getTile().getTextureRegion();
 	}
 }

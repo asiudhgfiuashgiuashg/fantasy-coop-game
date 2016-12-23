@@ -1,5 +1,6 @@
 package com.mygdx.game.client.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -20,5 +21,14 @@ public abstract class MapEntity {
 	public int getVisLayer() {
 		return visLayer;
 	}
-	// below other entities
+
+	public Vector2 getPos() {
+		return this.position;
+	}
+
+	/**
+	 * give the renderer something to draw
+	 * @return
+	 */
+	public abstract TextureRegion getTextureRegion();
 }

@@ -1,6 +1,7 @@
 package com.mygdx.game.client.model.entity;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * layer in Tiled. Their appearance and position is specified in code, not in
  * Tiled (unlike StaticEntities).
  */
-public class DynamicEntity extends MapEntity {
+public abstract class DynamicEntity extends MapEntity {
 	// maps animation name (specified in aseprite) to an animation (a
 	// sequence of frames drawn in aseprite)
 	private Map<String, Animation> nameToAnimationMap;
