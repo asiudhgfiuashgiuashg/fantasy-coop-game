@@ -4,15 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.ImageResolver;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.TilePolygonLoader;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Loads stuff relevant to the client from a tmx (Tiled) map file.
@@ -44,8 +49,52 @@ public class ClientTmxLoader extends TmxMapLoader {
 
         loadPolygons(tiledMap);
 
-        // TODO instantiate static and dynamic entities
+        loadEntities(tiledMap);
         return tiledMap;
+    }
+
+    private void loadEntities(ClientTiledMap tiledMap) {
+        loadStaticEntities(tiledMap);
+        // TODO load dynamic entities
+    }
+
+    private void loadStaticEntities(ClientTiledMap tiledMap) {
+        Array<Element> objectGroups = root.getChildrenByName("objectgroup");
+
+        // look for the Static Entities layer
+        boolean foundStaticEntitiesLayer = false;
+        for (int i = 0; i < objectGroups.size && !foundStaticEntitiesLayer;
+             i++) {
+            Element objectGroup = objectGroups.get(i);
+            if (objectGroup.getAttribute("name").equals("Static Entities")) {
+                GameClient.console.log("found static entities layer -- " +
+                        "loading static entities");
+                foundStaticEntitiesLayer = true;
+                // load the TiledMapTileMapObjects for the StaticEntities
+                loadObjectGroup(tiledMap, objectGroup);
+                // create the StaticEntities
+                // there'll be a static entity for each TiledMapTileMapObject
+                // since a TiledMapTileMapObject is the visual component of a
+                // static entity
+                // Get the TiledMapTlieMapObjects layer we just loaded
+                MapLayer objectsLayer = tiledMap.getLayers().get("Static " +
+                        "Entities");
+                for (MapObject mapObject: objectsLayer.getObjects()) {
+                    TiledMapTileMapObject tileMapObject =
+                            (TiledMapTileMapObject) mapObject; // I know
+                    // casting is gross but we need to do it here if we want
+                    // to use libgdx's included objectgroup loading instead
+                    // of doing it ourselves.
+                    StaticEntity staticEntity = new StaticEntity(tiledMap
+                            .gidToPolygonMap.get(tileMapObject.getTile()
+                                    .getId()), tileMapObject);
+                    tiledMap.staticEntities.add(staticEntity);
+                    GameClient.console.log("loaded static entity - " +
+                            tileMapObject.getName() + " - pos: " + staticEntity
+                            .getPos().toString());
+                }
+            }
+        }
     }
 
     private void loadPolygons(ClientTiledMap tiledMap) {

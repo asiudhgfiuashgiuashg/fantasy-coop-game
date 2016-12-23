@@ -1,9 +1,12 @@
 package com.mygdx.game.client.model;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,4 +18,6 @@ import java.util.Map;
 public class ClientTiledMap extends TiledMap {
 	protected final Map<Integer, CollideablePolygon> gidToPolygonMap = new
 	HashMap<Integer, CollideablePolygon>();
+	protected final List<StaticEntity>  staticEntities = new
+			ArrayList<StaticEntity>();
 }

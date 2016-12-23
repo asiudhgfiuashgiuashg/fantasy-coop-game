@@ -28,7 +28,7 @@ import java.util.HashMap;
  *
  *file format:
  * aseprite json array format
- *}
+ *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 public class SpritesheetMetadataParser {

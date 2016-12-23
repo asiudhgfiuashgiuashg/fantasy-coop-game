@@ -44,7 +44,7 @@ import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
  *
  */
 public class GameClient extends Game {
-	private SingletonGUIConsole console;
+	public static SingletonGUIConsole console;
 
 	private Client client; //communication with server will be done through this object.
 	private static int CONNECT_TIMEOUT = 5000; //timeout for connecting client to server.
