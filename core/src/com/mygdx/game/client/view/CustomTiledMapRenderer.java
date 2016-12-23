@@ -2,6 +2,7 @@ package com.mygdx.game.client.view;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /**
@@ -9,6 +10,27 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
  */
 public class CustomTiledMapRenderer extends
 		OrthogonalTiledMapRenderer {
+
+	/**
+	 * renders:
+	 * - tile layer
+	 * - static entities
+	 * - dynamic entities
+	 * doesn't render:
+	 * - gui
+	 * - developer console
+	 */
+	@Override
+	public void render() {
+		beginRender();
+		TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get("Tile Layer " +
+				"1");
+		renderTileLayer(tileLayer);
+		// TODO render static entities
+		// TODO render dynamic entities
+		endRender();
+	}
+
 	public CustomTiledMapRenderer(TiledMap map) {
 		super(map);
 	}
