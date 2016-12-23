@@ -13,6 +13,9 @@ import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mygdx.game.client.model.GameClient.console;
 
 /**
@@ -29,7 +32,12 @@ import static com.mygdx.game.client.model.GameClient.console;
  */
 public class CustomTiledMapRenderer extends
 	OrthogonalTiledMapRenderer {
-	private static final int DEFAULT_VISLAYER = 0;
+	public static final int DEFAULT_VISLAYER = 0;
+	private final List<MapEntity> layerNegOneEntities = new
+			ArrayList<MapEntity>();
+	private final List<MapEntity> layerZeroEntities = new
+			ArrayList<MapEntity>();
+	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
 	/**
 	 * renders:
@@ -66,19 +74,38 @@ public class CustomTiledMapRenderer extends
 
 	public CustomTiledMapRenderer(ClientTiledMap map) {
 		super(map);
-		//map = (ClientTiledMap) super.map;
+		populateEntitiesLists();
 	}
 
 	public CustomTiledMapRenderer(TiledMap map, Batch batch) {
 		super(map, batch);
+		populateEntitiesLists();
 	}
 
 	public CustomTiledMapRenderer(TiledMap map, float unitScale) {
 		super(map, unitScale);
+		populateEntitiesLists();
 	}
 
 	public CustomTiledMapRenderer(TiledMap map, float unitScale,
 								  Batch batch) {
 		super(map, unitScale, batch);
+		populateEntitiesLists();
 	}
+
+	/**
+	 * used by constructors to initially populate lists of entities in each
+	 * visLayer for easier rendering.
+	 *
+	 * Initially there will only be static entities, so don't worry about
+	 * dynamic entities. These will be inserted into the lists when
+	 * communication with the server starts a moment after the map loads.
+	 */
+	private void populateEntitiesLists() {
+		for (MapEntity entity: ((ClientTiledMap) map).staticEntities) {
+			int visLayer = entity.getVisLayer();
+		}
+	}
+
+
 }

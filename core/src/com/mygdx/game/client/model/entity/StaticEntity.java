@@ -7,6 +7,10 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 
 import java.util.Iterator;
 
+import static com.mygdx.game.client.model.GameClient.console;
+import static com.mygdx.game.client.view.CustomTiledMapRenderer
+		.DEFAULT_VISLAYER;
+
 /**
  * A non-moving object visualized on the screen by a StaticTiledMapTile or an
  * AnimatedTiledMapTile (wrapped in a TiledMapTileMapObject). It may have a
@@ -31,6 +35,11 @@ public class StaticEntity extends MapEntity {
 			tileMapObject, float mapHeight) {
 		this.hitbox = hitbox;
 		this.tileMapObject = tileMapObject;
+		String visLayerStr = (String) (tileMapObject.getProperties()
+				.get("visLayer"));
+		this.visLayer = null == visLayerStr ? DEFAULT_VISLAYER : Integer.valueOf
+				(visLayerStr); // get the vislayer that was loaded for us by
+		// libgdx
 
 		// the libgdx loader loaded the associated TiledMapTileMapObject from
 		// the Static Entities layer for us, and in Tiled we specify the x
