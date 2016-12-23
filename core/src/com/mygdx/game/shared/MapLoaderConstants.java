@@ -10,6 +10,7 @@ public class MapLoaderConstants {
 	public static final String STATIC_ENTITIES_LAYER_NAME = "Static Entities";
 	public static final String DYNAMIC_ENTITIES_LAYER_NAME = "Dynamic Entities";
 	public static final String TRIGGERS_LAYER_NAME = "Triggers";
+	public static final String BOUNDARIES_LAYER_NAME = "Boundaries";
 	
 	public static final String CUTSCENE_TRIGGER_TYPE = "Cutscene";
 	public static final String MAPLOAD_TRIGGER_TYPE = "MapLoad";

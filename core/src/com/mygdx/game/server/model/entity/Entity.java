@@ -3,7 +3,6 @@ package com.mygdx.game.server.model.entity;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Drawable;
 import com.mygdx.game.server.model.PolygonObject;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
  * Something which has a position and an associated sprite name.
@@ -15,6 +14,7 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 public abstract class Entity extends PolygonObject implements Drawable {
 
 	protected Entity(String uid, Vector2 position, int visLayer) {
+		super(null);
 		this.uid = uid;
 		this.position = position;
 		this.visLayer = visLayer;
@@ -39,6 +39,7 @@ public abstract class Entity extends PolygonObject implements Drawable {
 
 	/**
 	 * Gets the entity's position
+	 * 
 	 * @return
 	 */
 	public Vector2 getPosition() {

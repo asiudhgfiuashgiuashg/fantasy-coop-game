@@ -22,6 +22,7 @@ public class GameMap {
 	private Array<Projectile> projectiles;
 	private Array<Trigger> triggers;
 	private Array<StaticEntity> staticEntities;
+	private Array<Boundary> boundaries;
 
 	/**
 	 * Constructor used by MapLoader.
@@ -46,7 +47,7 @@ public class GameMap {
 	public Array<Enemy> getEnemies() {
 		return enemies;
 	}
-	
+
 	public void addEnemy(Enemy enemy) {
 		enemies.add(enemy);
 	}
@@ -54,7 +55,7 @@ public class GameMap {
 	public Array<Friendly> getFriendlies() {
 		return friendlies;
 	}
-	
+
 	public void addFriendly(Friendly friendly) {
 		friendlies.add(friendly);
 	}
@@ -62,7 +63,7 @@ public class GameMap {
 	public Array<ActiveSpell> getActiveSpells() {
 		return activeSpells;
 	}
-	
+
 	public void addActiveSpell(ActiveSpell spell) {
 		activeSpells.add(spell);
 	}
@@ -70,7 +71,7 @@ public class GameMap {
 	public Array<Projectile> getProjectiles() {
 		return projectiles;
 	}
-	
+
 	public void addProjectile(Projectile proj) {
 		projectiles.add(proj);
 	}
@@ -78,17 +79,25 @@ public class GameMap {
 	public Array<Trigger> getTriggers() {
 		return triggers;
 	}
-	
+
 	public void addTrigger(Trigger trig) {
 		System.out.print("trig added");
 		triggers.add(trig);
 	}
-	
+
 	public Array<StaticEntity> getStaticEntities() {
 		return staticEntities;
 	}
-	
+
 	public void addStaticEntity(StaticEntity ent) {
 		staticEntities.add(ent);
+	}
+
+	public Array<Boundary> getBoundaries() {
+		return boundaries;
+	}
+
+	public void addBoundary(Boundary b) {
+		boundaries.add(b);
 	}
 }

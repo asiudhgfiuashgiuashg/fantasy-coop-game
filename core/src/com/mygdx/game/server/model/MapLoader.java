@@ -33,8 +33,11 @@ public class MapLoader {
 	private static final String DEFAULT_STATIC_ENTITY_NAME = "DEFAULT_NAME";
 
 	/** Temporary variables for use during loading */
-	private Map<Integer, Tile> tiles; // used to lookup tiles by gid since not every tile will be loaded server side,
-										//  only those with hitboxes needed to be loaded
+	private Map<Integer, Tile> tiles; // used to lookup tiles by gid since not
+										// every tile will be loaded server
+										// side,
+										// only those with hitboxes needed to be
+										// loaded
 	private String mapName;
 	private GameMap map;
 
@@ -135,11 +138,13 @@ public class MapLoader {
 		for (Element layer : root.getChildrenByName("objectgroup")) {
 			String name = layer.getAttribute("name");
 			if (name.equals(MapLoaderConstants.STATIC_ENTITIES_LAYER_NAME)) {
-			loadStaticEntities(layer);
+				loadStaticEntities(layer);
 			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
 				loadDynamicEntities(layer);
 			} else if (name.equals(MapLoaderConstants.TRIGGERS_LAYER_NAME)) {
 				loadTriggers(layer);
+			} else if (name.equals(MapLoaderConstants.BOUNDARIES_LAYER_NAME)) {
+				loadBoundaries(layer);
 			}
 		}
 	}
@@ -227,9 +232,11 @@ public class MapLoader {
 
 			// Use reflection to instantiate and add to game map
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
+				Class<?> c = Class
+						.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
 				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class);
-				cons.setAccessible(true); // need to call this for non-public constructor
+				cons.setAccessible(true); // need to call this for non-public
+											// constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
 				map.addEnemy(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
@@ -245,14 +252,14 @@ public class MapLoader {
 	}
 
 	/**
-	 * Load dynamic entities from trigger layer.
+	 * Load triggers from trigger layer.
 	 * 
 	 * @param layer
 	 *            trigger layer XML element
 	 * @throws various
-	 *             reflection-related exceptions
-	 *     TODO - make it so that trigger constructors can have arbitrary parameters
-	 *              (which will be specified in Tiled)
+	 *             reflection-related exceptions TODO - make it so that trigger
+	 *             constructors can have arbitrary parameters (which will be
+	 *             specified in Tiled)
 	 */
 	private void loadTriggers(Element layer) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -277,7 +284,8 @@ public class MapLoader {
 			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
 			// Check for special classes of triggers
-			// if a trigger's type is given, then use it to choose what generic trigger type to instantiate
+			// if a trigger's type is given, then use it to choose what generic
+			// trigger type to instantiate
 			// Use the name as an instantiation parameter for a generic tr
 			if (type != null) {
 				if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
@@ -285,21 +293,32 @@ public class MapLoader {
 				} else if (type.equals(MapLoaderConstants.MAPLOAD_TRIGGER_TYPE)) {
 					trig = new MapLoadTrigger(hitbox, name);
 				}
-			// if a trigger's type is not given, then use the name field to figure out what class to instantiate
+				// if a trigger's type is not given, then use the name field to
+				// figure out what class to instantiate
 			} else {
 				// Use reflection to create trigger
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.TRIGGER_PACKAGE + "." + name);
+				Class<?> c = Class.forName(
+						MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.TRIGGER_PACKAGE + "." + name);
 				Constructor<?> cons = c.getConstructor(CollideablePolygon.class);
 				Object o;
 				o = cons.newInstance(hitbox);
 				trig = (Trigger) o;
 			}
-			if (null == trigger) {
-				throw new IllegalArgumentException("Invalid Trigger: name: " + trigger.get("name") + " type: " + trigger.get("type"));
-			} else {
-				map.addTrigger(trig);
-			}
+			map.addTrigger(trig);
+		}
+	}
 
+	/**
+	 * Loads boundaries from boundaries layer.
+	 * 
+	 * @param layer
+	 *            boundaries layer XML element
+	 */
+	private void loadBoundaries(Element layer) {
+		for (Element object : layer.getChildrenByName("object")) {
+			CollideablePolygon p = TilePolygonLoader.loadPolygon(object);
+			Boundary b = new Boundary(p);
+			map.addBoundary(b);
 		}
 	}
 
