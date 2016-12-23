@@ -13,7 +13,7 @@ import com.mygdx.game.shared.util.CollideablePolygon;
 public abstract class Trigger extends PolygonObject implements Actable {
 
 	protected Trigger(CollideablePolygon polygon) {
-		this.polygon = polygon;
+		super(polygon);
 	}
 
 }
