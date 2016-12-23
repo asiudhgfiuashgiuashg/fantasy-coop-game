@@ -17,7 +17,7 @@ import com.mygdx.game.shared.model.TilePolygonLoader;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
 import java.io.IOException;
-import java.util.List;
+
 
 /**
  * Loads stuff relevant to the client from a tmx (Tiled) map file.
@@ -55,7 +55,6 @@ public class ClientTmxLoader extends TmxMapLoader {
 
     private void loadEntities(ClientTiledMap tiledMap) {
         loadStaticEntities(tiledMap);
-        // TODO load dynamic entities
     }
 
     private void loadStaticEntities(ClientTiledMap tiledMap) {
