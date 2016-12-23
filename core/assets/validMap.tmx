@@ -57,16 +57,24 @@
  <objectgroup name="Dynamic Entities">
   <object id="7" name="SpiderBoss" type="Enemy" gid="82" x="63.3333" y="222.333" width="32" height="32"/>
  </objectgroup>
- <objectgroup name="Static Entities">
-  <object id="6" gid="28" x="171" y="259.667" width="32" height="32">
+ <objectgroup name="Static Entities" offsetx="0" offsety="-1">
+  <object id="6" gid="28" x="90" y="277.667" width="32" height="32">
    <properties>
     <property name="visLayer" type="int" value="1"/>
    </properties>
   </object>
-  <object id="18" name="static_rock" gid="68" x="167.5" y="69" width="32" height="32"/>
+  <object id="18" name="static_rock" gid="68" x="174.5" y="257" width="32" height="32">
+   <properties>
+    <property name="visLayer" value="1"/>
+   </properties>
+  </object>
   <object id="19" gid="1" x="262.667" y="64" width="32" height="32"/>
   <object id="20" gid="7" x="230" y="94.6667" width="32" height="32"/>
-  <object id="21" gid="28" x="227.333" y="242.667" width="32" height="32"/>
+  <object id="21" gid="28" x="196.333" y="244.667" width="32" height="32">
+   <properties>
+    <property name="visLayer" value="0"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Triggers">
   <object id="9" name="SomeBossTrigger" x="170" y="138.666" width="50.6667" height="35.3333"/>

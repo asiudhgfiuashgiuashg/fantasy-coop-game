@@ -10,15 +10,26 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.client.model.ClientTiledMap;
+import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
 
 import static com.mygdx.game.client.model.GameClient.console;
 
 /**
- * Extends libgdx's renderer to work with MapEntities
+ * Extends libgdx's renderer to work with MapEntities and respect visLayers
+ *
+ * visLayers: TODO implement
+ *     -1 = always render below other entities
+ *     0 = render according to y-position derived from hitbox and location --
+ *     DEFAULT VISLAYER
+ *     1 = always render above other entities
+ *
+ *     Rendering order: Tile Layer -> visLayer -1 entities -> visLayer 0
+ *     entities -> visLayer 1 entities
  */
 public class CustomTiledMapRenderer extends
-		OrthogonalTiledMapRenderer {
+	OrthogonalTiledMapRenderer {
+	private static final int DEFAULT_VISLAYER = 0;
 
 	/**
 	 * renders:
