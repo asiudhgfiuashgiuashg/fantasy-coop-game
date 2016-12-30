@@ -1,14 +1,21 @@
 package com.mygdx.game.client.view;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
+import com.mygdx.game.shared.util.CollideablePolygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +25,10 @@ import static com.mygdx.game.client.model.GameClient.console;
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
  *
- * visLayers: TODO implement
+ * visLayers:
  *     -1 = always render below other entities
- *     0 = render according to y-position derived from hitbox and location --
- *     DEFAULT VISLAYER
+ *     TODO 0 = render according to y-position derived from hitbox and
+ *     location -- DEFAULT VISLAYER
  *     1 = always render above other entities
  *
  *     Rendering order: Tile Layer -> visLayer -1 entities -> visLayer 0
@@ -30,11 +37,19 @@ import static com.mygdx.game.client.model.GameClient.console;
 public class CustomTiledMapRenderer extends
 	OrthogonalTiledMapRenderer {
 	public static final int DEFAULT_VISLAYER = 0;
+	private static final float DEFAULT_UNIT_SCALE = 2f;
 	private final List<MapEntity> layerNegOneEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerZeroEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
+
+	public boolean debug = true; // should I draw things that developers use
+	// to debug?
+	private float debugLineWidth = 3;
+
+	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+
 
 	/**
 	 * renders:
@@ -54,12 +69,49 @@ public class CustomTiledMapRenderer extends
 		renderTileLayer(tileLayer); // render tiles before entities so tiles
 		// are on the bottom
 		renderEntities();
-
 		endRender();
+
+		// since debug rendering uses a shape renderer, it must start after
+		// endRender() which calls batch.end(). Otherwise rendering gets
+		// messed up and some textureregions don't draw for some reason...
+		if (debug) {
+			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+			debugRenderEntities();
+			shapeRenderer.end();
+		}
+
+
 	}
 
 	/**
-	 * draw static and dynamic entities
+	 * render debug info about entities (hitboxes)
+	 */
+	private void debugRenderEntities() {
+		debugRenderEntityList(layerNegOneEntities);
+		debugRenderEntityList(layerZeroEntities);
+		debugRenderEntityList(layerOneEntities);
+	}
+
+	private void debugRenderEntityList(List<MapEntity> entities) {
+		for (MapEntity entity: entities) {
+			debugRenderEntity(entity);
+		}
+	}
+
+	private void debugRenderEntity(MapEntity entity) {
+		CollideablePolygon hitbox = entity.getHitbox();
+		if (hitbox != null) {
+			Polygon scaledHitbox = new CollideablePolygon(hitbox);// scale
+			// the hitbox to render on top of the scaled images properly
+			scaledHitbox.setScale(unitScale, unitScale);
+			scaledHitbox.setPosition(scaledHitbox.getX() * unitScale,
+					scaledHitbox.getY() * unitScale);
+			shapeRenderer.polygon(scaledHitbox.getTransformedVertices());
+		}
+	}
+
+	/**
+	 * draw static and dynamic entities by layer
 	 *  TODO render dynamic entities
 	 */
 	private void renderEntities() {
@@ -82,24 +134,29 @@ public class CustomTiledMapRenderer extends
 				unitScale, toDraw.getRegionHeight() * unitScale);
 	}
 
-	public CustomTiledMapRenderer(ClientTiledMap map) {
-		super(map);
-		populateEntitiesLists();
+
+	@Override
+	public void setView(OrthographicCamera camera) {
+		super.setView(camera);
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.setColor(Color.FIREBRICK);
+		Gdx.gl20.glLineWidth(debugLineWidth / camera.zoom);
 	}
 
-	public CustomTiledMapRenderer(TiledMap map, Batch batch) {
-		super(map, batch);
-		populateEntitiesLists();
+	public CustomTiledMapRenderer(ClientTiledMap map) {
+		this(map, DEFAULT_UNIT_SCALE);
 	}
+
 
 	public CustomTiledMapRenderer(TiledMap map, float unitScale) {
 		super(map, unitScale);
-		populateEntitiesLists();
+		setup();
 	}
 
-	public CustomTiledMapRenderer(TiledMap map, float unitScale,
-								  Batch batch) {
-		super(map, unitScale, batch);
+	/**
+	 * called in constructors to set up/load variables
+	 */
+	private void setup() {
 		populateEntitiesLists();
 	}
 

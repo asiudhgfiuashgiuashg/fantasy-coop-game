@@ -40,6 +40,7 @@ public class MapLoader {
 										// loaded
 	private String mapName;
 	private GameMap map;
+	private int tileHeight;
 
 	/**
 	 * Loads a game map of given .tmx file name
@@ -61,6 +62,7 @@ public class MapLoader {
 		}
 
 		Element root = XML.parse(file);
+		tileHeight = root.getInt("tileheight");
 
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
@@ -115,7 +117,8 @@ public class MapLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile);
+		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon
+				(tile, tileHeight);
 
 		// Store tile in map
 		int tileGid = firstGid + id;
@@ -316,7 +319,8 @@ public class MapLoader {
 	 */
 	private void loadBoundaries(Element layer) {
 		for (Element object : layer.getChildrenByName("object")) {
-			CollideablePolygon p = TilePolygonLoader.loadPolygon(object);
+			CollideablePolygon p = TilePolygonLoader.loadPolygon(object,
+					tileHeight);
 			Boundary b = new Boundary(p);
 			map.addBoundary(b);
 		}

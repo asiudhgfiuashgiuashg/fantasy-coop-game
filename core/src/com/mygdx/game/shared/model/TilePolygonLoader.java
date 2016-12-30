@@ -3,6 +3,8 @@ package com.mygdx.game.shared.model;
 import com.badlogic.gdx.utils.XmlReader;
 import com.mygdx.game.shared.util.CollideablePolygon;
 
+import static com.mygdx.game.client.model.GameClient.console;
+
 /**
  * Polygon loading methods usable by both client and server.
  * 
@@ -10,20 +12,23 @@ import com.mygdx.game.shared.util.CollideablePolygon;
  * @author Sawyer Harris
  */
 public class TilePolygonLoader {
-	public static CollideablePolygon loadTilePolygon(XmlReader.Element tileElement) {
+	public static CollideablePolygon loadTilePolygon(XmlReader.Element
+															 tileElement, int
+													 tileHeight) {
 		// Load tiles that have polygon hitboxes
 		for (XmlReader.Element objGroup : tileElement.getChildrenByName
 				("objectgroup")) {
 			// The first child named "object" is considered the hitbox
 			XmlReader.Element object = null;
 			if ((object = objGroup.getChildByName("object")) != null) {
-				return loadPolygon(object);
+				return loadPolygon(object, tileHeight);
 			}
 		}
 		return null;
 	}
 	
-	public static CollideablePolygon loadPolygon( XmlReader.Element object ) {
+	public static CollideablePolygon loadPolygon(XmlReader.Element object,
+												 int tileHeight) {
 		// The first child named "polygon" is the actual polygon hitbox
 		XmlReader.Element polygon = null;
 		if ((polygon = object.getChildByName("polygon")) != null) {
@@ -34,7 +39,8 @@ public class TilePolygonLoader {
 			for (int i = 0; i < points.length; i++) {
 				String[] point = points[i].split(",");
 				vertices[i * 2] = Float.parseFloat(point[0]) + object.getFloatAttribute("x");
-				vertices[i * 2 + 1] = object.getFloatAttribute("y") - Float.parseFloat(point[1]);
+				vertices[i * 2 + 1] = (tileHeight - object.getFloatAttribute
+						("y")) - Float.parseFloat(point[1]);
 			}
 			return new CollideablePolygon(vertices);
 		}
