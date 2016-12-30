@@ -1,9 +1,6 @@
 package com.mygdx.game.shared.model;
 
 import com.badlogic.gdx.utils.XmlReader;
-import com.mygdx.game.shared.util.CollideablePolygon;
-
-import static com.mygdx.game.client.model.GameClient.console;
 
 /**
  * Polygon loading methods usable by both client and server.

@@ -1,10 +1,10 @@
-package com.mygdx.game.shared.util;
+package com.mygdx.game.shared.model;
 
 import java.util.Arrays;
 
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
@@ -20,12 +20,13 @@ public class CollideablePolygon extends Polygon {
 	 */
 	private static final Intersector INTERSECTOR = new Intersector();
 	// the y position above which another entity should be rendered behind
-	// instead of in front of the entity with this CollideablePolygon hitbox
-	private int cutoffY;
+	// instead of in front of the entity with this CollideablePolygon hitbox.
+	// Relative to the polygon's origin NOT the world origin. Use
+	// getTransformedCutoffY for that.
+	private float cutoffY;
 
 	public CollideablePolygon(float[] vertices) {
 		super(vertices);
-		checkVerticesValidity(vertices);
 		cutoffY = calcCutoffY();
 	}
 
@@ -50,22 +51,10 @@ public class CollideablePolygon extends Polygon {
 	 * CollideablePolygon hitbox
 	 * @return
 	 */
-	private int calcCutoffY() {
-		return 0;
+	private float calcCutoffY() {
+		return 6; // TODO - esitmate the cutoffy
 	}
 
-	/**
-	 * Check if a set of vertices specify a valid polygon. A valid polygon is
-	 * convex and specified counter-clockwise. Throw an exception if the
-	 * vertices are not valid.
-	 *
-	 * @param vertices
-	 */
-	private void checkVerticesValidity(float[] vertices) {
-		if (!notOddNumberOf(vertices)) {
-			throw new IllegalArgumentException("The vertex array must have an even number of floats");
-		}
-	}
 
 	/**
 	 * @param other
@@ -110,9 +99,19 @@ public class CollideablePolygon extends Polygon {
 		return true;
 	}
 
-	@Override
-	public void setVertices(float[] vertices) {
-		checkVerticesValidity(vertices);
-		super.setVertices(vertices);
+
+	public float getCutoffY() {
+		return cutoffY;
+	}
+
+	public float getTransformedCutoffY() {
+		float transformedCutoffY = cutoffY;
+		transformedCutoffY *= getScaleY();
+
+		//TODO account for rotation
+
+		transformedCutoffY += getY() + getOriginY();
+
+		return transformedCutoffY;
 	}
 }

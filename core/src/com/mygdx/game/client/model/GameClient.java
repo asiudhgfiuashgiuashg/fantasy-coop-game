@@ -51,7 +51,7 @@ public class GameClient extends Game {
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
 
-	private static final float MAP_SCALE = 5f; // how much to scale polygons,
+	private static final float MAP_SCALE = 2f; // how much to scale polygons,
 	// tiles, etc. ex) A scale of 2.0 means that every pixel in a loaded image
 	// will take up 2 pixels in the game window.
 

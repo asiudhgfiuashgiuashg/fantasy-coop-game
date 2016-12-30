@@ -3,24 +3,19 @@ package com.mygdx.game.client.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
-import com.mygdx.game.client.model.entity.StaticEntity;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mygdx.game.client.model.GameClient.console;
 
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
@@ -101,13 +96,31 @@ public class CustomTiledMapRenderer extends
 	private void debugRenderEntity(MapEntity entity) {
 		CollideablePolygon hitbox = entity.getHitbox();
 		if (hitbox != null) {
-			Polygon scaledHitbox = new CollideablePolygon(hitbox);// scale
-			// the hitbox to render on top of the scaled images properly
-			scaledHitbox.setScale(unitScale, unitScale);
-			scaledHitbox.setPosition(scaledHitbox.getX() * unitScale,
-					scaledHitbox.getY() * unitScale);
-			shapeRenderer.polygon(scaledHitbox.getTransformedVertices());
+			debugDrawCollideablePolygon(hitbox);
 		}
+	}
+
+	/**
+	 * used for debugging -- polygons shouldn't be drawn normally
+	 * @param hitbox
+	 */
+	private void debugDrawCollideablePolygon(CollideablePolygon hitbox) {
+		CollideablePolygon scaledHitbox = new CollideablePolygon(hitbox);//
+		// scale the hitbox to render on top of the scaled images properly
+		scaledHitbox.setScale(unitScale, unitScale);
+		scaledHitbox.setPosition(scaledHitbox.getX() * unitScale,
+				scaledHitbox.getY() * unitScale);
+		shapeRenderer.setColor(Color.FIREBRICK);
+		shapeRenderer.polygon(scaledHitbox.getTransformedVertices());
+
+		//draw a  line representing the cutoffy
+		Rectangle boundingRect = scaledHitbox.getBoundingRectangle(); // used
+		// to draw ycuttoff line
+		shapeRenderer.setColor(Color.GREEN);
+		shapeRenderer.line(boundingRect.getX(), scaledHitbox.getTransformedCutoffY(),
+				boundingRect.getX() + boundingRect.getWidth(), scaledHitbox
+						.getTransformedCutoffY());
+
 	}
 
 	/**
@@ -139,7 +152,6 @@ public class CustomTiledMapRenderer extends
 	public void setView(OrthographicCamera camera) {
 		super.setView(camera);
 		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.setColor(Color.FIREBRICK);
 		Gdx.gl20.glLineWidth(debugLineWidth / camera.zoom);
 	}
 

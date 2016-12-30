@@ -1,7 +1,7 @@
 package com.mygdx.game.server.model;
 
 import com.badlogic.gdx.math.Intersector;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * An object which has a collideablepolygon as one of its fields.

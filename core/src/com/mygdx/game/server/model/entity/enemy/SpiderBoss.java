@@ -2,7 +2,6 @@ package com.mygdx.game.server.model.entity.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.DrawMessage;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 public class SpiderBoss extends Enemy {
 

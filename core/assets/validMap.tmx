@@ -19,11 +19,7 @@
    </objectgroup>
   </tile>
   <tile id="27">
-   <objectgroup draworder="index">
-    <object id="64" x="9.90909" y="1.90909">
-     <polygon points="0,0 -7.36364,27.4545 22,28.6364 10.9091,-1.09091"/>
-    </object>
-   </objectgroup>
+   <objectgroup draworder="index"/>
   </tile>
  </tileset>
  <tileset firstgid="37" name="another_tileset" tilewidth="32" tileheight="32" tilecount="48" columns="8">
@@ -41,7 +37,9 @@
   </tile>
   <tile id="31">
    <objectgroup draworder="index">
-    <object id="1" x="0.272727" y="0.272727" width="31.4545" height="31.2727"/>
+    <object id="6" x="17" y="7.09091">
+     <polygon points="0,0 -2.36364,5.09091 -4,11.7273 -0.818182,17.1818 6.36364,17.6364 11.5455,16.5455 14.8182,15.8182 14.3636,2.90909 9.45455,-0.181818"/>
+    </object>
    </objectgroup>
   </tile>
  </tileset>

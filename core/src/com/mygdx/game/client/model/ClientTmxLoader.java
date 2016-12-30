@@ -14,9 +14,11 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.TilePolygonLoader;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.io.IOException;
+
+import static com.mygdx.game.client.model.GameClient.console;
 
 
 /**
@@ -42,6 +44,8 @@ public class ClientTmxLoader extends TmxMapLoader {
         ImageResolver imageResolver = getImageResolver(mapFile);
 
         for (Element tilesetElement : root.getChildrenByName("tileset")) {
+            console.log("loading tileset " + tilesetElement.getAttribute
+                    ("name"));
             loadTileSet(tiledMap, tilesetElement, mapFile, imageResolver);
         }
         // load tile layer
@@ -68,8 +72,6 @@ public class ClientTmxLoader extends TmxMapLoader {
              i++) {
             Element objectGroup = objectGroups.get(i);
             if (objectGroup.getAttribute("name").equals("Static Entities")) {
-                GameClient.console.log("found static entities layer -- " +
-                        "loading static entities");
                 foundStaticEntitiesLayer = true;
                 // load the TiledMapTileMapObjects for the StaticEntities
                 loadObjectGroup(tiledMap, objectGroup);
@@ -95,10 +97,6 @@ public class ClientTmxLoader extends TmxMapLoader {
                     StaticEntity staticEntity = new StaticEntity(hitboxPolygon,
                             tileMapObject, mapHeight, tileHeight);
                     tiledMap.staticEntities.add(staticEntity);
-                    GameClient.console.log("loaded static entity - " +
-                            tileMapObject.getName() + " - pos: " + staticEntity
-                            .getPos().toString() + " - visLayer: " +
-                            staticEntity.getVisLayer());
                 }
             }
         }

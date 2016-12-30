@@ -2,7 +2,7 @@ package com.mygdx.game.client.model;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.mygdx.game.client.model.entity.StaticEntity;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.ArrayList;
 import java.util.HashMap;

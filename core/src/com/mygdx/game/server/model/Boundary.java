@@ -1,6 +1,6 @@
 package com.mygdx.game.server.model;
 
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * Represents a map boundary. The map's boundaries consist of many Boundary

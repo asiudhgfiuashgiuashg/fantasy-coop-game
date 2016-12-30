@@ -2,7 +2,7 @@ package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.DrawMessage;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * A static entity on the server. A static entity's sprite is defined in Tiled

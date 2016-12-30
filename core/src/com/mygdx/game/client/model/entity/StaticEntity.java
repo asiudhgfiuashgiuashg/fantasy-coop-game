@@ -3,12 +3,8 @@ package com.mygdx.game.client.model.entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.client.model.GameClient;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
-import java.util.Iterator;
-
-import static com.mygdx.game.client.model.GameClient.console;
 import static com.mygdx.game.client.view.CustomTiledMapRenderer
         .DEFAULT_VISLAYER;
 

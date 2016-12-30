@@ -2,7 +2,6 @@ package com.mygdx.game.server.model.entity.friendly;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.entity.DamageableEntity;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
  * an AI who does not attack the player

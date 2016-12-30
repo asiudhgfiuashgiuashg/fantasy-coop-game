@@ -1,7 +1,6 @@
 package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 public abstract class Projectile extends ActingEntity {
 	

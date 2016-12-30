@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Effect;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
  * An entity that has health.

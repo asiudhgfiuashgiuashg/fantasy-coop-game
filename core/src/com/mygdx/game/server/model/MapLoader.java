@@ -23,7 +23,7 @@ import com.mygdx.game.shared.MapLoaderConstants;
 import com.mygdx.game.shared.UniqueIDAssigner;
 import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.model.TilePolygonLoader;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * Loads the portions of the map that the server cares about
