@@ -39,4 +39,12 @@ public abstract class MapEntity {
 		return hitbox;
 	}
 
+	/**
+	 * a value used for rendering order in layer zero
+	 * @return
+	 */
+	public float getCutOffY() {
+		return hitbox == null ? getPos().y : hitbox.getTransformedCutoffY();
+	}
+
 }

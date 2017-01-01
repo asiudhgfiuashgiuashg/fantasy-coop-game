@@ -46,6 +46,16 @@ public class CustomTiledMapRenderer extends
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
+	public CustomTiledMapRenderer(ClientTiledMap map) {
+		this(map, DEFAULT_UNIT_SCALE);
+	}
+
+
+	public CustomTiledMapRenderer(TiledMap map, float unitScale) {
+		super(map, unitScale);
+		setup();
+	}
+
 	/**
 	 * renders:
 	 * - tile layer
@@ -155,15 +165,6 @@ public class CustomTiledMapRenderer extends
 		Gdx.gl20.glLineWidth(debugLineWidth / camera.zoom);
 	}
 
-	public CustomTiledMapRenderer(ClientTiledMap map) {
-		this(map, DEFAULT_UNIT_SCALE);
-	}
-
-
-	public CustomTiledMapRenderer(TiledMap map, float unitScale) {
-		super(map, unitScale);
-		setup();
-	}
 
 	/**
 	 * called in constructors to set up/load variables
@@ -182,47 +183,86 @@ public class CustomTiledMapRenderer extends
 	 */
 	private void populateEntitiesLists() {
 		for (MapEntity entity: ((ClientTiledMap) map).staticEntities) {
-			int visLayer = entity.getVisLayer();
-			if (-1 == visLayer) {
-				layerNegOneEntities.add(entity);
-			} else if (0 == visLayer) {
-				layerZeroEntities.add(entity);
-			} else if (1 == visLayer) {
-				layerOneEntities.add(entity);
-			}
+			registerEntity(entity);
 		}
-		sortLayerZeroEntities();
 	}
 
 	/**
-	 * initially sort all the layer zero entities in the order that they
-	 * should be rendered (highest cutoff Y positions should be rendered first)
+	 * when a new entity appears on the map, tell the renderer to keep track
+	 * of it also
+	 *
+	 * Also use this when instantiating the renderer with the map after the map
+	 * has been loaded
 	 */
-	private void sortLayerZeroEntities() {
-		Collections.sort(layerZeroEntities, new Comparator<MapEntity>() {
-			@Override
-			public int compare(MapEntity o1, MapEntity o2) {
-				CollideablePolygon o1Hitbox = o1.getHitbox();
-				CollideablePolygon o2Hitbox = o2.getHitbox();
-				/*
-				 * the values by which o1 and o2 will be sorted
-				 */
-				float o1RenderY = o1Hitbox == null ? o1.getPos().y : o1Hitbox
-						.getTransformedCutoffY();
-				float o2RenderY = o2Hitbox == null ? o2.getPos().y : o2Hitbox
-						.getTransformedCutoffY();
+	public void registerEntity(MapEntity entity) {
+		int visLayer = entity.getVisLayer();
+		if (-1 == visLayer) {
+			layerNegOneEntities.add(entity);
+		} else if (0 == visLayer) {
+			insertIntoLayerZero(entity);
+		} else if (1 == visLayer) {
+			layerOneEntities.add(entity);
+		}
+	}
 
-				float comparisonVal = o2RenderY - o1RenderY;
-				if (comparisonVal < 0) {
-					return -1;
-				}
-				if (comparisonVal > 0) {
-					return 1;
-				}
-				return 0;
+	/**
+	 * put this entity into an already-sorted layer 0
+	 * @param entity
+	 */
+	private void insertIntoLayerZero(MapEntity entity) {
+		boolean inserted = false;
+		EntityComparator comparator = new EntityComparator();
+		for (int i = 0; i < layerZeroEntities.size() && !inserted; i++) {
+			MapEntity otherEntity = layerZeroEntities.get(i);
+			/* if otherEntity (and all the following entities in the list)
+			 * should be rendered above this one
+			 */
+			if (comparator.compare(entity, otherEntity) < 0) {
+				inserted = true;
+				layerZeroEntities.add(i, entity);
 			}
-		});
+		}
+		if (!inserted) { //stick it at the end of the render list
+			layerZeroEntities.add(entity);
+		}
+	}
+
+	/**
+	 * when an entity is removed from the map, tell the renderer to stop
+	 * caring about it
+	 */
+	public void deregisterEntity(MapEntity entity) {
+		int visLayer = entity.getVisLayer();
+		if (-1 == visLayer) {
+			layerNegOneEntities.remove(entity);
+		} else if (0 == visLayer) {
+			layerZeroEntities.remove(entity);
+		} else if (1 == visLayer) {
+			layerOneEntities.remove(entity);
+		}
 	}
 
 
+	/**
+	 * used to sort entities in layer zero for rendering
+	 */
+	private class EntityComparator implements Comparator<MapEntity> {
+		@Override
+		public int compare(MapEntity o1, MapEntity o2) {
+				/*
+				 * the values by which o1 and o2 will be sorted
+				 */
+			float o1RenderY = o1.getCutOffY();
+			float o2RenderY = o2.getCutOffY();
+
+			float comparisonVal = o2RenderY - o1RenderY;
+			if (comparisonVal < 0) {
+				return -1;
+			}
+			if (comparisonVal > 0) {
+				return 1;
+			}
+			return 0;
+		}
+	}
 }

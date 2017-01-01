@@ -79,7 +79,7 @@
   <object id="7" name="SpiderBoss" type="Enemy" gid="82" x="8.66663" y="147.666" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Static Entities" offsetx="0" offsety="-1">
-  <object id="6" gid="28" x="102.667" y="247" width="32" height="32">
+  <object id="6" gid="28" x="110.667" y="247.667" width="32" height="32">
    <properties>
     <property name="visLayer" type="int" value="0"/>
    </properties>
