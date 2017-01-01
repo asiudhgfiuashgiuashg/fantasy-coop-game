@@ -65,7 +65,7 @@ public class GameClient extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		camera.update();
 
-		clientMap = new ClientTmxLoader().load("validMap.tmx");
+		clientMap = new ClientTmxLoader().load("prototypeMap.tmx");
 		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE);
 
 	}
