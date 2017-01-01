@@ -19,7 +19,11 @@
    </objectgroup>
   </tile>
   <tile id="27">
-   <objectgroup draworder="index"/>
+   <objectgroup draworder="index">
+    <object id="6" x="10.5455" y="2.81818">
+     <polygon points="0,0 -8.18182,16.8182 -1.27273,25.7273 13.3636,26.6364 18.4545,20.4545 7.63636,12.7273 12.5455,6.54545 13.4545,1.18182"/>
+    </object>
+   </objectgroup>
   </tile>
  </tileset>
  <tileset firstgid="37" name="another_tileset" tilewidth="32" tileheight="32" tilecount="48" columns="8">
@@ -72,34 +76,34 @@
 </data>
  </layer>
  <objectgroup name="Dynamic Entities">
-  <object id="7" name="SpiderBoss" type="Enemy" gid="82" x="63.3333" y="222.333" width="32" height="32"/>
+  <object id="7" name="SpiderBoss" type="Enemy" gid="82" x="8.66663" y="147.666" width="32" height="32"/>
  </objectgroup>
  <objectgroup name="Static Entities" offsetx="0" offsety="-1">
-  <object id="6" gid="28" x="90" y="277.667" width="32" height="32">
+  <object id="6" gid="28" x="102.667" y="247" width="32" height="32">
    <properties>
-    <property name="visLayer" type="int" value="1"/>
+    <property name="visLayer" type="int" value="0"/>
    </properties>
   </object>
-  <object id="18" name="static_rock" gid="68" x="155.167" y="259" width="32" height="32">
+  <object id="18" name="static_rock" gid="68" x="83.1667" y="267" width="32" height="32">
    <properties>
     <property name="visLayer" value="0"/>
    </properties>
   </object>
   <object id="19" gid="1" x="262.667" y="64" width="32" height="32"/>
   <object id="20" gid="7" x="230" y="94.6667" width="32" height="32"/>
-  <object id="21" name="test_pipe" gid="28" x="196.333" y="244.667" width="32" height="32">
+  <object id="21" name="test_pipe" gid="28" x="253" y="124" width="32" height="32">
    <properties>
     <property name="visLayer" value="0"/>
    </properties>
   </object>
-  <object id="38" gid="28" x="0.666667" y="320" width="32" height="32">
+  <object id="38" gid="28" x="179.333" y="168.667" width="32" height="32">
    <properties>
     <property name="visLayer" type="int" value="1"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="Triggers">
-  <object id="9" name="SomeBossTrigger" x="170" y="138.666" width="50.6667" height="35.3333"/>
+  <object id="9" name="SomeBossTrigger" x="176.667" y="37.9993" width="50.6667" height="35.3333"/>
   <object id="25" name="PortalTriggerToLevel3" type="MapLoad" x="30.6667" y="28.6667" width="66.6667" height="58"/>
  </objectgroup>
 </map>

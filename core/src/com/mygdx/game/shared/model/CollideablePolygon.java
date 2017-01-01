@@ -90,7 +90,6 @@ public class CollideablePolygon extends Polygon {
                 }
             }
         }
-
         return highestNookY;
 
     }

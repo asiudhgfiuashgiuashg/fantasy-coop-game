@@ -8,21 +8,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static com.mygdx.game.client.model.GameClient.console;
 
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
  *
  * visLayers:
  *     -1 = always render below other entities
- *     TODO 0 = render according to y-position derived from hitbox and
+ *     0 = render in order according to y-position derived from hitbox and
  *     location -- DEFAULT VISLAYER
  *     1 = always render above other entities
  *
@@ -36,7 +36,7 @@ public class CustomTiledMapRenderer extends
 	private final List<MapEntity> layerNegOneEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerZeroEntities = new
-			ArrayList<MapEntity>();
+			LinkedList<MapEntity>();
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
 	public boolean debug = true; // should I draw things that developers use
@@ -191,6 +191,37 @@ public class CustomTiledMapRenderer extends
 				layerOneEntities.add(entity);
 			}
 		}
+		sortLayerZeroEntities();
+	}
+
+	/**
+	 * initially sort all the layer zero entities in the order that they
+	 * should be rendered (highest cutoff Y positions should be rendered first)
+	 */
+	private void sortLayerZeroEntities() {
+		Collections.sort(layerZeroEntities, new Comparator<MapEntity>() {
+			@Override
+			public int compare(MapEntity o1, MapEntity o2) {
+				CollideablePolygon o1Hitbox = o1.getHitbox();
+				CollideablePolygon o2Hitbox = o2.getHitbox();
+				/*
+				 * the values by which o1 and o2 will be sorted
+				 */
+				float o1RenderY = o1Hitbox == null ? o1.getPos().y : o1Hitbox
+						.getTransformedCutoffY();
+				float o2RenderY = o2Hitbox == null ? o2.getPos().y : o2Hitbox
+						.getTransformedCutoffY();
+
+				float comparisonVal = o2RenderY - o1RenderY;
+				if (comparisonVal < 0) {
+					return -1;
+				}
+				if (comparisonVal > 0) {
+					return 1;
+				}
+				return 0;
+			}
+		});
 	}
 
 

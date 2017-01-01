@@ -24,6 +24,7 @@ import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
@@ -66,6 +67,7 @@ public class GameClient extends Game {
 
 		clientMap = new ClientTmxLoader().load("validMap.tmx");
 		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE);
+
 	}
 
 	@Override
