@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="21">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="9" columns="0">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="22">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="10" columns="0">
   <tile id="0">
    <image width="24" height="24" source="prototype/grasstile0.png"/>
   </tile>
@@ -33,6 +33,9 @@
   <tile id="9">
    <image width="24" height="24" source="prototype/grasstile2flowers1.png"/>
   </tile>
+  <tile id="10">
+   <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10">
   <data encoding="csv">
@@ -50,6 +53,11 @@
  </layer>
  <objectgroup name="Static Entities">
   <object id="20" gid="8" x="-2.66667" y="209" width="74" height="31"/>
+  <object id="21" gid="11" x="25.3333" y="186.333" width="37" height="14">
+   <properties>
+    <property name="visLayer" type="int" value="-1"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Dynamic Entities"/>
  <objectgroup name="Triggers"/>
