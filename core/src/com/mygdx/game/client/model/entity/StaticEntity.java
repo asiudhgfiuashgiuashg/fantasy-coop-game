@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
+import static com.mygdx.game.client.model.GameClient.console;
 import static com.mygdx.game.client.view.CustomTiledMapRenderer
         .DEFAULT_VISLAYER;
 
@@ -43,6 +44,10 @@ public class StaticEntity extends MapEntity {
         // flip y axis
         float yPos = mapHeight + tileMapObject.getProperties()
                 .get("y", Float.class);
+        console.log("y: " + tileMapObject.getProperties()
+                .get("y", Float.class));
+        console.log("mapheight: " + mapHeight);
+        console.log("static entity y : " + yPos);
         //for some reason yPos needs negated or the y values are flipped..
         this.position = new Vector2(xPos, yPos);
 
