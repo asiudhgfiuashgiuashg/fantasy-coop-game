@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="34">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="13" columns="0">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="36">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="16" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
   </tile>
@@ -45,19 +45,28 @@
   <tile id="24">
    <image width="24" height="24" source="prototype/dirt_path_vertical1.png"/>
   </tile>
+  <tile id="27">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal0.png"/>
+  </tile>
+  <tile id="28">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal1.png"/>
+  </tile>
+  <tile id="29">
+   <image width="24" height="24" source="prototype/dirt_path_plus_xroads.png"/>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10">
   <data encoding="csv">
 13,14,13,14,13,14,13,14,13,14,
 15,19,15,16,15,16,15,16,15,16,
-13,14,13,14,13,14,13,14,13,21,
-15,16,15,24,15,16,15,16,15,16,
-13,14,13,25,13,21,13,14,13,14,
-15,16,15,24,15,18,15,16,15,16,
-13,14,13,25,13,14,13,14,13,14,
-15,18,15,25,15,16,15,16,15,16,
-13,14,13,24,13,14,13,14,13,14,
-15,16,15,24,15,16,15,16,15,16
+13,14,13,25,13,14,13,14,13,21,
+15,16,15,24,14,16,15,16,15,16,
+13,14,13,25,14,21,13,14,13,14,
+15,16,15,24,14,18,15,16,15,16,
+13,14,13,25,14,14,13,14,13,14,
+15,18,15,24,14,16,15,16,15,16,
+28,29,28,30,28,29,28,29,28,29,
+15,16,15,24,14,16,15,16,15,16
 </data>
  </layer>
  <objectgroup name="Static Entities">
@@ -67,6 +76,7 @@
     <property name="visLayer" type="int" value="-1"/>
    </properties>
   </object>
+  <object id="34" gid="5" x="73.5" y="204.5" width="16" height="23"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities"/>
  <objectgroup name="Triggers"/>
