@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="22">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="10" columns="0">
-  <tile id="0">
-   <image width="24" height="24" source="prototype/grasstile0.png"/>
-  </tile>
-  <tile id="1">
-   <image width="24" height="24" source="prototype/grasstile1.png"/>
-  </tile>
-  <tile id="2">
-   <image width="24" height="24" source="prototype/grasstile2.png"/>
-  </tile>
-  <tile id="3">
-   <image width="24" height="24" source="prototype/grasstile3.png"/>
-  </tile>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="34">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="11" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
   </tile>
@@ -27,33 +15,48 @@
   <tile id="7">
    <image width="74" height="31" source="prototype/cart_missing_pull_handle.png"/>
   </tile>
-  <tile id="8">
-   <image width="24" height="24" source="prototype/grasstile2flowers.png"/>
-  </tile>
-  <tile id="9">
-   <image width="24" height="24" source="prototype/grasstile2flowers1.png"/>
-  </tile>
   <tile id="10">
    <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
+  </tile>
+  <tile id="12">
+   <image width="24" height="24" source="prototype/grass0.png"/>
+  </tile>
+  <tile id="13">
+   <image width="24" height="24" source="prototype/grass1.png"/>
+  </tile>
+  <tile id="14">
+   <image width="24" height="24" source="prototype/grass2.png"/>
+  </tile>
+  <tile id="15">
+   <image width="24" height="24" source="prototype/grass3.png"/>
+  </tile>
+  <tile id="17">
+   <image width="24" height="24" source="prototype/grass3flowers.png"/>
+  </tile>
+  <tile id="18">
+   <image width="24" height="24" source="prototype/grass3flowers1.png"/>
+  </tile>
+  <tile id="20">
+   <image width="24" height="24" source="prototype/grass1flowers0.png"/>
   </tile>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10">
   <data encoding="csv">
-3,4,3,4,3,4,0,0,0,0,
-1,2,1,2,1,2,0,0,0,0,
-3,10,3,10,3,4,0,0,0,0,
-1,2,1,2,1,2,0,0,0,0,
-3,4,3,4,3,4,0,0,0,0,
-1,2,1,9,1,2,0,0,0,0,
-3,4,3,4,3,4,0,0,0,0,
-1,2,1,2,1,2,0,0,0,0,
-3,4,3,4,10,4,0,0,0,0,
-9,2,1,2,1,2,0,0,0,0
+13,14,13,14,13,14,13,14,13,14,
+15,19,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,21,
+15,16,15,18,15,16,15,16,15,16,
+13,14,13,14,13,21,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,
+15,18,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16
 </data>
  </layer>
  <objectgroup name="Static Entities">
-  <object id="20" gid="8" x="-2.66667" y="209" width="74" height="31"/>
-  <object id="21" gid="11" x="25.3333" y="186.333" width="37" height="14">
+  <object id="20" gid="8" x="29.6667" y="134" width="74" height="31"/>
+  <object id="21" gid="11" x="49.3333" y="138.333" width="37" height="14">
    <properties>
     <property name="visLayer" type="int" value="-1"/>
    </properties>
