@@ -1,17 +1,16 @@
 package com.mygdx.game.client.model;
 
 import box2dLight.RayHandler;
-import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.client.view.GameScreen;
@@ -40,7 +39,7 @@ public class GameClient extends Game {
 
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
-
+	public SpriteBatch batch;
 	private CustomTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 
@@ -56,7 +55,7 @@ public class GameClient extends Game {
 		instance = this;
 
 		setupConsole();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -83,8 +82,9 @@ public class GameClient extends Game {
 
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
-		renderer.setView(camera);
-		renderer.render();
+		//renderer.setView(camera);
+		//renderer.render();
+		batch.end();
 		console.draw();
 
 		// temporary
@@ -128,8 +128,7 @@ public class GameClient extends Game {
 	 * disconnect from the server and perform the accompanying display changes
 	 */
 	public void disconnect() {
-		communicator.disconnect();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -159,7 +158,7 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen());
+		setScreen(new GameScreen(this));
 		console.log("Transitioned to in-game from lobby");
 	}
 
