@@ -45,7 +45,7 @@ public class GameClient extends Game {
 	private String username = "PLACEHOLDER"; //client's username
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
-	private SpriteBatch batch;
+	public SpriteBatch batch;
 	private CustomTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 
@@ -55,7 +55,7 @@ public class GameClient extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		setupConsole();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -75,8 +75,8 @@ public class GameClient extends Game {
 		batch.begin();
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
-		renderer.setView(camera);
-		renderer.render();
+		//renderer.setView(camera);
+		//renderer.render();
 		batch.end();
 		console.draw();
 	}
@@ -111,7 +111,7 @@ public class GameClient extends Game {
 		try {
 			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
 			console.log("Connected to server", LogLevel.SUCCESS);
-			setScreen(new LobbyScreen());
+			setScreen(new LobbyScreen(this));
 			lobbyManager.sendUsername();
 		} catch (IOException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
@@ -123,7 +123,7 @@ public class GameClient extends Game {
 	 */
 	public void disconnect() {
 		client.close();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -169,7 +169,7 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen());
+		setScreen(new GameScreen(this));
 		console.log("Transitioned to in-game from lobby");
 	}
 }
