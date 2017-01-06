@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.client.model.GameClient;
@@ -39,27 +41,37 @@ public class MenuScreen extends ScreenAdapter
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		final Label topPane = new Label("Select a Screen", skin);
+		//The following is used after selecting a server option to connect/create a server
+		TextArea portEntry = new TextArea("", skin);
+		TextArea ipEntry = new TextArea("", skin);
+		TextArea usernameEntry = new TextArea("", skin);
+		final Label port = new Label("Port: ", skin);
+		final Label ip = new Label("IP: ", skin);
+		final Label username = new Label("Username: ", skin);
+		final Table serverInfo = new Table();
+		TextButton connectButton = new TextButton("Connect", skin);
+		
+		
+		final Label topPane = new Label("Select a Server option", skin);
 		final HorizontalGroup botPane = new HorizontalGroup();
-		final TextButton gameButton = new TextButton("Game Screen", skin, "default");
-		gameButton.addListener(new ClickListener(){
+		final TextButton hostButton = new TextButton("Host Server", skin, "default");
+		hostButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
-				game.setScreen(new GameScreen(game));
-	            dispose();
+				serverInfo.clearChildren();
+				
             }
 		});
 		
-		final TextButton lobbyButton = new TextButton("Lobby Screen", skin, "default");
-		lobbyButton.addListener(new ClickListener(){
+		final TextButton joinButton = new TextButton("Join Server", skin, "default");
+		joinButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
 				game.setScreen(new LobbyScreen(game));
-	            dispose();
             }
 		});
-		botPane.addActor(gameButton);
-		botPane.addActor(lobbyButton);
+		botPane.addActor(hostButton);
+		botPane.addActor(joinButton);
 		final SplitPane pane = new SplitPane(topPane, botPane, true, skin);
 		pane.setFillParent(true);
 		

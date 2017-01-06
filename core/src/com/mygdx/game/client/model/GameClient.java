@@ -67,18 +67,18 @@ public class GameClient extends Game {
 
 	@Override
 	public void render () {
-		super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		super.render();
 
 
-		batch.begin();
+		//batch.begin();
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
 		//renderer.setView(camera);
 		//renderer.render();
-		batch.end();
-		console.draw();
+		//batch.end();
+		//console.draw();
 	}
 
 	@Override
@@ -171,5 +171,11 @@ public class GameClient extends Game {
 	public void transitionToInGame() {
 		setScreen(new GameScreen(this));
 		console.log("Transitioned to in-game from lobby");
+	}
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
+	
 	}
 }
