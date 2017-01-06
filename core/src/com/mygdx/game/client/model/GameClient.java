@@ -76,14 +76,10 @@ public class GameClient extends Game {
 
 	@Override
 	public void render() {
-		super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		// do the drawing here
-		// for example, batch.draw(textureregion, x, y);
-		//renderer.setView(camera);
-		//renderer.render();
+		super.render();
+		
 		batch.end();
 		console.draw();
 
@@ -164,5 +160,10 @@ public class GameClient extends Game {
 
 	public CustomTiledMapRenderer getRenderer() {
 		return renderer;
+	}
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
 	}
 }
