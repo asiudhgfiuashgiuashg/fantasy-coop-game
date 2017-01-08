@@ -1,8 +1,9 @@
 package com.mygdx.game.server.model;
 
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.server.model.entity.Projectile;
+import java.util.ArrayList;
+
 import com.mygdx.game.server.model.entity.StaticEntity;
+import com.mygdx.game.server.model.entity.VelocityEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.Trigger;
@@ -16,13 +17,14 @@ import com.mygdx.game.server.model.trigger.Trigger;
  */
 public class GameMap {
 	private String name;
-	private Array<Enemy> enemies;
-	private Array<Friendly> friendlies;
-	private Array<ActiveSpell> activeSpells;
-	private Array<Projectile> projectiles;
-	private Array<Trigger> triggers;
-	private Array<StaticEntity> staticEntities;
-	private Array<Boundary> boundaries;
+	private ArrayList<Enemy> enemies;
+	private ArrayList<Friendly> friendlies;
+	private ArrayList<ActiveSpell> activeSpells;
+	private ArrayList<VelocityEntity> projectiles;
+	private ArrayList<Trigger> triggers;
+	private ArrayList<StaticEntity> staticEntities;
+	private ArrayList<Boundary> boundaries;
+	private ArrayList<PolygonObject> solidObjects;
 
 	/**
 	 * Constructor used by MapLoader.
@@ -32,72 +34,48 @@ public class GameMap {
 	 */
 	public GameMap(String name) {
 		this.name = name;
-		enemies = new Array<Enemy>();
-		friendlies = new Array<Friendly>();
-		activeSpells = new Array<ActiveSpell>();
-		projectiles = new Array<Projectile>();
-		triggers = new Array<Trigger>();
-		staticEntities = new Array<StaticEntity>();
+		enemies = new ArrayList<Enemy>();
+		friendlies = new ArrayList<Friendly>();
+		activeSpells = new ArrayList<ActiveSpell>();
+		projectiles = new ArrayList<VelocityEntity>();
+		triggers = new ArrayList<Trigger>();
+		staticEntities = new ArrayList<StaticEntity>();
+		solidObjects = new ArrayList<PolygonObject>();
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Array<Enemy> getEnemies() {
+	public ArrayList<Enemy> getEnemies() {
 		return enemies;
 	}
 
-	public void addEnemy(Enemy enemy) {
-		enemies.add(enemy);
-	}
-
-	public Array<Friendly> getFriendlies() {
+	public ArrayList<Friendly> getFriendlies() {
 		return friendlies;
 	}
 
-	public void addFriendly(Friendly friendly) {
-		friendlies.add(friendly);
-	}
-
-	public Array<ActiveSpell> getActiveSpells() {
+	public ArrayList<ActiveSpell> getActiveSpells() {
 		return activeSpells;
 	}
 
-	public void addActiveSpell(ActiveSpell spell) {
-		activeSpells.add(spell);
-	}
-
-	public Array<Projectile> getProjectiles() {
+	public ArrayList<VelocityEntity> getProjectiles() {
 		return projectiles;
 	}
 
-	public void addProjectile(Projectile proj) {
-		projectiles.add(proj);
-	}
-
-	public Array<Trigger> getTriggers() {
+	public ArrayList<Trigger> getTriggers() {
 		return triggers;
 	}
 
-	public void addTrigger(Trigger trig) {
-		System.out.print("trig added");
-		triggers.add(trig);
-	}
-
-	public Array<StaticEntity> getStaticEntities() {
+	public ArrayList<StaticEntity> getStaticEntities() {
 		return staticEntities;
 	}
 
-	public void addStaticEntity(StaticEntity ent) {
-		staticEntities.add(ent);
-	}
-
-	public Array<Boundary> getBoundaries() {
+	public ArrayList<Boundary> getBoundaries() {
 		return boundaries;
 	}
-
-	public void addBoundary(Boundary b) {
-		boundaries.add(b);
+	
+	public ArrayList<PolygonObject> getSolidObjects() {
+		return solidObjects;
 	}
 }

@@ -4,20 +4,96 @@ import com.badlogic.gdx.math.Intersector;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
- * An object which has a collideablepolygon as one of its fields.
+ * An object which has a CollideablePolygon as one of its fields. A
+ * PolygonObject is the base class for many server entities and objects. Solid
+ * PolygonObjects are not allowed to have their hitboxes overlap and have
+ * special collision checking ( see VelocityEntity ).
  * 
  * @author elimonent
  * @author Sawyer Harris
  *
  */
 public abstract class PolygonObject {
-	protected CollideablePolygon polygon;
+	/** The polygon */
+	private CollideablePolygon polygon;
 
-	protected PolygonObject(CollideablePolygon polygon) {
+	/** If object is solid i.e. cannot overlap with another */
+	private boolean solid;
+
+	/**
+	 * Constructs a PolygonObject and adds it to GameMap's list of solidObjects
+	 * if it is solid.
+	 * 
+	 * @param polygon
+	 * @param solid
+	 */
+	public PolygonObject(CollideablePolygon polygon, boolean solid) {
+		this.polygon = polygon;
+		this.solid = solid;
+		if (solid) {
+			Server.getInstance().getMap().getSolidObjects().add(this);
+		}
+	}
+
+	/**
+	 * Checks for a collision with another polygon.
+	 * 
+	 * @param other
+	 *            the other polygonobject
+	 * @return true if there is a collision
+	 */
+	public boolean collides(PolygonObject other) {
+		return other.polygon.collides(this.polygon, new Intersector.MinimumTranslationVector());
+	}
+
+	/**
+	 * Gets the polygon
+	 * 
+	 * @return polygon
+	 */
+	public CollideablePolygon getPolygon() {
+		return polygon;
+	}
+
+	/**
+	 * Sets the polygon
+	 * 
+	 * @param polygon
+	 */
+	public void setPolygon(CollideablePolygon polygon) {
 		this.polygon = polygon;
 	}
 
-	protected boolean collides(PolygonObject other) {
-		return other.polygon.collides(this.polygon, new Intersector.MinimumTranslationVector());
+	/**
+	 * Returns if the polygon is solid i.e. cannot overlap with others
+	 * 
+	 * @return true if solid
+	 */
+	public boolean isSolid() {
+		return solid;
 	}
+
+	/**
+	 * Sets if the polygon is solid i.e. cannot overlap with others
+	 * 
+	 * @param solid
+	 */
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+
+	/**
+	 * Destructor for PolygonObject. Removes from GameMap's solidObjects list if
+	 * it is solid.
+	 * 
+	 * @return true if successfully destroyed, false if solid and couldn't be
+	 *         removed from solidObjects list
+	 */
+	public boolean destroy() {
+		if (solid) {
+			return Server.getInstance().getMap().getSolidObjects().remove(this);
+		}
+		return true;
+	}
+
 }

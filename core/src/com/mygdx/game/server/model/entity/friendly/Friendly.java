@@ -10,8 +10,8 @@ import com.mygdx.game.server.model.entity.DamageableEntity;
  */
 public abstract class Friendly extends DamageableEntity {
 
-	protected Friendly(String uid, Vector2 position, int visLayer) {
-		super(uid, position, visLayer);
+	protected Friendly(String uid, Vector2 position, int visLayer, boolean solid) {
+		super(uid, position, visLayer, solid);
 	}
 
 }

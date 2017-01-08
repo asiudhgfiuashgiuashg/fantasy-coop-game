@@ -10,9 +10,9 @@ import com.mygdx.game.server.model.Effect;
  * @author elimonent
  *
  */
-public abstract class DamageableEntity extends ActingEntity {
-	protected DamageableEntity(String uid, Vector2 position, int visLayer) {
-		super(uid, position, visLayer);
+public abstract class DamageableEntity extends DynamicEntity {
+	protected DamageableEntity(String uid, Vector2 position, int visLayer, boolean solid) {
+		super(uid, position, visLayer, solid);
 	}
 	
 	protected int health;

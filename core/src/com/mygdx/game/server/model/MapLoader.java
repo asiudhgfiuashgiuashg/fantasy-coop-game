@@ -174,6 +174,9 @@ public class MapLoader {
 
 			// By default visLayer is zero
 			int visLayer = 0;
+			
+			// By default entity is non-solid
+			boolean solid = false;
 
 			Element properties = null;
 			if ((properties = layer.getChildByName("properties")) != null) {
@@ -181,6 +184,12 @@ public class MapLoader {
 				if ((visLayerProp = properties.getChildByName("visLayer")) != null) {
 					// If visLayer was explicitly set, override default value
 					visLayer = visLayerProp.getIntAttribute("value");
+				}
+				
+				Element solidProp = null;
+				if ((solidProp = properties.getChildByName("solid")) != null) {
+					// If solid was explicitly set, override default value
+					solid = solidProp.getBooleanAttribute("value");
 				}
 			}
 
@@ -192,7 +201,7 @@ public class MapLoader {
 				hitboxPolygon = new CollideablePolygon(tile.hitbox);
 			}
 
-			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, hitboxPolygon));
+			map.getStaticEntities().add(new StaticEntity(uid, new Vector2(x, y), visLayer, solid, hitboxPolygon));
 		}
 	}
 
@@ -241,13 +250,13 @@ public class MapLoader {
 				cons.setAccessible(true); // need to call this for non-public
 											// constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.addEnemy(enemy);
+				map.getEnemies().add(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
 				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
 				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.addFriendly(friendly);
+				map.getFriendlies().add(friendly);
 			} else {
 				throw new MapLoaderException();
 			}
@@ -307,7 +316,7 @@ public class MapLoader {
 				o = cons.newInstance(hitbox);
 				trig = (Trigger) o;
 			}
-			map.addTrigger(trig);
+			map.getTriggers().add(trig);
 		}
 	}
 
@@ -322,7 +331,7 @@ public class MapLoader {
 			CollideablePolygon p = TilePolygonLoader.loadPolygon(object,
 					tileHeight);
 			Boundary b = new Boundary(p);
-			map.addBoundary(b);
+			map.getBoundaries().add(b);
 		}
 	}
 
