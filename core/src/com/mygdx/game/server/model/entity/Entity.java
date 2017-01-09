@@ -41,12 +41,13 @@ public abstract class Entity extends PolygonObject {
 	}
 
 	/**
-	 * Gets the entity's position
+	 * Returns a copy of the entity's position. All modifications must be done
+	 * via setPosition()
 	 * 
-	 * @return position
+	 * @return copy of position
 	 */
 	public Vector2 getPosition() {
-		return position;
+		return new Vector2(position);
 	}
 
 	/**

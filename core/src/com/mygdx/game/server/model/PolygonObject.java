@@ -1,6 +1,7 @@
 package com.mygdx.game.server.model;
 
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
@@ -36,14 +37,20 @@ public abstract class PolygonObject {
 	}
 
 	/**
-	 * Checks for a collision with another polygon.
+	 * Checks for a collision with another polygon object.
 	 * 
 	 * @param other
 	 *            the other polygonobject
 	 * @return true if there is a collision
 	 */
 	public boolean collides(PolygonObject other) {
-		return other.polygon.collides(this.polygon, new Intersector.MinimumTranslationVector());
+		CollideablePolygon p1 = this.polygon;
+		CollideablePolygon p2 = other.polygon;
+		Vector2 diff = new Vector2(p2.getX() - p1.getX(), p2.getY() - p1.getY());
+		if (diff.len() > p1.getMaxLength() + p2.getMaxLength()) {
+			return false;
+		}
+		return p2.collides(p1, new Intersector.MinimumTranslationVector());
 	}
 
 	/**

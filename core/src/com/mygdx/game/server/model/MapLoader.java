@@ -117,8 +117,7 @@ public class MapLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon
-				(tile, tileHeight);
+		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile, tileHeight);
 
 		// Store tile in map
 		int tileGid = firstGid + id;
@@ -174,7 +173,7 @@ public class MapLoader {
 
 			// By default visLayer is zero
 			int visLayer = 0;
-			
+
 			// By default entity is non-solid
 			boolean solid = false;
 
@@ -185,7 +184,7 @@ public class MapLoader {
 					// If visLayer was explicitly set, override default value
 					visLayer = visLayerProp.getIntAttribute("value");
 				}
-				
+
 				Element solidProp = null;
 				if ((solidProp = properties.getChildByName("solid")) != null) {
 					// If solid was explicitly set, override default value
@@ -292,6 +291,8 @@ public class MapLoader {
 			float height = trigger.getFloatAttribute("height");
 
 			Trigger trig = null;
+
+			// Triggers are rectangles
 			float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
 			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
@@ -328,8 +329,14 @@ public class MapLoader {
 	 */
 	private void loadBoundaries(Element layer) {
 		for (Element object : layer.getChildrenByName("object")) {
-			CollideablePolygon p = TilePolygonLoader.loadPolygon(object,
-					tileHeight);
+			// Load polygon			
+			CollideablePolygon p = TilePolygonLoader.loadPolygon(object, tileHeight);
+			
+			// Boundary position
+			float x = object.getFloatAttribute("x");
+			float y = object.getFloatAttribute("y");
+			p.setPosition(x, y);
+			
 			Boundary b = new Boundary(p);
 			map.getBoundaries().add(b);
 		}
