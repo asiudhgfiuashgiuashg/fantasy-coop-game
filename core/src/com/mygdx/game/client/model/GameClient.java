@@ -51,7 +51,7 @@ public class GameClient extends Game {
 	private OrthographicCamera camera;
 
 	private static final int SCREEN_WIDTH = 800;
-	private static final int SCREEN_HEIGHT = 600;
+	public static final int SCREEN_HEIGHT = 600;
 
 	private static final float MAP_SCALE = 4f; // how much to scale polygons,
 	// tiles, etc. ex) A scale of 2.0 means that every pixel in a loaded image

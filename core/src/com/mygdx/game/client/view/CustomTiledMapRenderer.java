@@ -1,5 +1,7 @@
 package com.mygdx.game.client.view;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,12 +11,16 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.*;
 
+import static com.mygdx.game.client.model.GameClient.SCREEN_HEIGHT;
 import static com.mygdx.game.client.model.GameClient.console;
 
 /**
@@ -45,6 +51,14 @@ public class CustomTiledMapRenderer extends
 
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
+	private World world; // used to render lights
+	private RayHandler rayhandler; // used to render lights
+	private PointLight light;
+	/*
+	 * The color which covers everything. Move alpha towards zero to make
+	 * things darker or move alpha towards one to make things lighter
+	 */
+	private Color ambientColor;
 
 	public CustomTiledMapRenderer(ClientTiledMap map) {
 		this(map, DEFAULT_UNIT_SCALE);
@@ -57,10 +71,40 @@ public class CustomTiledMapRenderer extends
 	}
 
 	/**
+	 * called in constructors to set up/load variables
+	 */
+	private void setup() {
+		populateEntitiesLists();
+		world = new World(new Vector2(0, 0), false);
+		rayhandler = new RayHandler(world);
+		rayhandler.setCombinedMatrix(batch.getProjectionMatrix());
+		ambientColor = Color.CLEAR;
+		setAmbientAlpha(.5f);
+
+		light = new PointLight(rayhandler, 100, Color.YELLOW, 100, 250,
+				250);
+	}
+
+	public void setAmbientColor(Color color) {
+		this.ambientColor = color;
+		rayhandler.setAmbientLight(ambientColor);
+	}
+
+	/**
+	 * good for simulating time of day
+	 * @param alpha
+	 */
+	public void setAmbientAlpha(float alpha) {
+		ambientColor.a = alpha;
+		rayhandler.setAmbientLight(ambientColor);
+	}
+
+	/**
 	 * renders:
 	 * - tile layer
 	 * - static entities
 	 * - dynamic entities
+	 * - lighting
 	 * doesn't render:
 	 * - gui
 	 * - developer console
@@ -74,7 +118,8 @@ public class CustomTiledMapRenderer extends
 		// are on the bottom
 		renderEntities();
 		endRender();
-
+		light.setPosition(Gdx.input.getX(), SCREEN_HEIGHT - Gdx.input.getY());
+		rayhandler.updateAndRender();
 		// since debug rendering uses a shape renderer, it must start after
 		// endRender() which calls batch.end(). Otherwise rendering gets
 		// messed up and some textureregions don't draw for some reason...
@@ -83,8 +128,6 @@ public class CustomTiledMapRenderer extends
 			debugRenderEntities();
 			shapeRenderer.end();
 		}
-
-
 	}
 
 	/**
@@ -148,7 +191,7 @@ public class CustomTiledMapRenderer extends
 		}
 	}
 
-	private void renderEntity(MapEntity staticEntity) {
+	private void renderEntity(MapEntity staticEntity ) {
 		TextureRegion toDraw = staticEntity.getTextureRegion();
 
 		batch.draw(toDraw, staticEntity.getPos().x * unitScale, staticEntity
@@ -165,12 +208,7 @@ public class CustomTiledMapRenderer extends
 	}
 
 
-	/**
-	 * called in constructors to set up/load variables
-	 */
-	private void setup() {
-		populateEntitiesLists();
-	}
+
 
 	/**
 	 * used by constructors to initially populate lists of entities in each

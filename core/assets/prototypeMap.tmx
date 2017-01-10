@@ -4,8 +4,8 @@
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
    <objectgroup draworder="index">
-    <object id="5" x="10.1818" y="3.18182">
-     <polygon points="0,0 -7.72727,0.363636 -6.36364,13.7273 0.545455,13.0909 2.81818,7.18182"/>
+    <object id="13" x="9.36364" y="17.3636">
+     <polygon points="0,0 -8,0.727273 -8.72727,3.90909 -0.727273,5.09091 3.81818,4.27273 5.27273,1.18182"/>
     </object>
    </objectgroup>
   </tile>

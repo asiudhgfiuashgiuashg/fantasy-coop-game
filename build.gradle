@@ -55,6 +55,9 @@ project(":core") {
         compile group: 'com.esotericsoftware', name: 'kryonet', version: '2.22.0-RC1'
         compile group: 'javassist', name: 'javassist', version: '3.12.1.GA'
         compile group: 'com.google.guava', name: 'guava', version: '19.0'
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.box2dlights:box2dlights:1.4"
     }
 }
 
