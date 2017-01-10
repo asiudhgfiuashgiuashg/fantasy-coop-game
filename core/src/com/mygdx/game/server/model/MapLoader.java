@@ -117,7 +117,7 @@ public class MapLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile, tileHeight);
+		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile);
 
 		// Store tile in map
 		int tileGid = firstGid + id;

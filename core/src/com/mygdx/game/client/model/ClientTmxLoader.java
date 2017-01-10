@@ -110,7 +110,7 @@ public class ClientTmxLoader extends TmxMapLoader {
                 int tileGid = firstGid + localId;
                 // extract the hitbox
                 CollideablePolygon tileHitbox = TilePolygonLoader.loadTilePolygon
-                        (tileXml, tileHeight);
+                        (tileXml);
                 tiledMap.gidToPolygonMap.put(tileGid, tileHitbox);
             }
         }

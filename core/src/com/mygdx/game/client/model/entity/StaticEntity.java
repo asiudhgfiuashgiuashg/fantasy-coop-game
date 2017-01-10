@@ -58,8 +58,16 @@ public class StaticEntity extends MapEntity {
             // polygon loaded with the tile set so that we can offset it to the
             // correct position on the map
             this.hitbox.setPosition(this.position.x, this.position.y);//
-            // offset
-            // hitbox to be on top of this static entity on the map.
+            // offset hitbox to be on top of this static entity on the map.
+            console.log("hitbox y: " + this.hitbox.getY());
+            console.log("hitbox vertices: ");
+            for (int i = 0; i < this.hitbox.getVertices().length; i++) {
+                if (i % 2 == 0) {
+                    console.log("x: " + this.hitbox.getVertices()[i]);
+                } else {
+                    console.log("y: " + this.hitbox.getVertices()[i]);
+                }
+            }
         }
     }
 

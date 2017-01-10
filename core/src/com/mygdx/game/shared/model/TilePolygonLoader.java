@@ -10,16 +10,15 @@ import com.badlogic.gdx.utils.XmlReader;
  */
 public class TilePolygonLoader {
 	public static CollideablePolygon loadTilePolygon(XmlReader.Element
-															 tileElement, int
-													 tileHeight) {
-		// Load tiles that have polygon hitboxes
-		for (XmlReader.Element objGroup : tileElement.getChildrenByName
-				("objectgroup")) {
-			// The first child named "object" is considered the hitbox
-			XmlReader.Element object = null;
-			if ((object = objGroup.getChildByName("object")) != null) {
-				return loadPolygon(object, tileHeight);
-			}
+															 tileElement) {
+		int tileHeight = tileElement.getChildByName("image").getInt("height");
+		// Load polygon hitbox
+		XmlReader.Element objGroup = tileElement.getChildByName("objectgroup");
+		// The first child named "object" is considered the hitbox
+		XmlReader.Element object = null;
+		if (objGroup != null && (object = objGroup.getChildByName("object")) !=
+				null) {
+			return loadPolygon(object, tileHeight);
 		}
 		return null;
 	}
