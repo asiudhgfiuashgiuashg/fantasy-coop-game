@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="38">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="45">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="16" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
+   <objectgroup draworder="index">
+    <object id="5" x="10.1818" y="3.18182">
+     <polygon points="0,0 -7.72727,0.363636 -6.36364,13.7273 0.545455,13.0909 2.81818,7.18182"/>
+    </object>
+   </objectgroup>
   </tile>
   <tile id="5">
    <image width="49" height="43" source="prototype/sign.png"/>
@@ -15,13 +20,18 @@
   <tile id="7">
    <image width="74" height="31" source="prototype/cart_missing_pull_handle.png"/>
    <objectgroup draworder="index">
-    <object id="1" x="12.25" y="30">
-     <polygon points="0,0 5,-1.75 8.75,-5.75 61.5,0.75 61.25,-4 29.5,-10.5 29.5,-19 -11.5,-22.25 -12.25,-9.5 -9,-3.75 -4.5,-0.75"/>
+    <object id="7" x="2.36364" y="12.7273">
+     <polygon points="0,0 -2.09091,4.45455 0.454545,10.3636 8.45455,16.1818 17.2727,14.5455 20.8182,9.81818 44,15.3636 69.9091,17.9091 70.2727,15.4545 46.5455,9.90909 38.1818,7.54545 37.6364,2.72727 4.27273,-0.909091"/>
     </object>
    </objectgroup>
   </tile>
   <tile id="10">
    <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="22.3333" y="3.66667">
+     <polygon points="0,0 -21.3333,7 -20.3333,10 12.6667,-1 13.3333,-3.66667"/>
+    </object>
+   </objectgroup>
   </tile>
   <tile id="12">
    <image width="24" height="24" source="prototype/grass0.png"/>
@@ -52,6 +62,11 @@
   </tile>
   <tile id="27">
    <image width="24" height="24" source="prototype/dirt_path_horizontal0.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="0.09375" y="23.8438">
+     <polygon points="0,0 2.9375,0 2.59375,-3.78125 -0.09375,-3.90625"/>
+    </object>
+   </objectgroup>
   </tile>
   <tile id="28">
    <image width="24" height="24" source="prototype/dirt_path_horizontal1.png"/>
@@ -60,7 +75,7 @@
    <image width="24" height="24" source="prototype/dirt_path_plus_xroads.png"/>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="10" height="10">
+ <layer name="Tile Layer 1" width="10" height="10" offsetx="0.25" offsety="0.25">
   <data encoding="csv">
 13,14,13,14,13,14,13,14,13,14,
 15,19,15,16,15,16,15,16,15,16,
@@ -75,7 +90,7 @@
 </data>
  </layer>
  <objectgroup name="Static Entities">
-  <object id="20" gid="8" x="29.6667" y="134" width="74" height="31">
+  <object id="20" gid="8" x="108.667" y="225" width="74" height="31">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
@@ -85,7 +100,7 @@
     <property name="visLayer" type="int" value="-1"/>
    </properties>
   </object>
-  <object id="34" gid="5" x="73.5" y="204.5" width="16" height="23"/>
+  <object id="34" gid="5" x="74.2273" y="215.227" width="16" height="23"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities"/>
  <objectgroup name="Triggers"/>

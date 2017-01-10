@@ -150,4 +150,11 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void message(String msg) {
 		gameClient.getClient().sendTCP(new ChatMessageMsg(msg));
 	}
+
+	/**
+	 * toggle rendering debug stuff
+	 */
+	public void debug() {
+		gameClient.getRenderer().toggleDebug();
+	}
 }
