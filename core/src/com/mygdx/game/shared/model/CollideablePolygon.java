@@ -115,8 +115,8 @@ public class CollideablePolygon extends Polygon {
 	 *            polygon out of collision with {@code other}
 	 * @return true if there is collision. Also populates mtv.
 	 */
-	public boolean collides(CollideablePolygon other, Intersector.MinimumTranslationVector mtv) {
-		return INTERSECTOR.overlapConvexPolygons(this.getVertices(), other.getVertices(), mtv);
+	public boolean collides(CollideablePolygon other) {
+		return INTERSECTOR.overlapConvexPolygons(this, other);
 	}
 
 	/**
