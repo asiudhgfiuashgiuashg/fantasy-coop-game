@@ -23,7 +23,7 @@ import com.mygdx.game.shared.MapLoaderConstants;
 import com.mygdx.game.shared.UniqueIDAssigner;
 import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.model.TilePolygonLoader;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * Loads the portions of the map that the server cares about
@@ -40,6 +40,7 @@ public class MapLoader {
 										// loaded
 	private String mapName;
 	private GameMap map;
+	private int tileHeight;
 
 	/**
 	 * Loads a game map of given .tmx file name
@@ -61,6 +62,7 @@ public class MapLoader {
 		}
 
 		Element root = XML.parse(file);
+		tileHeight = root.getInt("tileheight");
 
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
@@ -115,7 +117,7 @@ public class MapLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile);
+		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon(tile, tileHeight);
 
 		// Store tile in map
 		int tileGid = firstGid + id;
@@ -172,12 +174,21 @@ public class MapLoader {
 			// By default visLayer is zero
 			int visLayer = 0;
 
+			// By default entity is non-solid
+			boolean solid = false;
+
 			Element properties = null;
 			if ((properties = layer.getChildByName("properties")) != null) {
 				Element visLayerProp = null;
 				if ((visLayerProp = properties.getChildByName("visLayer")) != null) {
 					// If visLayer was explicitly set, override default value
 					visLayer = visLayerProp.getIntAttribute("value");
+				}
+
+				Element solidProp = null;
+				if ((solidProp = properties.getChildByName("solid")) != null) {
+					// If solid was explicitly set, override default value
+					solid = solidProp.getBooleanAttribute("value");
 				}
 			}
 
@@ -189,7 +200,7 @@ public class MapLoader {
 				hitboxPolygon = new CollideablePolygon(tile.hitbox);
 			}
 
-			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, hitboxPolygon));
+			map.getStaticEntities().add(new StaticEntity(uid, new Vector2(x, y), visLayer, solid, hitboxPolygon));
 		}
 	}
 
@@ -238,13 +249,13 @@ public class MapLoader {
 				cons.setAccessible(true); // need to call this for non-public
 											// constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.addEnemy(enemy);
+				map.getEnemies().add(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
 				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
 				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.addFriendly(friendly);
+				map.getFriendlies().add(friendly);
 			} else {
 				throw new MapLoaderException();
 			}
@@ -280,6 +291,8 @@ public class MapLoader {
 			float height = trigger.getFloatAttribute("height");
 
 			Trigger trig = null;
+
+			// Triggers are rectangles
 			float[] vertices = { x, y, x + width, y, x + width, y + height, x, y + height };
 			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
@@ -304,7 +317,7 @@ public class MapLoader {
 				o = cons.newInstance(hitbox);
 				trig = (Trigger) o;
 			}
-			map.addTrigger(trig);
+			map.getTriggers().add(trig);
 		}
 	}
 
@@ -316,9 +329,16 @@ public class MapLoader {
 	 */
 	private void loadBoundaries(Element layer) {
 		for (Element object : layer.getChildrenByName("object")) {
-			CollideablePolygon p = TilePolygonLoader.loadPolygon(object);
+			// Load polygon			
+			CollideablePolygon p = TilePolygonLoader.loadPolygon(object, tileHeight);
+			
+			// Boundary position
+			float x = object.getFloatAttribute("x");
+			float y = object.getFloatAttribute("y");
+			p.setPosition(x, y);
+			
 			Boundary b = new Boundary(p);
-			map.addBoundary(b);
+			map.getBoundaries().add(b);
 		}
 	}
 

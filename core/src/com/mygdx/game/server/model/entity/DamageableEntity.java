@@ -4,16 +4,15 @@ import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Effect;
-import com.mygdx.game.shared.util.CollideablePolygon;
 
 /**
  * An entity that has health.
  * @author elimonent
  *
  */
-public abstract class DamageableEntity extends ActingEntity {
-	protected DamageableEntity(String uid, Vector2 position, int visLayer) {
-		super(uid, position, visLayer);
+public abstract class DamageableEntity extends DynamicEntity {
+	protected DamageableEntity(String uid, Vector2 position, int visLayer, boolean solid) {
+		super(uid, position, visLayer, solid);
 	}
 	
 	protected int health;

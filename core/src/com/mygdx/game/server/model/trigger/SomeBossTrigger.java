@@ -1,6 +1,6 @@
 package com.mygdx.game.server.model.trigger;
 
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 public class SomeBossTrigger extends Trigger {
 

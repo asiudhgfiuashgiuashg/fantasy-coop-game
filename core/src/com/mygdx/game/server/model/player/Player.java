@@ -15,5 +15,4 @@ public abstract class Player {
 	 */
 	protected List<ServerSpell> spells;
 	
-	
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="38">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="16" columns="0">
+  <tile id="4">
+   <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
+  </tile>
+  <tile id="5">
+   <image width="49" height="43" source="prototype/sign.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="20.0625" y="30.25">
+     <polygon points="0,0 -6.3125,6.4375 2.6875,12.6875 12.0625,9.125 12.5,1.0625 5.6875,-1.0625"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="7">
+   <image width="74" height="31" source="prototype/cart_missing_pull_handle.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="12.25" y="30">
+     <polygon points="0,0 5,-1.75 8.75,-5.75 61.5,0.75 61.25,-4 29.5,-10.5 29.5,-19 -11.5,-22.25 -12.25,-9.5 -9,-3.75 -4.5,-0.75"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="10">
+   <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
+  </tile>
+  <tile id="12">
+   <image width="24" height="24" source="prototype/grass0.png"/>
+  </tile>
+  <tile id="13">
+   <image width="24" height="24" source="prototype/grass1.png"/>
+  </tile>
+  <tile id="14">
+   <image width="24" height="24" source="prototype/grass2.png"/>
+  </tile>
+  <tile id="15">
+   <image width="24" height="24" source="prototype/grass3.png"/>
+  </tile>
+  <tile id="17">
+   <image width="24" height="24" source="prototype/grass3flowers.png"/>
+  </tile>
+  <tile id="18">
+   <image width="24" height="24" source="prototype/grass3flowers1.png"/>
+  </tile>
+  <tile id="20">
+   <image width="24" height="24" source="prototype/grass1flowers0.png"/>
+  </tile>
+  <tile id="23">
+   <image width="24" height="24" source="prototype/dirt_path_vertical0.png"/>
+  </tile>
+  <tile id="24">
+   <image width="24" height="24" source="prototype/dirt_path_vertical1.png"/>
+  </tile>
+  <tile id="27">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal0.png"/>
+  </tile>
+  <tile id="28">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal1.png"/>
+  </tile>
+  <tile id="29">
+   <image width="24" height="24" source="prototype/dirt_path_plus_xroads.png"/>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+13,14,13,14,13,14,13,14,13,14,
+15,19,15,16,15,16,15,16,15,16,
+13,14,13,25,13,14,13,14,13,21,
+15,16,15,24,14,16,15,16,15,16,
+13,14,13,25,14,21,13,14,13,14,
+15,16,15,24,14,18,15,16,15,16,
+13,14,13,25,14,14,13,14,13,14,
+15,18,15,24,14,16,15,16,15,16,
+28,29,28,30,28,29,28,29,28,29,
+15,16,15,24,14,16,15,16,15,16
+</data>
+ </layer>
+ <objectgroup name="Static Entities">
+  <object id="20" gid="8" x="29.6667" y="134" width="74" height="31">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="21" gid="11" x="49.3333" y="138.333" width="37" height="14">
+   <properties>
+    <property name="visLayer" type="int" value="-1"/>
+   </properties>
+  </object>
+  <object id="34" gid="5" x="73.5" y="204.5" width="16" height="23"/>
+ </objectgroup>
+ <objectgroup name="Dynamic Entities"/>
+ <objectgroup name="Triggers"/>
+ <objectgroup name="Boundaries"/>
+</map>

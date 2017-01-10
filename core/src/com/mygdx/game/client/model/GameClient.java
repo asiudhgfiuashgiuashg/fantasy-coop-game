@@ -24,6 +24,7 @@ import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
@@ -45,15 +46,18 @@ public class GameClient extends Game {
 	private String username = "PLACEHOLDER"; //client's username
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
-	private SpriteBatch batch;
 	private CustomTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 
 	private static final int SCREEN_WIDTH = 800;
 	private static final int SCREEN_HEIGHT = 600;
+
+	private static final float MAP_SCALE = 4f; // how much to scale polygons,
+	// tiles, etc. ex) A scale of 2.0 means that every pixel in a loaded image
+	// will take up 2 pixels in the game window.
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
 		setupConsole();
 		setScreen(new MenuScreen());
 
@@ -61,8 +65,10 @@ public class GameClient extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		camera.update();
 
-		clientMap = new ClientTmxLoader().load("validMap.tmx");
-		renderer = new CustomTiledMapRenderer(clientMap, 2f);
+		clientMap = new ClientTmxLoader().load("prototypeMap.tmx");
+		//clientMap = new ClientTmxLoader().load("validMap.tmx");
+		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE);
+
 	}
 
 	@Override
@@ -72,12 +78,11 @@ public class GameClient extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
-		batch.begin();
+
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
 		renderer.setView(camera);
 		renderer.render();
-		batch.end();
 		console.draw();
 	}
 

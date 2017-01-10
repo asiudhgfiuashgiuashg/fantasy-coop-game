@@ -14,9 +14,11 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.TilePolygonLoader;
-import com.mygdx.game.shared.util.CollideablePolygon;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.io.IOException;
+
+import static com.mygdx.game.client.model.GameClient.console;
 
 
 /**
@@ -25,6 +27,7 @@ import java.io.IOException;
 public class ClientTmxLoader extends TmxMapLoader {
 
     private static final XmlReader XML = new XmlReader();
+    private int tileHeight;
 
     @Override
     public ClientTiledMap load(String fileName) {
@@ -35,11 +38,14 @@ public class ClientTmxLoader extends TmxMapLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        tileHeight = root.getInt("tileheight");
 
         // load tilesets (tile polygons not loaded)
         ImageResolver imageResolver = getImageResolver(mapFile);
 
         for (Element tilesetElement : root.getChildrenByName("tileset")) {
+            console.log("loading tileset " + tilesetElement.getAttribute
+                    ("name"));
             loadTileSet(tiledMap, tilesetElement, mapFile, imageResolver);
         }
         // load tile layer
@@ -66,16 +72,14 @@ public class ClientTmxLoader extends TmxMapLoader {
              i++) {
             Element objectGroup = objectGroups.get(i);
             if (objectGroup.getAttribute("name").equals("Static Entities")) {
-                GameClient.console.log("found static entities layer -- " +
-                        "loading static entities");
                 foundStaticEntitiesLayer = true;
                 // load the TiledMapTileMapObjects for the StaticEntities
                 loadObjectGroup(tiledMap, objectGroup);
-                // create the StaticEntities
-                // there'll be a static entity for each TiledMapTileMapObject
+                // Create the StaticEntities.
+                // There'll be a static entity for each TiledMapTileMapObject
                 // since a TiledMapTileMapObject is the visual component of a
-                // static entity
-                // Get the TiledMapTlieMapObjects layer we just loaded
+                // static entity.
+                // Get the TiledMapTlieMapObjects layer we just loaded.
                 MapLayer objectsLayer = tiledMap.getLayers().get("Static " +
                         "Entities");
                 for (MapObject mapObject: objectsLayer.getObjects()) {
@@ -84,17 +88,15 @@ public class ClientTmxLoader extends TmxMapLoader {
                     // casting is gross but we need to do it here if we want
                     // to use libgdx's included objectgroup loading instead
                     // of doing it ourselves.
-                    float tileHeight = root.getFloat("tileheight");
                     float mapHeight = root.getFloat("height") * tileHeight;
 
-                    StaticEntity staticEntity = new StaticEntity(tiledMap
+                    CollideablePolygon hitboxPolygon = tiledMap
                             .gidToPolygonMap.get(tileMapObject.getTile()
-                                    .getId()), tileMapObject, mapHeight);
+                                    .getId());
+
+                    StaticEntity staticEntity = new StaticEntity(hitboxPolygon,
+                            tileMapObject, mapHeight, tileHeight);
                     tiledMap.staticEntities.add(staticEntity);
-                    GameClient.console.log("loaded static entity - " +
-                            tileMapObject.getName() + " - pos: " + staticEntity
-                            .getPos().toString() + " - visLayer: " +
-                            staticEntity.getVisLayer());
                 }
             }
         }
@@ -108,7 +110,7 @@ public class ClientTmxLoader extends TmxMapLoader {
                 int tileGid = firstGid + localId;
                 // extract the hitbox
                 CollideablePolygon tileHitbox = TilePolygonLoader.loadTilePolygon
-                        (tileXml);
+                        (tileXml, tileHeight);
                 tiledMap.gidToPolygonMap.put(tileGid, tileHitbox);
             }
         }

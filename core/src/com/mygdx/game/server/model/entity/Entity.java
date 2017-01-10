@@ -1,49 +1,53 @@
 package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.server.model.Drawable;
+import com.mygdx.game.server.model.DrawMessage;
 import com.mygdx.game.server.model.PolygonObject;
 
 /**
- * Something which has a position and an associated sprite name.
+ * A PolygonObject which has a sprite to be drawn on the client.
  * 
  * @author elimonent
  * @author Sawyer Harris
  * 
  */
-public abstract class Entity extends PolygonObject implements Drawable {
+public abstract class Entity extends PolygonObject {
 
-	protected Entity(String uid, Vector2 position, int visLayer) {
-		super(null);
+	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
+		super(null, solid);
 		this.uid = uid;
 		this.position = position;
 		this.visLayer = visLayer;
+
+		// Draw on creation
+		draw();
+	}
+
+	/** Unique identifier synchronized between client and server */
+	public String uid;
+	/** Position in global coordinates */
+	public Vector2 position;
+	/** Name of entity's sprite (if dynamic) */
+	public String spriteName;
+	/** Visibility layer for rendering */
+	public int visLayer;
+
+	/**
+	 * Creates a DrawMessage to tell clients to update their view of this entity
+	 */
+	public void draw() {
+		DrawMessage msg = new DrawMessage(uid, position, spriteName, visLayer);
+		// TODO: Tell Server to send message to client
 	}
 
 	/**
-	 * unique identifier synchronized between client and server
-	 */
-	protected String uid;
-	/**
-	 * position in global coordinates
-	 */
-	protected Vector2 position;
-	/**
-	 * Name of entity's sprite (if dynamic)
-	 */
-	protected String spriteName;
-	/**
-	 * the layer that this Entity resides in (affects how it is drawn on client)
-	 */
-	protected int visLayer;
-
-	/**
-	 * Gets the entity's position
+	 * Returns a copy of the entity's position. All modifications must be done
+	 * via setPosition()
 	 * 
-	 * @return
+	 * @return copy of position
 	 */
 	public Vector2 getPosition() {
-		return position;
+		return new Vector2(position);
 	}
 
 	/**
@@ -55,7 +59,10 @@ public abstract class Entity extends PolygonObject implements Drawable {
 		this.position = position;
 
 		// Bind hitbox position to entity position
-		this.polygon.setPosition(position.x, position.y);
+		getPolygon().setPosition(position.x, position.y);
+
+		// Redraw on position change
+		draw();
 	}
 
 	/**
@@ -74,6 +81,9 @@ public abstract class Entity extends PolygonObject implements Drawable {
 	 */
 	public void setSpriteName(String spriteName) {
 		this.spriteName = spriteName;
+
+		// Redraw on sprite change
+		draw();
 	}
 
 	/**
@@ -93,6 +103,9 @@ public abstract class Entity extends PolygonObject implements Drawable {
 	 */
 	public void setVisLayer(int visLayer) {
 		this.visLayer = visLayer;
+
+		// Redraw on visLayer change
+		draw();
 	}
 
 	/**
