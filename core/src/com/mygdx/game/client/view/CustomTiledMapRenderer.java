@@ -241,6 +241,13 @@ public class CustomTiledMapRenderer extends
 		}
 	}
 
+	/**
+	 * toggle rendering debug stuff such as drawing hitboxes
+	 */
+	public void toggleDebug() {
+		debug = debug ? false : true;
+	}
+
 
 	/**
 	 * used to sort entities in layer zero for rendering

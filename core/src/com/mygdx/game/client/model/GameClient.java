@@ -46,6 +46,7 @@ public class GameClient extends Game {
 	private String username = "PLACEHOLDER"; //client's username
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
+
 	private CustomTiledMapRenderer renderer;
 	private OrthographicCamera camera;
 
@@ -176,5 +177,9 @@ public class GameClient extends Game {
 	public void transitionToInGame() {
 		setScreen(new GameScreen());
 		console.log("Transitioned to in-game from lobby");
+	}
+
+	public CustomTiledMapRenderer getRenderer() {
+		return renderer;
 	}
 }
