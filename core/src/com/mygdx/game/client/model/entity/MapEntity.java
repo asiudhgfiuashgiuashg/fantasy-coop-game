@@ -1,8 +1,13 @@
 package com.mygdx.game.client.model.entity;
 
+import box2dLight.Light;
+import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.shared.model.CollideablePolygon;
+
+import java.util.List;
 
 /**
  * represents an entity on the map.
@@ -14,6 +19,8 @@ public abstract class MapEntity {
 	protected int visLayer; // affects whether the entity is drawn above or
 	protected CollideablePolygon hitbox; // specified in Tiled for static
 	// entities. Specified in java code for dynamic entities.
+
+	public List<PointLight> box2dLights;
 
 	/**
 	 * according to design doc vislayer shouldn't be modifiable, so there is

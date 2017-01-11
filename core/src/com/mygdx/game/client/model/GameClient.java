@@ -1,6 +1,7 @@
 package com.mygdx.game.client.model;
 
 
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Game;
 
 import com.badlogic.gdx.Gdx;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Listener;
@@ -66,9 +69,13 @@ public class GameClient extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		camera.update();
 
-		clientMap = new ClientTmxLoader().load("prototypeMap.tmx");
+		RayHandler rayHandler = new RayHandler(new World(new Vector2(0, 0),
+				false));
+		// box2d lights need a rayhandler to be instantiated, so that's why
+		// we pass rayHandler to the loader.
+		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler);
 		//clientMap = new ClientTmxLoader().load("validMap.tmx");
-		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE);
+		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE, rayHandler);
 
 	}
 
