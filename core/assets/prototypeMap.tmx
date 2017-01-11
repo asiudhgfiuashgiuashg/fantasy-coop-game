@@ -4,7 +4,7 @@
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
    <objectgroup draworder="index">
-    <object id="13" x="9.36364" y="17.3636">
+    <object id="13" name="hitbox" x="9.36364" y="17.3636">
      <polygon points="0,0 -8,0.727273 -8.72727,3.90909 -0.727273,5.09091 3.81818,4.27273 5.27273,1.18182"/>
     </object>
    </objectgroup>
@@ -20,7 +20,7 @@
   <tile id="7">
    <image width="74" height="31" source="prototype/cart_missing_pull_handle.png"/>
    <objectgroup draworder="index">
-    <object id="7" x="2.36364" y="12.7273">
+    <object id="7" name="hitbox" x="2.36364" y="12.7273">
      <polygon points="0,0 -2.09091,4.45455 0.454545,10.3636 8.45455,16.1818 17.2727,14.5455 20.8182,9.81818 44,15.3636 69.9091,17.9091 70.2727,15.4545 46.5455,9.90909 38.1818,7.54545 37.6364,2.72727 4.27273,-0.909091"/>
     </object>
    </objectgroup>
@@ -77,7 +77,7 @@
   <tile id="34">
    <image width="20" height="40" source="prototype/street_lamp.png"/>
    <objectgroup draworder="index">
-    <object id="1" x="9" y="35.5455">
+    <object id="1" name="hitbox" x="9" y="35.5455">
      <polygon points="0,0 -2.27273,1.63636 -0.272727,3.90909 2,4.27273 4.36364,2.18182 3.54545,1 2.18182,0"/>
     </object>
     <object id="2" name="light" x="8.81818" y="8.63636" width="2.54545" height="2.63636">
@@ -98,6 +98,9 @@
       <property name="distance" type="float" value="100"/>
      </properties>
      <ellipse/>
+    </object>
+    <object id="2" name="hitbox" x="8.72727" y="35.2727">
+     <polygon points="0,0 -2.36364,2.54545 0.636364,4.63636 3.09091,4.72727 5.45455,1.90909 3,-0.272727"/>
     </object>
    </objectgroup>
   </tile>
