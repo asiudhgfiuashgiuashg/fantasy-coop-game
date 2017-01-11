@@ -34,7 +34,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 
     private static final XmlReader XML = new XmlReader();
     private int tileHeight;
-    private static final float DEFAULT_LIGHT_DISTANCE = 100;
+    private static final float DEFAULT_LIGHT_DISTANCE = 200;
 
     public ClientTiledMap load(String fileName, RayHandler rayHandler) {
         FileHandle mapFile = Gdx.files.internal(fileName);
