@@ -34,7 +34,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 
     private static final XmlReader XML = new XmlReader();
     private int tileHeight;
-    private static final float DEFAULT_LIGHT_RADIUS = 100;
+    private static final float DEFAULT_LIGHT_DISTANCE = 100;
 
     public ClientTiledMap load(String fileName, RayHandler rayHandler) {
         FileHandle mapFile = Gdx.files.internal(fileName);
@@ -168,17 +168,18 @@ public class ClientTmxLoader extends TmxMapLoader {
                 x = x + width / 2;
                 float height = xmlObj.getFloatAttribute("height");
                 y = y - height / 2;
-                // load stuff like light radius and color from the additional
+                // load stuff like light distance and color from the additional
                 // properties
-                float radius = DEFAULT_LIGHT_RADIUS;
+                float distance = DEFAULT_LIGHT_DISTANCE;
                 Element properties = xmlObj.getChildByName("properties");
                 Color color = null;
                 if (properties != null) {
                     for (Element property: properties.getChildrenByName
                             ("property")) {
                         String propName = property.getAttribute("name");
-                        if (propName.equals("radius")) {
-                            radius = property.getFloatAttribute("value");
+                        // light distance
+                        if (propName.equals("distance")) {
+                            distance = property.getFloatAttribute("value");
                         } else if (propName.equals("color")) {
                             String colorHexStr = property.getAttribute
                                     ("value");
@@ -192,7 +193,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 
                 PointLight tempLight = new PointLight(rayHandler,
                         CustomTiledMapRenderer
-                        .NUM_RAYS, color, radius, x, y);
+                        .NUM_RAYS, color, distance, x, y);
                 tempLight.remove(); // don't render this temporary light.
                 // It'll be used to create the actual entity lights that DO
                 // get rendered

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="50">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="17" columns="0">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="53">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="18" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
    <objectgroup draworder="index">
@@ -83,7 +83,19 @@
     <object id="2" name="light" x="8.81818" y="8.63636" width="2.54545" height="2.63636">
      <properties>
       <property name="color" value="42cbf4FF"/>
-      <property name="radius" type="float" value="100"/>
+      <property name="radius" type="float" value="150"/>
+     </properties>
+     <ellipse/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="35">
+   <image width="20" height="40" source="prototype/street_lamp.png"/>
+   <objectgroup draworder="index">
+    <object id="1" name="light" x="8.81818" y="8.45455" width="2.36364" height="2.90909">
+     <properties>
+      <property name="color" value="ce1286FF"/>
+      <property name="radius" type="float" value="150"/>
      </properties>
      <ellipse/>
     </object>
@@ -123,6 +135,8 @@
    </properties>
   </object>
   <object id="49" gid="35" x="63" y="98" width="20" height="40"/>
+  <object id="51" gid="36" x="88.3333" y="235" width="20" height="40"/>
+  <object id="52" gid="36" x="92" y="127.333" width="20" height="40"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities"/>
  <objectgroup name="Triggers"/>

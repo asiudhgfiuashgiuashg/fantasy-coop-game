@@ -79,7 +79,7 @@ public class CustomTiledMapRenderer extends
 		populateEntitiesLists();
 		rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
 		ambientColor = Color.CLEAR;
-		setAmbientAlpha(.5f);
+		setAmbientAlpha(.15f);
 		fpsLogger = new FPSLogger();
 		updateLights(1f);
 	}
