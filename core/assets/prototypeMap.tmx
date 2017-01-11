@@ -82,6 +82,7 @@
     </object>
     <object id="2" name="light" x="8.81818" y="8.63636" width="2.54545" height="2.63636">
      <properties>
+      <property name="color" value="42cbf4FF"/>
       <property name="radius" type="float" value="100"/>
      </properties>
      <ellipse/>

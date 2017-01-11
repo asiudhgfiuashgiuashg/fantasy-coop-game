@@ -172,12 +172,19 @@ public class ClientTmxLoader extends TmxMapLoader {
                 // properties
                 float radius = DEFAULT_LIGHT_RADIUS;
                 Element properties = xmlObj.getChildByName("properties");
+                Color color = null;
                 if (properties != null) {
                     for (Element property: properties.getChildrenByName
                             ("property")) {
                         String propName = property.getAttribute("name");
                         if (propName.equals("radius")) {
                             radius = property.getFloatAttribute("value");
+                        } else if (propName.equals("color")) {
+                            String colorHexStr = property.getAttribute
+                                    ("value");
+                            Long rgba8888l = Long.parseLong(colorHexStr, 16);
+                            int rgba8888 = rgba8888l.intValue();
+                            color = new Color(rgba8888);
                         }
                     }
                 }
@@ -185,7 +192,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 
                 PointLight tempLight = new PointLight(rayHandler,
                         CustomTiledMapRenderer
-                        .NUM_RAYS, Color.YELLOW, radius, x, y);
+                        .NUM_RAYS, color, radius, x, y);
                 tempLight.remove(); // don't render this temporary light.
                 // It'll be used to create the actual entity lights that DO
                 // get rendered
