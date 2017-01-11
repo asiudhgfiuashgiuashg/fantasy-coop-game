@@ -161,8 +161,13 @@ public class ClientTmxLoader extends TmxMapLoader {
             String name = xmlObj.getAttribute("name", null);
             // if found a light on this tile
             if (name != null && name.equals("light")) {
+                // create a light at the center of the oval that was drawn
                 float x = xmlObj.getFloatAttribute("x");
                 float y = tileHeight - xmlObj.getFloatAttribute("y");
+                float width = xmlObj.getFloatAttribute("width");
+                x = x + width / 2;
+                float height = xmlObj.getFloatAttribute("height");
+                y = y - height / 2;
                 // load stuff like light radius and color from the additional
                 // properties
                 float radius = DEFAULT_LIGHT_RADIUS;

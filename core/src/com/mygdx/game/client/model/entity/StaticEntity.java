@@ -55,10 +55,6 @@ public class StaticEntity extends MapEntity {
         // flip y axis
         float yPos = mapHeight + tileMapObject.getProperties()
                 .get("y", Float.class);
-        console.log("y: " + tileMapObject.getProperties()
-                .get("y", Float.class));
-        console.log("mapheight: " + mapHeight);
-        console.log("static entity y : " + yPos);
         //for some reason yPos needs negated or the y values are flipped..
         this.position = new Vector2(xPos, yPos);
 
@@ -105,7 +101,6 @@ public class StaticEntity extends MapEntity {
 				CustomTiledMapRenderer.NUM_RAYS, light.getColor().cpy(),
 				light.getDistance(), light.getX() + getPos().x, light
 				.getY() + getPos().y);
-		console.log("light pos: " + toReturn.getX());
 		return toReturn;
 	}
 
