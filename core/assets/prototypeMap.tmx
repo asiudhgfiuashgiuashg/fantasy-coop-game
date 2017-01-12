@@ -84,6 +84,9 @@
      <properties>
       <property name="color" value="42cbf4FF"/>
       <property name="distance" type="float" value="100"/>
+      <property name="flickerMinAlphaMult" type="float" value="0.94999999999999996"/>
+      <property name="flickerMinDistMult" type="float" value="0.94999999999999996"/>
+      <property name="flickerRate" type="float" value="1.1000000000000001"/>
      </properties>
      <ellipse/>
     </object>
@@ -97,6 +100,7 @@
       <property name="color" value="ce1286FF"/>
       <property name="distance" type="float" value="100"/>
       <property name="flickerRate" type="float" value="1.1000000000000001"/>
+      <property name="minFlickerAlphaMult" type="float" value="0.94999999999999996"/>
       <property name="minFlickerDistMult" type="float" value="0.94999999999999996"/>
      </properties>
      <ellipse/>

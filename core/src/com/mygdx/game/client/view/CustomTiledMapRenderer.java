@@ -38,7 +38,7 @@ public class CustomTiledMapRenderer extends
 	OrthogonalTiledMapRenderer {
 	public static final int DEFAULT_VISLAYER = 0;
 	private static final float DEFAULT_UNIT_SCALE = 2f;
-	public static final int NUM_RAYS = 30; // affects the quality of lights
+	public static final int NUM_RAYS = 15; // affects the quality of lights
 	private final List<MapEntity> layerNegOneEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerZeroEntities = new

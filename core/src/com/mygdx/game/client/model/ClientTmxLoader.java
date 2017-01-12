@@ -176,6 +176,8 @@ public class ClientTmxLoader extends TmxMapLoader {
 				float flickerRate = 0; // no flicker if none is specified
 				float flickerDistMult = FlickerPointLight
 						.DEFAULT_MIN_RADIUS_MULTIPLIER;
+				float flickerAlphaMult = FlickerPointLight
+						.DEFAULT_MIN_ALPHA_MULTIPLIER;
 				if (properties != null) {
 					for (Element property : properties.getChildrenByName
 							("property")) {
@@ -194,6 +196,9 @@ public class ClientTmxLoader extends TmxMapLoader {
 						} else if (propName.equals("minFlickerDistMult")) {
 							flickerDistMult = property.getFloatAttribute
 									("value");
+						} else if (propName.equals("minFlickerAlphaMult")) {
+							flickerAlphaMult = property.getFloatAttribute
+									("value");
 						}
 					}
 				}
@@ -201,7 +206,8 @@ public class ClientTmxLoader extends TmxMapLoader {
 
 				FlickerPointLight tempLight = new FlickerPointLight
 						(rayHandler, CustomTiledMapRenderer.NUM_RAYS, color,
-								distance, x, y, flickerRate, flickerDistMult);
+								distance, x, y, flickerRate, flickerDistMult,
+								flickerAlphaMult);
 				tempLight.remove(); // don't render this temporary light.
 				// It'll be used to create the actual entity lights that DO
 				// get rendered

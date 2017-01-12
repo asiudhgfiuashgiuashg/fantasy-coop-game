@@ -104,7 +104,8 @@ public class StaticEntity extends MapEntity {
 		FlickerPointLight toReturn = new FlickerPointLight(rayHandler,
 				CustomTiledMapRenderer.NUM_RAYS, light.getColor().cpy(), light
 				.getDistance(), light.getX() + getPos().x, light.getY() +
-				getPos().y, light.getFlickerRate(), light.getFlickerDistMult());
+				getPos().y, light.getFlickerRate(), light.getFlickerDistMult
+				(), light.getFlickerAlphaMult());
 		return toReturn;
 	}
 

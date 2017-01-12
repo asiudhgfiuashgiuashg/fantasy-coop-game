@@ -9,15 +9,13 @@ import com.badlogic.gdx.graphics.Color;
  * A box2d pointlight that flickers at some rate by changing distance and color
  */
 public class FlickerPointLight extends PointLight {
-	/*
-	 * how many times to flicker per second - zero to not flicker
-	 */
+
+	// how many times to flicker per second - zero to not flicker
 	private float flickerRate;
-	/*
-	 * when flickering, the lowest distance of the light =
-	 * MIN_RADIUS_MULTIPLIER * (distance specified in Tiled)
-	 */
+	// default for flickerDistMult
 	static final float DEFAULT_MIN_RADIUS_MULTIPLIER = .9f;
+	// default for flickerAlphaMult
+	static final float DEFAULT_MIN_ALPHA_MULTIPLIER = .8f;
 	// lowest distance that the light will flicker to
 	private float minDistance;
 	// whether the light is currently shrinking or expanding
@@ -25,17 +23,43 @@ public class FlickerPointLight extends PointLight {
 	// the original distance specified in Tiled and the maximum distance this
 	// light will expand to while flickering
 	private float maxDistance;
+	/*
+	 * when flickering, the lowest distance of the light =
+	 * flickerDistMult * (distance specified in Tiled)
+	 */
 	private float flickerDistMult;
+	private float flickerAlphaMult;
+	/* the original light color alpha specified in Tiled as the last 8 bits
+	 * (2 characters) of the hex color code. The most alpha the light will
+	 * have when flickering.
+	 */
+	private float maxAlpha;
+	// the lowest the alpha will go when flickering (alpha decreases as the
+	// light radius is contracting)
+	private float minAlpha;
 
-	public FlickerPointLight(RayHandler rayHandler, int rays, Color color, float distance, float x, float y, float flickerRate, float flickerDistMult) {
+	public FlickerPointLight(RayHandler rayHandler, int rays, Color color,
+							 float distance, float x, float y, float
+									 flickerRate, float flickerDistMult, float
+									 flickerAlphaMult) {
 		super(rayHandler, rays, color, distance, x, y);
 		this.flickerRate = flickerRate;
 		this.minDistance = distance * flickerDistMult;
 		this.maxDistance = distance;
 		shrinking = true;
 		this.flickerDistMult = flickerDistMult;
+		this.flickerAlphaMult = flickerAlphaMult;
+		this.maxAlpha = color.a;
+		this.minAlpha = flickerAlphaMult * maxAlpha;
+		setStaticLight(true);
+		setXray(true);
 	}
 
+	/**
+	 * perform flickering in addition to the usual updates
+	 * flickering involves changing the distance and alpha of the light over
+	 * time
+	 */
 	@Override
 	public void update() {
 		super.update();
@@ -44,10 +68,25 @@ public class FlickerPointLight extends PointLight {
 				(maxDistance - minDistance);
 		distDiff = shrinking ? -distDiff : distDiff;
 		setDistance(distance + distDiff);
-		if (shrinking && distance <= minDistance) {
+
+		float alphaDiff = Gdx.graphics.getDeltaTime() * flickerRate *
+				(maxAlpha - minAlpha);
+		alphaDiff = shrinking ? -alphaDiff : alphaDiff;
+		setColor(new Color(color.r, color.g, color.b, color.a + alphaDiff));
+
+		if (shrinking && (distance <= minDistance || color.a <= minAlpha)) {
 			shrinking = false;
-		} else if (!shrinking && distance >= maxDistance) {
+			//distance and alpha can become out of sync at low fps for some
+			// reason, so sync them up here.
+			distance = minDistance;
+			setColor(new Color(color.r, color.g, color.b , minAlpha));
+		} else if (!shrinking && (distance >= maxDistance || color.a >=
+				maxAlpha)) {
 			shrinking = true;
+			//distance and alpha can become out of sync at low fps for some
+			// reason, so sync them up here.
+			distance = maxDistance;
+			setColor(new Color(color.r, color.g, color.b , maxAlpha));
 		}
 	}
 
@@ -57,5 +96,9 @@ public class FlickerPointLight extends PointLight {
 
 	public float getFlickerDistMult() {
 		return flickerDistMult;
+	}
+
+	public float getFlickerAlphaMult() {
+		return flickerAlphaMult;
 	}
 }
