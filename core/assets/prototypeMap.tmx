@@ -96,6 +96,7 @@
      <properties>
       <property name="color" value="ce1286FF"/>
       <property name="distance" type="float" value="100"/>
+      <property name="flicker" type="float" value="0.5"/>
      </properties>
      <ellipse/>
     </object>

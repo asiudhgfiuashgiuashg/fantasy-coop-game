@@ -186,6 +186,9 @@ public class ClientTmxLoader extends TmxMapLoader {
                             Long rgba8888l = Long.parseLong(colorHexStr, 16);
                             int rgba8888 = rgba8888l.intValue();
                             color = new Color(rgba8888);
+                        } else if (propName.equals("flicker")) {
+                            float flickerRate = property.getFloatAttribute
+                                    ("flicker");
                         }
                     }
                 }
