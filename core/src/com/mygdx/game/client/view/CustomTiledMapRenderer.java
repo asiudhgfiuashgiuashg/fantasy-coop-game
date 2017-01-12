@@ -1,7 +1,9 @@
 package com.mygdx.game.client.view;
 
+import box2dLight.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -9,12 +11,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.*;
 
+import static com.mygdx.game.client.model.GameClient.SCREEN_HEIGHT;
 import static com.mygdx.game.client.model.GameClient.console;
 
 /**
@@ -33,27 +38,89 @@ public class CustomTiledMapRenderer extends
 	OrthogonalTiledMapRenderer {
 	public static final int DEFAULT_VISLAYER = 0;
 	private static final float DEFAULT_UNIT_SCALE = 2f;
+	public static final int NUM_RAYS = 30; // affects the quality of lights
 	private final List<MapEntity> layerNegOneEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerZeroEntities = new
 			LinkedList<MapEntity>();
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
-	public boolean debug = true; // should I draw things that developers use
+	public boolean debug = false; // should I draw things that developers use
 	// to debug?
 	private float debugLineWidth = 3;
 
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
+	private RayHandler rayHandler; // used to render lights
 
-	public CustomTiledMapRenderer(ClientTiledMap map) {
-		this(map, DEFAULT_UNIT_SCALE);
+	/*
+	 * The color which covers everything. Move alpha towards zero to make
+	 * things darker or move alpha towards one to make things lighter
+	 */
+	private Color ambientColor;
+
+	private FPSLogger fpsLogger;
+
+	public CustomTiledMapRenderer(ClientTiledMap map, RayHandler rayHandler) {
+		this(map, DEFAULT_UNIT_SCALE, rayHandler);
 	}
 
 
-	public CustomTiledMapRenderer(TiledMap map, float unitScale) {
+	public CustomTiledMapRenderer(TiledMap map, float unitScale, RayHandler rayHandler) {
 		super(map, unitScale);
+		this.rayHandler = rayHandler;
 		setup();
+	}
+
+	/**
+	 * called in constructors to set up/load variables
+	 */
+	private void setup() {
+		populateEntitiesLists();
+		rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
+		ambientColor = Color.CLEAR;
+		setAmbientAlpha(.15f);
+		fpsLogger = new FPSLogger();
+		updateLights(1f);
+	}
+
+	/**
+	 * scale box2d light positions with unitScale and also scale the radius
+	 * of the lights. Call this when changing/setting camera zoom (unitScale);
+	 * @param oldScale the old unitScale
+	 */
+	private void updateLights(float oldScale) {
+		updateEntityListLights(layerNegOneEntities, oldScale);
+		updateEntityListLights(layerZeroEntities, oldScale);
+		updateEntityListLights(layerOneEntities, oldScale);
+	}
+
+	private void updateEntityListLights(List<MapEntity> entities, float
+			oldScale) {
+		for (MapEntity entity: entities) {
+			updateEntityLights(entity, oldScale);
+		}
+	}
+
+	private void updateEntityLights(MapEntity entity, float oldScale) {
+		float multiplier = unitScale * oldScale;
+		for (PointLight light: entity.box2dLights) {
+			light.setPosition(light.getPosition().scl(multiplier));
+		}
+	}
+
+	public void setAmbientColor(Color color) {
+		this.ambientColor = color;
+		rayHandler.setAmbientLight(ambientColor);
+	}
+
+	/**
+	 * good for simulating time of day
+	 * @param alpha
+	 */
+	public void setAmbientAlpha(float alpha) {
+		ambientColor.a = alpha;
+		rayHandler.setAmbientLight(ambientColor);
 	}
 
 	/**
@@ -61,6 +128,8 @@ public class CustomTiledMapRenderer extends
 	 * - tile layer
 	 * - static entities
 	 * - dynamic entities
+	 * - lighting
+	 * - hitboxes and cutoffY's if debug is true
 	 * doesn't render:
 	 * - gui
 	 * - developer console
@@ -74,7 +143,7 @@ public class CustomTiledMapRenderer extends
 		// are on the bottom
 		renderEntities();
 		endRender();
-
+		rayHandler.updateAndRender();
 		// since debug rendering uses a shape renderer, it must start after
 		// endRender() which calls batch.end(). Otherwise rendering gets
 		// messed up and some textureregions don't draw for some reason...
@@ -82,9 +151,8 @@ public class CustomTiledMapRenderer extends
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 			debugRenderEntities();
 			shapeRenderer.end();
+			fpsLogger.log();
 		}
-
-
 	}
 
 	/**
@@ -148,7 +216,20 @@ public class CustomTiledMapRenderer extends
 		}
 	}
 
-	private void renderEntity(MapEntity staticEntity) {
+	/**
+	 * draws an entity's texture and its associated lights
+	 * @param staticEntity
+	 */
+	private void renderEntity(MapEntity staticEntity ) {
+		drawEntityTexture(staticEntity);
+		drawEntityLights(staticEntity);
+	}
+
+	private void drawEntityLights(MapEntity staticEntity) {
+
+	}
+
+	private void drawEntityTexture(MapEntity staticEntity) {
 		TextureRegion toDraw = staticEntity.getTextureRegion();
 
 		batch.draw(toDraw, staticEntity.getPos().x * unitScale, staticEntity
@@ -165,12 +246,7 @@ public class CustomTiledMapRenderer extends
 	}
 
 
-	/**
-	 * called in constructors to set up/load variables
-	 */
-	private void setup() {
-		populateEntitiesLists();
-	}
+
 
 	/**
 	 * used by constructors to initially populate lists of entities in each

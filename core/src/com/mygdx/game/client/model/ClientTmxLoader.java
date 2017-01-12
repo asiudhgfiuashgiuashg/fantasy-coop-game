@@ -1,7 +1,10 @@
 package com.mygdx.game.client.model;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.ImageResolver;
 import com.badlogic.gdx.maps.MapLayer;
@@ -13,10 +16,13 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.client.model.entity.StaticEntity;
+import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.shared.model.TilePolygonLoader;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mygdx.game.client.model.GameClient.console;
 
@@ -28,9 +34,9 @@ public class ClientTmxLoader extends TmxMapLoader {
 
     private static final XmlReader XML = new XmlReader();
     private int tileHeight;
+    private static final float DEFAULT_LIGHT_DISTANCE = 200;
 
-    @Override
-    public ClientTiledMap load(String fileName) {
+    public ClientTiledMap load(String fileName, RayHandler rayHandler) {
         FileHandle mapFile = Gdx.files.internal(fileName);
         ClientTiledMap tiledMap = new ClientTiledMap();
         try {
@@ -53,17 +59,28 @@ public class ClientTmxLoader extends TmxMapLoader {
         loadTileLayer(tiledMap, root.getChildByName("layer"));
 
 
-        loadPolygons(tiledMap);
+        loadPolygonsAndLights(tiledMap, rayHandler);
 
-        loadEntities(tiledMap);
+        loadEntities(tiledMap, rayHandler);
         return tiledMap;
     }
 
-    private void loadEntities(ClientTiledMap tiledMap) {
-        loadStaticEntities(tiledMap);
+    /**
+     *
+     * @param tiledMap
+     * @param rayHandler needed to instantiate box2dlights
+     */
+    private void loadEntities(ClientTiledMap tiledMap, RayHandler rayHandler) {
+        loadStaticEntities(tiledMap, rayHandler);
     }
 
-    private void loadStaticEntities(ClientTiledMap tiledMap) {
+    /**
+     *
+     * @param tiledMap
+     * @param rayHandler needed to instantiate box2dlights
+     */
+    private void loadStaticEntities(ClientTiledMap tiledMap, RayHandler
+            rayHandler) {
         Array<Element> objectGroups = root.getChildrenByName("objectgroup");
 
         // look for the Static Entities layer
@@ -94,15 +111,27 @@ public class ClientTmxLoader extends TmxMapLoader {
                             .gidToPolygonMap.get(tileMapObject.getTile()
                                     .getId());
 
-                    StaticEntity staticEntity = new StaticEntity(hitboxPolygon,
-                            tileMapObject, mapHeight, tileHeight);
+                    List<PointLight> lights = tiledMap
+                            .gidToLightsMap.get(tileMapObject.getTile().getId
+                                    ());
+
+                    StaticEntity staticEntity = new StaticEntity
+                            (hitboxPolygon, lights, tileMapObject, mapHeight,
+                                    tileHeight, rayHandler);
                     tiledMap.staticEntities.add(staticEntity);
                 }
             }
         }
     }
 
-    private void loadPolygons(ClientTiledMap tiledMap) {
+    /**
+     * Tiles can contain polygons and lights. The reason for this is that
+     * tiles may be used to create static entities, and a static entity might
+     * need a polygon hitbox and lights associated with it.
+     * @param tiledMap map to load (tile gid) -> (polygon and light) maps into
+     */
+    private void loadPolygonsAndLights(ClientTiledMap tiledMap, RayHandler
+            rayHandler) {
         for (Element tilesetXml: root.getChildrenByName("tileset")) {
             int firstGid = tilesetXml.getInt("firstgid", 1);
             for (Element tileXml: tilesetXml.getChildrenByName("tile")) {
@@ -111,9 +140,67 @@ public class ClientTmxLoader extends TmxMapLoader {
                 // extract the hitbox
                 CollideablePolygon tileHitbox = TilePolygonLoader.loadTilePolygon
                         (tileXml);
+                List<PointLight> tileLights = loadLights(tileXml, rayHandler);
                 tiledMap.gidToPolygonMap.put(tileGid, tileHitbox);
+                tiledMap.gidToLightsMap.put(tileGid, tileLights);
             }
         }
+    }
+
+    /**
+     * load the lights associated with this tile so that entities which use
+     * this tile can use the lights
+     * @param tileXml
+     * @return
+     */
+    private List<PointLight> loadLights(Element tileXml, RayHandler
+            rayHandler) {
+        List<PointLight> lights = new ArrayList<PointLight>();
+        int tileHeight = tileXml.getChildByName("image").getInt("height");
+        for (Element xmlObj: tileXml.getChildrenByNameRecursively("object")) {
+            String name = xmlObj.getAttribute("name", null);
+            // if found a light on this tile
+            if (name != null && name.equals("light")) {
+                // create a light at the center of the oval that was drawn
+                float x = xmlObj.getFloatAttribute("x");
+                float y = tileHeight - xmlObj.getFloatAttribute("y");
+                float width = xmlObj.getFloatAttribute("width");
+                x = x + width / 2;
+                float height = xmlObj.getFloatAttribute("height");
+                y = y - height / 2;
+                // load stuff like light distance and color from the additional
+                // properties
+                float distance = DEFAULT_LIGHT_DISTANCE;
+                Element properties = xmlObj.getChildByName("properties");
+                Color color = null;
+                if (properties != null) {
+                    for (Element property: properties.getChildrenByName
+                            ("property")) {
+                        String propName = property.getAttribute("name");
+                        // light distance
+                        if (propName.equals("distance")) {
+                            distance = property.getFloatAttribute("value");
+                        } else if (propName.equals("color")) {
+                            String colorHexStr = property.getAttribute
+                                    ("value");
+                            Long rgba8888l = Long.parseLong(colorHexStr, 16);
+                            int rgba8888 = rgba8888l.intValue();
+                            color = new Color(rgba8888);
+                        }
+                    }
+                }
+
+
+                PointLight tempLight = new PointLight(rayHandler,
+                        CustomTiledMapRenderer
+                        .NUM_RAYS, color, distance, x, y);
+                tempLight.remove(); // don't render this temporary light.
+                // It'll be used to create the actual entity lights that DO
+                // get rendered
+                lights.add(tempLight);
+            }
+        }
+        return lights;
     }
 
     /**
