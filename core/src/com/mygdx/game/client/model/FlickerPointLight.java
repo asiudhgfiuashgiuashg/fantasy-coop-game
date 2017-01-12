@@ -5,6 +5,8 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 
+import java.util.Random;
+
 /**
  * A box2d pointlight that flickers at some rate by changing distance and color
  */
@@ -37,6 +39,7 @@ public class FlickerPointLight extends PointLight {
 	// the lowest the alpha will go when flickering (alpha decreases as the
 	// light radius is contracting)
 	private float minAlpha;
+	private static final Random rand = new Random();
 
 	public FlickerPointLight(RayHandler rayHandler, int rays, Color color,
 							 float distance, float x, float y, float
@@ -51,9 +54,22 @@ public class FlickerPointLight extends PointLight {
 		this.flickerAlphaMult = flickerAlphaMult;
 		this.maxAlpha = color.a;
 		this.minAlpha = flickerAlphaMult * maxAlpha;
-		setStaticLight(true);
-		setXray(true);
+		setStaticLight(true); // optimization
+		setXray(true); // optimization
+		chooseRandomStartingFlicker();
 	}
+
+	/**
+	 * choose a random distance and alpha so that light flickering isn't
+	 * synced between lights
+	 */
+	private void chooseRandomStartingFlicker() {
+		float multiplier = rand.nextFloat();
+		distance = maxDistance - (multiplier * (maxDistance - minDistance));
+		float alpha = maxAlpha - (multiplier * (maxAlpha - minAlpha));
+		setColor(color.r, color.g, color.b, alpha);
+	}
+
 
 	/**
 	 * perform flickering in addition to the usual updates
