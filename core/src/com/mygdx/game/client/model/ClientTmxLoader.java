@@ -173,7 +173,9 @@ public class ClientTmxLoader extends TmxMapLoader {
 				float distance = DEFAULT_LIGHT_DISTANCE;
 				Element properties = xmlObj.getChildByName("properties");
 				Color color = null;
-				float flickerRate = 0;
+				float flickerRate = 0; // no flicker if none is specified
+				float flickerDistMult = FlickerPointLight
+						.DEFAULT_MIN_RADIUS_MULTIPLIER;
 				if (properties != null) {
 					for (Element property : properties.getChildrenByName
 							("property")) {
@@ -187,8 +189,11 @@ public class ClientTmxLoader extends TmxMapLoader {
 							Long rgba8888l = Long.parseLong(colorHexStr, 16);
 							int rgba8888 = rgba8888l.intValue();
 							color = new Color(rgba8888);
-						} else if (propName.equals("flicker")) {
+						} else if (propName.equals("flickerRate")) {
 							flickerRate = property.getFloatAttribute("value");
+						} else if (propName.equals("minFlickerDistMult")) {
+							flickerDistMult = property.getFloatAttribute
+									("value");
 						}
 					}
 				}
@@ -196,7 +201,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 
 				FlickerPointLight tempLight = new FlickerPointLight
 						(rayHandler, CustomTiledMapRenderer.NUM_RAYS, color,
-								distance, x, y, flickerRate);
+								distance, x, y, flickerRate, flickerDistMult);
 				tempLight.remove(); // don't render this temporary light.
 				// It'll be used to create the actual entity lights that DO
 				// get rendered

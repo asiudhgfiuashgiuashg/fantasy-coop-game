@@ -17,7 +17,7 @@ public class FlickerPointLight extends PointLight {
 	 * when flickering, the lowest distance of the light =
 	 * MIN_RADIUS_MULTIPLIER * (distance specified in Tiled)
 	 */
-	private static final float MIN_RADIUS_MULTIPLIER = .9f;
+	static final float DEFAULT_MIN_RADIUS_MULTIPLIER = .9f;
 	// lowest distance that the light will flicker to
 	private float minDistance;
 	// whether the light is currently shrinking or expanding
@@ -25,15 +25,15 @@ public class FlickerPointLight extends PointLight {
 	// the original distance specified in Tiled and the maximum distance this
 	// light will expand to while flickering
 	private float maxDistance;
+	private float flickerDistMult;
 
-	public FlickerPointLight(RayHandler rayHandler, int rays, Color color,
-							 float distance, float x, float y, float
-									 flickerRate) {
+	public FlickerPointLight(RayHandler rayHandler, int rays, Color color, float distance, float x, float y, float flickerRate, float flickerDistMult) {
 		super(rayHandler, rays, color, distance, x, y);
 		this.flickerRate = flickerRate;
-		this.minDistance = distance * MIN_RADIUS_MULTIPLIER;
+		this.minDistance = distance * flickerDistMult;
 		this.maxDistance = distance;
 		shrinking = true;
+		this.flickerDistMult = flickerDistMult;
 	}
 
 	@Override
@@ -53,5 +53,9 @@ public class FlickerPointLight extends PointLight {
 
 	public float getFlickerRate() {
 		return flickerRate;
+	}
+
+	public float getFlickerDistMult() {
+		return flickerDistMult;
 	}
 }
