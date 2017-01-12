@@ -45,7 +45,7 @@ public class CustomTiledMapRenderer extends
 			LinkedList<MapEntity>();
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
-	public boolean debug = false; // should I draw things that developers use
+	public boolean debug = true; // should I draw things that developers use
 	// to debug?
 	private float debugLineWidth = 3;
 

@@ -22,10 +22,10 @@ import java.util.Map;
  */
 public class ClientTiledMap extends TiledMap {
 	protected final Map<Integer, CollideablePolygon> gidToPolygonMap = new
-	HashMap<Integer, CollideablePolygon>();
-	protected final Map<Integer, List<PointLight>> gidToLightsMap = new HashMap
-			<Integer, List<PointLight>>();
-	public final List<StaticEntity>  staticEntities = new
+			HashMap<Integer, CollideablePolygon>();
+	protected final Map<Integer, List<FlickerPointLight>> gidToLightsMap = new
+			HashMap<Integer, List<FlickerPointLight>>();
+	public final List<StaticEntity> staticEntities = new
 			ArrayList<StaticEntity>();
 
 }
