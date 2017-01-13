@@ -2,14 +2,11 @@ package com.mygdx.game.server.model.lobby;
 
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Server;
-import com.mygdx.game.shared.model.LobbyManager;
-import com.mygdx.game.shared.model.LobbyPlayer;
-import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.GameStartMsg;
+import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.shared.model.lobby.LobbyManager;
+import com.mygdx.game.shared.network.LobbyMessage.GameStartMessage;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Logic and state for player's connecting, chatting, choosing classes, readying up.
@@ -19,36 +16,19 @@ import java.util.List;
  */
 public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 
-	private Server server;
-
-	public ServerLobbyManager(Server server) {
+	private static final GameServer server = GameServer.getInstance();
+	
+	public ServerLobbyManager() {
 		lobbyPlayers = new ArrayList<ServerLobbyPlayer>();
-		this.server = server;
 	}
-
-	/**
-	 * See if all the players in the lobby are ready to start the game
-	 * @return
-	 */
-	public boolean getReadyAndClassesSelected() {
-		for (ServerLobbyPlayer lobbyPlayer: lobbyPlayers) {
-			if (!lobbyPlayer.ready.get() || null == lobbyPlayer.playerClass) {
-				return false;
+	
+	public void checkForGameStart() {
+		for (ServerLobbyPlayer player : lobbyPlayers) {
+			if (!player.isReady() || player.getPlayerClass() == null) {
+				return;
 			}
 		}
-		return true;
-	}
-
-	public ServerLobbyPlayer getPlayerByConnection(Connection connection) {
-		for (ServerLobbyPlayer player: lobbyPlayers) {
-			if (player.connection.equals(connection)) {
-				return player;
-			}
-		}
-		return null;
-	}
-
-	public void onAllReady() {
-		server.sendToAllTCP(new GameStartMsg());
+		
+		server.queueMessage(new GameStartMessage());
 	}
 }

@@ -1,9 +1,9 @@
-package com.mygdx.game.server.model.lobby;
+package com.mygdx.game.shared.model.lobby;
 
 /**
  * Represents a player's class in a lobby.
  */
-public enum PlayerClassEnum {
+public enum PlayerClass {
 	MAGE,
 	RANGER,
 	SHIELD,

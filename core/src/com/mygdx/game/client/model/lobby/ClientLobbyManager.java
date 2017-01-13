@@ -1,12 +1,9 @@
 package com.mygdx.game.client.model.lobby;
 
-import com.esotericsoftware.kryonet.Client;
-import com.mygdx.game.shared.model.LobbyManager;
-import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.ChooseUsernameMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.ReadyStatusMsg;
-
-import java.util.ArrayList;
+import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.shared.model.lobby.LobbyManager;
+import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
+import com.mygdx.game.shared.network.LobbyMessage.ReadyStatusMessage;
 
 /**
  * Maintains lobby state information on the client side.
@@ -16,21 +13,10 @@ import java.util.ArrayList;
  * Created by elimonent on 9/6/2016.
  */
 public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
+    private static final GameClient client = GameClient.getInstance();
+	
+	private ClientLobbyPlayer localLobbyPlayer;
 
-    private ClientLobbyPlayer localLobbyPlayer;
-    private Client kryoClient;
-
-    /**
-     * called after establishing connection between kryo client and server
-     * @param username
-     * @param kryoClient
-     */
-    public ClientLobbyManager(String username, Client kryoClient) {
-        this.kryoClient = kryoClient;
-        lobbyPlayers = new ArrayList<ClientLobbyPlayer>();
-        localLobbyPlayer = new ClientLobbyPlayer(ClientLobbyPlayer.LOCAL_PLAYER_UID, username);
-        lobbyPlayers.add(localLobbyPlayer);
-    }
 
     /**
      * Add the player to the client lobby if their uid isn't already there.
@@ -39,8 +25,8 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      */
     @Override
     public void addLobbyPlayer(ClientLobbyPlayer player) {
-        super.addLobbyPlayer(player);
-        //update client lobby view here
+    	super.addLobbyPlayer(player);
+    	//update client lobby view here
     }
 
     public ClientLobbyPlayer getByUid(int uid) {
@@ -52,13 +38,10 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
         return null;
     }
 
-    /**
-     * send the local client's chosen username to the server after connecting
-     */
-    public void sendUsername() {
-        kryoClient.sendTCP(new ChooseUsernameMsg(localLobbyPlayer.username));
+    public void setLocalLobbyPlayer(ClientLobbyPlayer player) {
+    	localLobbyPlayer = player;
     }
-
+    
     public ClientLobbyPlayer getLocalLobbyPlayer() {
         return localLobbyPlayer;
     }
@@ -68,9 +51,11 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      * Send Network message to server that player is ready.
      * Update portion of view which reflects readyness
      */
-    public void setAndSendReady(boolean ready) {
-        localLobbyPlayer.ready.set(ready);
-        kryoClient.sendTCP(new ReadyStatusMsg(ready));
+    public void setReady(boolean ready) {
+        localLobbyPlayer.setReady(ready);
+        ReadyStatusMessage msg = new ReadyStatusMessage();
+        msg.ready = ready;
+        client.queueMessage(msg);
         //TODO update view
     }
 
@@ -79,7 +64,7 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
      * @param msg
      */
     @Override
-    public void addChatMessage(ChatMessageMsg msg) {
+    public void addChatMessage(ChatMessage msg) {
         super.addChatMessage(msg);
         //TODO display message on screen
     }

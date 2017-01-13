@@ -32,7 +32,7 @@ public abstract class PolygonObject {
 		this.polygon = polygon;
 		this.solid = solid;
 		if (solid) {
-			Server.getInstance().getMap().getSolidObjects().add(this);
+			GameServer.getInstance().getMap().getSolidObjects().add(this);
 		}
 	}
 
@@ -98,7 +98,7 @@ public abstract class PolygonObject {
 	 */
 	public boolean destroy() {
 		if (solid) {
-			return Server.getInstance().getMap().getSolidObjects().remove(this);
+			return GameServer.getInstance().getMap().getSolidObjects().remove(this);
 		}
 		return true;
 	}

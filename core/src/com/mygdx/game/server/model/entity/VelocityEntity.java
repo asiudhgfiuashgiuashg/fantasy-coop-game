@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.PolygonObject;
-import com.mygdx.game.server.model.Server;
+import com.mygdx.game.server.model.GameServer;
 
 /**
  * A VelocityEntity is an entity with a mass and velocity-based movement. Forces
@@ -68,7 +68,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 				getPolygon().setPosition(pos.x, pos.y);
 
 				// Check for collisions with other solid objects
-				for (PolygonObject solidObj : Server.getInstance().getMap().getSolidObjects()) {
+				for (PolygonObject solidObj : GameServer.getInstance().getMap().getSolidObjects()) {
 					if (this.collides(solidObj)) {
 						// Revert to starting position of this iteration
 						getPolygon().setPosition(startX, startY);

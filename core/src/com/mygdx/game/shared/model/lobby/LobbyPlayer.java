@@ -1,6 +1,4 @@
-package com.mygdx.game.shared.model;
-
-import com.mygdx.game.server.model.lobby.PlayerClassEnum;
+package com.mygdx.game.shared.model.lobby;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -11,18 +9,43 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class LobbyPlayer {
     protected int uid; //uniquely identifies this client to other clients
-    public String username;
-    public PlayerClassEnum playerClass;
+    private String username;
+    private PlayerClass playerClass;
 
-    public final AtomicBoolean ready = new AtomicBoolean(false); // Whether or not this player is ready to start.
+    private final AtomicBoolean ready = new AtomicBoolean(false); // Whether or not this player is ready to start.
                                                                 // This is Atomic because the Server or GameClient thread will access it
                                                                 //  and also the listeners on the Kryo Server or KryoClient thread, so 2 different threads
 
     public int getUid() {
         return uid;
     }
+    
+    public String getUsername() {
+		return username;
+	}
 
-    /**
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public PlayerClass getPlayerClass() {
+		return playerClass;
+	}
+
+	public void setPlayerClass(PlayerClass playerClass) {
+		this.playerClass = playerClass;
+	}
+
+
+	public boolean isReady() {
+		return ready.get();
+	}
+	
+	public void setReady(boolean ready) {
+		this.ready.set(ready);
+	}
+
+	/**
      *
      * @param other
      * @return whether uids are equal.

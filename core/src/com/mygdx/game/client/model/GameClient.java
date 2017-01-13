@@ -1,49 +1,38 @@
 package com.mygdx.game.client.model;
 
-
 import com.badlogic.gdx.Game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Listener;
-import com.mygdx.game.client.controller.networklisteners.LobbyListener;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.client.view.GameScreen;
-import com.mygdx.game.client.view.LobbyScreen;
 import com.mygdx.game.client.view.MenuScreen;
+import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
+import com.mygdx.game.shared.network.Message;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import com.mygdx.game.client.controller.ClientCommunicator;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 
-
 /**
- * The main game loop for the client application.
- * Delegates rendering to one of three screens.
+ * The main game loop for the client application. Delegates rendering to one of
+ * three screens.
+ * 
  * @author elimonent
  *
  */
 public class GameClient extends Game {
 	public static SingletonGUIConsole console;
 
-	private Client client; //communication with server will be done through this object.
-	private static int CONNECT_TIMEOUT = 5000; //timeout for connecting client to server.
-	private final List<LobbyListener> lobbyListeners = new ArrayList<LobbyListener>(); //holds listeners that need disposed of when leaving the lobby
+	private static GameClient instance;
 
-	private String username = "PLACEHOLDER"; //client's username
+	private ClientCommunicator communicator;
+
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
 	private CustomTiledMapRenderer renderer;
@@ -57,7 +46,9 @@ public class GameClient extends Game {
 	// will take up 2 pixels in the game window.
 
 	@Override
-	public void create () {
+	public void create() {
+		instance = this;
+
 		setupConsole();
 		setScreen(new MenuScreen());
 
@@ -65,31 +56,40 @@ public class GameClient extends Game {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		camera.update();
 
+		communicator = new ClientCommunicator();		
+		lobbyManager = new ClientLobbyManager();
+
 		clientMap = new ClientTmxLoader().load("prototypeMap.tmx");
-		//clientMap = new ClientTmxLoader().load("validMap.tmx");
+		// clientMap = new ClientTmxLoader().load("validMap.tmx");
 		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE);
 
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		super.render();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
 
 		// do the drawing here
 		// for example, batch.draw(textureregion, x, y);
 		renderer.setView(camera);
 		renderer.render();
 		console.draw();
+		
+		// temporary
+		communicator.readMessages();
+		communicator.sendMessages();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		console.refresh();
+	}
+
+	public static GameClient getInstance() {
+		return instance;
 	}
 
 	private void setupConsole() {
@@ -101,39 +101,35 @@ public class GameClient extends Game {
 
 	/**
 	 * connect to the server and enter the lobby screen
+	 * 
+	 * @throws ServerAlreadyInitializedException
 	 */
-	public void setupClientAndConnect(String ip, int tcpPort, String username) throws AlreadyConnectedException {
-		if (null != client && client.isConnected() == true) {
-			throw new AlreadyConnectedException();
-		}
-		this.username = username;
-		client = new Client();
-		Kryo kryo = client.getKryo();
-		kryo.setRegistrationRequired(false); //automatic registration of objects in kryo (which enables them to be serialized/deserialized)
-		lobbyManager = new ClientLobbyManager(username, client);
-		registerKryoLobbyListeners();
-		client.start();
-		try {
-			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
-			console.log("Connected to server", LogLevel.SUCCESS);
-			setScreen(new LobbyScreen());
-			lobbyManager.sendUsername();
-		} catch (IOException e) {
-			console.log(e.getMessage(), LogLevel.ERROR);
-		}
+	public void hostServer(int tcpPort, String username)
+			throws AlreadyConnectedException, ServerAlreadyInitializedException {
+		communicator.host(tcpPort);
+		connect(ClientCommunicator.LOCAL_HOST, tcpPort, username);
+	}
+
+	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException {
+		communicator.connect(ip, tcpPort, username);
 	}
 
 	/**
 	 * disconnect from the server and perform the accompanying display changes
 	 */
 	public void disconnect() {
-		client.close();
+		communicator.disconnect();
 		setScreen(new MenuScreen());
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
+	public void queueMessage(Message msg) {
+		communicator.queueMessage(msg);
+	}
+
 	/**
 	 * Override to automatically dispose of previous screen.
+	 * 
 	 * @param screen
 	 */
 	@Override
@@ -144,29 +140,8 @@ public class GameClient extends Game {
 		super.setScreen(screen);
 	}
 
-	/**
-	 * These listeners will react to server messages
-	 */
-	private void registerKryoLobbyListeners() {
-		LobbyListener lobbyListener = new LobbyListener(lobbyManager, this);
-		console.log("Added lobby listener");
-		client.addListener(lobbyListener);
-		lobbyListeners.add(lobbyListener); //keep track of this listener so we can destroy it later
-
-	}
-
-	public void removeKryoLobbyListeners() {
-		for (Listener listener: lobbyListeners) {
-			client.removeListener(listener);
-		}
-	}
-
 	public boolean isConnected() {
-		return !(null == client) && client.isConnected();
-	}
-
-	public Client getClient() {
-		return client;
+		return communicator.isConnected();
 	}
 
 	public ClientLobbyManager getLobbyManager() {

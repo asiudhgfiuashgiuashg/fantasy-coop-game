@@ -1,4 +1,4 @@
-package com.mygdx.game.shared;
+package com.mygdx.game.shared.model;
 
 /**
  * String contants used in .tmx files and server and client map loaders.

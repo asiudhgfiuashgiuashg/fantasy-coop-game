@@ -1,4 +1,4 @@
-package com.mygdx.game.shared;
+package com.mygdx.game.shared.model;
 
 import com.mygdx.game.server.model.entity.Entity;
 

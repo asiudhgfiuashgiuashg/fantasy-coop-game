@@ -1,4 +1,4 @@
-package com.mygdx.game.shared.exceptions;
+package com.mygdx.game.shared.model.exceptions;
 
 public class MapLoaderException extends RuntimeException {
 

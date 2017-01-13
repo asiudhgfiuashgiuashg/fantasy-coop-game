@@ -4,12 +4,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
-import com.mygdx.game.server.model.Server;
+import com.mygdx.game.server.controller.ServerCommunicator;
+import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
-import com.mygdx.game.server.model.lobby.PlayerClassEnum;
 import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
-import com.mygdx.game.shared.util.network.messages.lobby.ChatMessageMsg;
-import com.mygdx.game.shared.util.network.messages.lobby.SelectClassMessage;
+import com.mygdx.game.shared.model.lobby.PlayerClass;
+import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
+import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.LogLevel;
 
@@ -37,7 +38,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void connect(String ip, int port, String username) {
 		console.log("Attempting to connect to " + ip + ":" + port);
 		try {
-			gameClient.setupClientAndConnect(ip, port, username);
+			gameClient.connect(ip, port, username);
 
 		} catch (AlreadyConnectedException e) {
 			console.log("Already connected to a server!", LogLevel.ERROR);
@@ -51,11 +52,9 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 */
 	public void startServer(int port, String username) {
 		console.log("Starting server on port " + port + " ...");
-		Server server = Server.getInstance();
 
 		try {
-			server.init(port, gameClient, username);
-			serverStarted = true;
+			gameClient.hostServer(port, username);
 		} catch (ServerAlreadyInitializedException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
 		} catch (AlreadyConnectedException e) {
@@ -67,7 +66,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * Host a server on this computer listening on the default port.
 	 */
 	public void startServer(String username) {
-		startServer(Server.DEFAULT_PORT, username);
+		serverStarted = true; // BAD fix this
+		startServer(ServerCommunicator.DEFAULT_PORT, username);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 */
 	public void stopServer() {
 		console.log("Stopping server");
-		Server.getInstance().stop();
+		GameServer.getInstance().stop();
 		serverStarted = false;
 	}
 
@@ -93,7 +93,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void serverListPlayers() {
 		if (serverStarted) {
 			console.log("Connected clients: ");
-			for (ServerLobbyPlayer lobbyPlayer: Server.getInstance().getLobbyManager().getLobbyPlayers()) {
+			for (ServerLobbyPlayer lobbyPlayer: GameServer.getInstance().getLobbyManager().getLobbyPlayers()) {
 				console.log(lobbyPlayer.toString());
 			}
 		} else {
@@ -110,9 +110,11 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * @param className
 	 */
 	public void requestClass(String className) {
-		PlayerClassEnum playerClass = PlayerClassEnum.valueOf(className);
+		PlayerClass playerClass = PlayerClass.valueOf(className);
 		try {
-			gameClient.getClient().sendTCP(new SelectClassMessage(playerClass));
+			ClassAssignmentMessage msg = new ClassAssignmentMessage();
+			msg.playerClass = playerClass;
+			gameClient.queueMessage(msg);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -132,7 +134,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * and lobby update view
 	 */
 	public void ready() {
-		gameClient.getLobbyManager().setAndSendReady(true);
+		gameClient.getLobbyManager().setReady(true);
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * and update lobby view
 	 */
 	public void unready() {
-		gameClient.getLobbyManager().setAndSendReady(false);
+		gameClient.getLobbyManager().setReady(false);
 	}
 
 	/**
@@ -148,6 +150,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * @param msg the message to send
 	 */
 	public void message(String msg) {
-		gameClient.getClient().sendTCP(new ChatMessageMsg(msg));
+		ChatMessage chatMsg = new ChatMessage();
+		chatMsg.message = msg;
+		gameClient.queueMessage(chatMsg);
 	}
 }

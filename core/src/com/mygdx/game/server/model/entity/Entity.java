@@ -1,8 +1,9 @@
 package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.server.model.DrawMessage;
+import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.PolygonObject;
+import com.mygdx.game.shared.network.GameMessage.DrawMessage;
 
 /**
  * A PolygonObject which has a sprite to be drawn on the client.
@@ -13,6 +14,8 @@ import com.mygdx.game.server.model.PolygonObject;
  */
 public abstract class Entity extends PolygonObject {
 
+	private static final GameServer server = GameServer.getInstance();
+	
 	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(null, solid);
 		this.uid = uid;
@@ -36,8 +39,12 @@ public abstract class Entity extends PolygonObject {
 	 * Creates a DrawMessage to tell clients to update their view of this entity
 	 */
 	public void draw() {
-		DrawMessage msg = new DrawMessage(uid, position, spriteName, visLayer);
-		// TODO: Tell Server to send message to client
+		DrawMessage msg = new DrawMessage();
+		msg.entityUID = uid;
+		msg.position = position;
+		msg.spriteName = spriteName;
+		msg.visLayer = visLayer;
+		server.queueMessage(msg);
 	}
 
 	/**

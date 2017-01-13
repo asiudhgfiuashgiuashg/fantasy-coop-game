@@ -19,16 +19,16 @@ import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.CutsceneTrigger;
 import com.mygdx.game.server.model.trigger.MapLoadTrigger;
 import com.mygdx.game.server.model.trigger.Trigger;
-import com.mygdx.game.shared.MapLoaderConstants;
-import com.mygdx.game.shared.UniqueIDAssigner;
-import com.mygdx.game.shared.exceptions.MapLoaderException;
 import com.mygdx.game.shared.model.TilePolygonLoader;
+import com.mygdx.game.shared.model.UniqueIDAssigner;
+import com.mygdx.game.shared.model.exceptions.MapLoaderException;
 import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.shared.model.MapLoaderConstants;
 
 /**
  * Loads the portions of the map that the server cares about
  */
-public class MapLoader {
+public class ServerTmxLoader {
 	private static final XmlReader XML = new XmlReader();
 	private static final String DEFAULT_STATIC_ENTITY_NAME = "DEFAULT_NAME";
 
@@ -51,8 +51,9 @@ public class MapLoader {
 	 *             if fileName is invalid
 	 * @throws various
 	 *             reflection-related exceptions
+	 * @return the loaded GameMap
 	 */
-	public void loadMap(String fileName) throws IOException, ClassNotFoundException, InstantiationException,
+	public GameMap loadMap(String fileName) throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, MapLoaderException, IllegalArgumentException, InvocationTargetException,
 			NoSuchMethodException, SecurityException {
 
@@ -72,11 +73,10 @@ public class MapLoader {
 		loadTileSets(root);
 		loadLayers(root);
 
-		// Set current game map
-		Server.getInstance().setMap(map);
-
 		// Clear up tile memory because they have served their purpose
 		tiles.clear();
+		
+		return map;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class MapLoader {
 
 		// Store tile in map
 		int tileGid = firstGid + id;
-		tiles.put(tileGid, new MapLoader.Tile(tilePolygon));
+		tiles.put(tileGid, new ServerTmxLoader.Tile(tilePolygon));
 
 	}
 

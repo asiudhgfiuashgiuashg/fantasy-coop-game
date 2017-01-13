@@ -1,7 +1,7 @@
 package com.mygdx.game.client.model.lobby;
 
-import com.mygdx.game.server.model.lobby.PlayerClassEnum;
-import com.mygdx.game.shared.model.LobbyPlayer;
+import com.mygdx.game.shared.model.lobby.LobbyPlayer;
+import com.mygdx.game.shared.model.lobby.PlayerClass;
 
 /**
  * Represents a lobby player in the client's model of the lobby.
@@ -11,15 +11,13 @@ public class ClientLobbyPlayer extends LobbyPlayer {
     public static final int LOCAL_PLAYER_UID = -1; //if a player's uid is -1, they are the local player
                                                    //The local player is never informed of their actual uid
 
-    public ClientLobbyPlayer(int uid, String username, PlayerClassEnum playerClass) {
+    public ClientLobbyPlayer(int uid, String username, PlayerClass playerClass) {
         this.uid = uid;
-        this.username = username;
-        this.playerClass = playerClass;
+        setUsername(username);
+        setPlayerClass(playerClass);
     }
 
     public ClientLobbyPlayer(int uid, String username) {
-        this.uid = uid;
-        this.username = username;
-        this.playerClass = null;
+        this(uid, username, null);
     }
 }
