@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.client.model.GameClient;
@@ -48,9 +49,9 @@ public class MenuScreen extends ScreenAdapter
 		final ConcreteCommandExecutor cce = new ConcreteCommandExecutor(game);
 		
 		//The following is used after selecting a server option to connect/create a server
-		final TextArea portEntry = new TextArea("", skin);
-		final TextArea ipEntry = new TextArea("", skin);
-		final TextArea usernameEntry = new TextArea("", skin);
+		final TextField portEntry = new TextField("", skin);
+		final TextField ipEntry = new TextField("", skin);
+		final TextField usernameEntry = new TextField("", skin);
 		final Label port = new Label("Port: ", skin);
 		final Label ip = new Label("IP: ", skin);
 		final Label username = new Label("Username: ", skin);
