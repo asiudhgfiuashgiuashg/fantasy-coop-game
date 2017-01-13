@@ -50,7 +50,7 @@ public abstract class PolygonObject {
 		if (diff.len() > p1.getMaxLength() + p2.getMaxLength()) {
 			return false;
 		}
-		return p2.collides(p1, new Intersector.MinimumTranslationVector());
+		return p2.collides(p1);
 	}
 
 	/**

@@ -154,4 +154,11 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		chatMsg.message = msg;
 		gameClient.queueMessage(chatMsg);
 	}
+
+	/**
+	 * toggle rendering debug stuff
+	 */
+	public void debug() {
+		gameClient.getRenderer().toggleDebug();
+	}
 }
