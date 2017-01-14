@@ -51,9 +51,6 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * @param username the username to connect to your server with
 	 */
 	public void startServer(int port, String username) {
-		if (console == null) {
-			System.out.println("Throw it at him, not me!");
-		}
 		console.log("Starting server on port " + port + " ...");
 
 		try {

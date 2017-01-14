@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
+import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.strongjoshua.console.GUIConsole;
 import com.strongjoshua.console.LogLevel;
@@ -46,7 +48,6 @@ public class MenuScreen extends ScreenAdapter
 		cam.setToOrtho(false, 800, 480);
 		stage = new Stage();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		final ConcreteCommandExecutor cce = new ConcreteCommandExecutor(game);
 		
 		//The following is used after selecting a server option to connect/create a server
 		final TextField portEntry = new TextField("", skin);
@@ -88,11 +89,16 @@ public class MenuScreen extends ScreenAdapter
 				connectButton.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						System.out.println(portEntry.getText());
-						if (portEntry.getText().length() == 4 && portEntry.getText() != null) {
-							cce.startServer(Integer.parseInt(portEntry.getText()), usernameEntry.getText());
-						} else {
-							cce.startServer(usernameEntry.getText());
+						try {
+							game.hostServer(Integer.parseInt(portEntry.getText()), usernameEntry.getText());
+						} catch (AlreadyConnectedException e){
+							System.out.println("Neo, you're already in the Matrix");
+						} catch (ServerAlreadyInitializedException e) {
+							System.out.println("The world already exists, find a new one... scrub");
+						}
+						
+						if (game.isConnected()) {
+							game.setScreen(new LobbyScreen(game));
 						}
 						
 					}
@@ -123,7 +129,15 @@ public class MenuScreen extends ScreenAdapter
 				connectButton.addListener(new ClickListener() {
 					@Override
 					public void clicked(InputEvent event, float x, float y) {
-						cce.connect(ipEntry.getMessageText(), Integer.parseInt(portEntry.getMessageText()), usernameEntry.getMessageText());
+						try {
+							game.connect(ipEntry.getText(), Integer.parseInt(portEntry.getText()), usernameEntry.getText());
+						} catch (AlreadyConnectedException e) {
+							System.out.println("Neo, you're already in the Matrix");
+						}
+						
+						if (game.isConnected()) {
+							game.setScreen(new LobbyScreen(game));
+						}
 					}
 				});
 				
@@ -157,9 +171,10 @@ public class MenuScreen extends ScreenAdapter
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         cam.update();
+        game.batch.begin();
         game.batch.setProjectionMatrix(cam.combined);
 
-        game.batch.begin();
+       
         stage.draw();
         game.batch.end();
 		

@@ -53,7 +53,9 @@ public class GameClient extends Game {
 	@Override
 	public void create() {
 		instance = this;
-
+		
+		batch = new SpriteBatch();
+		
 		setupConsole();
 		setScreen(new MenuScreen(this));
 
@@ -79,7 +81,7 @@ public class GameClient extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
-		
+		batch.begin();
 		batch.end();
 		console.draw();
 
