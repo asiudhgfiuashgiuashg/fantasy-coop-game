@@ -156,7 +156,6 @@ public class MenuScreen extends ScreenAdapter
 				stage.addActor(pane);
 			}
 		});
-		
 		stage.addActor(pane);
 		Gdx.input.setInputProcessor(stage);
 	}
@@ -173,8 +172,7 @@ public class MenuScreen extends ScreenAdapter
         cam.update();
         game.batch.begin();
         game.batch.setProjectionMatrix(cam.combined);
-
-       
+        
         stage.draw();
         game.batch.end();
 		
