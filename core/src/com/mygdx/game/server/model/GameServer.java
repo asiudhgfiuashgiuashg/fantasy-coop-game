@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.mygdx.game.client.model.GameClient.console;
+
 /**
  * The GameServer singleton acts as a hub for the model that manages the in-game
  * server data and updates the model. First, it processes client messages from
@@ -40,7 +42,7 @@ public class GameServer implements Runnable {
 	private static final long MILLISECONDS = 1000000;
 
 	/** Singleton instance */
-	private static GameServer instance;
+	private static GameServer instance = new GameServer();
 
 	/** The current game state */
 	private GameState state;
@@ -66,7 +68,10 @@ public class GameServer implements Runnable {
 	private ServerCommunicator communicator;
 
 	/** Lobby manager */
-	private ServerLobbyManager lobbyManager = new ServerLobbyManager();
+	private ServerLobbyManager lobbyManager;
+
+	public int instanceNum;
+	public static int instanceInc;
 
 	/**
 	 * Private constructor enforces singleton pattern. Actual server
@@ -74,6 +79,8 @@ public class GameServer implements Runnable {
 	 */
 	private GameServer() {
 		initialized = false;
+		instanceNum = instanceInc;
+		instanceInc++;
 	}
 
 	/**
@@ -82,11 +89,9 @@ public class GameServer implements Runnable {
 	 * @return the GameServer instance
 	 * @throws ServerNotInitializedException
 	 */
-	public static GameServer getInstance() {
-		if (instance == null) {
-			instance = new GameServer();
-		}
+	public static synchronized GameServer getInstance() {
 		return instance;
+
 	}
 
 	/**
@@ -100,7 +105,7 @@ public class GameServer implements Runnable {
 		if (initialized) {
 			throw new ServerAlreadyInitializedException(port);
 		}
-
+		lobbyManager = new ServerLobbyManager();
 		// Set lobby state
 		setState(GameState.LOBBY);
 

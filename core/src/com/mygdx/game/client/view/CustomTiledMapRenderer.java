@@ -61,7 +61,7 @@ public class CustomTiledMapRenderer extends
 
 	private FPSLogger fpsLogger;
 
-	public CustomTiledMapRenderer(ClientTiledMap map, RayHandler rayHandler) {
+	public CustomTiledMapRenderer(TiledMap map, RayHandler rayHandler) {
 		this(map, DEFAULT_UNIT_SCALE, rayHandler);
 	}
 

@@ -10,8 +10,11 @@ import com.strongjoshua.console.LogLevel;
 
 /**
  * Handles rendering for the main menu which appears when the game is first started.
- * Created by elimonent on 8/18/16.
  */
-public class MenuScreen extends ScreenAdapter {
+public class MenuScreen extends DebuggableScreen {
 
+	@Override
+	public void toggleDebug() {
+
+	}
 }

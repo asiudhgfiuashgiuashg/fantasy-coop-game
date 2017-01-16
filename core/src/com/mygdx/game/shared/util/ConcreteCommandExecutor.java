@@ -31,6 +31,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	private boolean serverStarted = false; //used to restrict usage of methods applying to the
 
 
+
 	public ConcreteCommandExecutor(GameClient gameClient) {
 		this.gameClient = gameClient;
 	}
@@ -159,6 +160,6 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * toggle rendering debug stuff
 	 */
 	public void debug() {
-		gameClient.getRenderer().toggleDebug();
+		gameClient.getScreen().toggleDebug();
 	}
 }

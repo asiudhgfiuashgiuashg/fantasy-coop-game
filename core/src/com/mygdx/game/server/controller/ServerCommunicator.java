@@ -25,7 +25,7 @@ import com.strongjoshua.console.LogLevel;
 public class ServerCommunicator extends Communicator {
 	public static final int DEFAULT_PORT = 63332;
 
-	private static final GameServer gameServer = GameServer.getInstance();
+	private GameServer gameServer = GameServer.getInstance();
 	private static final SingletonGUIConsole console = SingletonGUIConsole.getInstance();
 	private final ServerLobbyManager manager = gameServer.getLobbyManager();
 	

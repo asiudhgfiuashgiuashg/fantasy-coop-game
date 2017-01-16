@@ -8,6 +8,8 @@ import com.mygdx.game.shared.network.LobbyMessage.GameStartMessage;
 
 import java.util.ArrayList;
 
+import static com.mygdx.game.client.model.GameClient.console;
+
 /**
  * Logic and state for player's connecting, chatting, choosing classes, readying up.
  * Should directly modify the view of the lobby based on lobby state changes.
@@ -28,7 +30,8 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 				return;
 			}
 		}
-		
+		System.out.println("server: " + server);
 		server.queueMessage(new GameStartMessage());
+
 	}
 }
