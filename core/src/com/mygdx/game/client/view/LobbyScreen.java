@@ -1,5 +1,7 @@
 package com.mygdx.game.client.view;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.game.client.model.GameClient;
 
 import com.badlogic.gdx.Gdx;
@@ -20,18 +22,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
  */
 public class LobbyScreen extends DebuggableScreen {
 	final GameClient game;
-	Stage stage;
 	Skin skin;
 	ScrollPane scrollPane;
 	
 	OrthographicCamera cam;
 	
-	public LobbyScreen(GameClient game) {
+	public LobbyScreen(GameClient game, InputMultiplexer inputMultiplexer) {
 		this.game = game;
-		
+		this.inputMultiplexer = inputMultiplexer;
+
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		stage = new Stage();
+		inputMultiplexer.addProcessor(stage);
 		
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, 800, 480);
@@ -70,7 +73,6 @@ public class LobbyScreen extends DebuggableScreen {
 		
 		splitpane.setFillParent(true);
 		stage.addActor(splitpane);
-		Gdx.input.setInputProcessor(stage);
 		
 	}
 

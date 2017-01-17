@@ -2,6 +2,8 @@ package com.mygdx.game.client.view;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,6 +22,8 @@ import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 
+import static com.mygdx.game.client.model.GameClient.console;
+
 /**
  * Handles rendering for the main menu which appears when the game is first started.
  */
@@ -29,13 +33,19 @@ public class MenuScreen extends DebuggableScreen {
 	
 	OrthographicCamera cam;
 	Skin skin;
-	final Stage stage;
-	
-	public MenuScreen(final GameClient game) {
+
+	/**
+	 *
+	 * @param game
+	 * @param inputMultiplexer add the stage's input to this
+	 */
+	public MenuScreen(final GameClient game, final InputMultiplexer inputMultiplexer) {
 		this.game = game;
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, 800, 480);
 		stage = new Stage();
+		this.inputMultiplexer = inputMultiplexer;
+		inputMultiplexer.addProcessor(stage);
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		/* To understand better how the ui is organized, think of a hierarchy of layout widgets (e.x. SplitPane), which is what organizes everything on the screen,
@@ -96,7 +106,7 @@ public class MenuScreen extends DebuggableScreen {
 						}
 						
 						if (game.isConnected()) {
-							game.setScreen(new LobbyScreen(game));
+							game.setScreen(new LobbyScreen(game, inputMultiplexer));
 						}
 						
 					}
@@ -135,7 +145,7 @@ public class MenuScreen extends DebuggableScreen {
 						}
 						
 						if (game.isConnected()) {
-							game.setScreen(new LobbyScreen(game));
+							game.setScreen(new LobbyScreen(game, inputMultiplexer));
 						}
 					}
 				});
@@ -160,7 +170,6 @@ public class MenuScreen extends DebuggableScreen {
 			}
 		});
 		stage.addActor(pane);
-		Gdx.input.setInputProcessor(stage);
 	}
 
 	/* (non-Javadoc)

@@ -1,6 +1,7 @@
 package com.mygdx.game.client.view;
 
 import box2dLight.RayHandler;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.Gdx;
@@ -25,18 +26,17 @@ public class GameScreen extends DebuggableScreen {
 	// will take up 2 pixels in the game window.
 	private OrthographicCamera camera;
 	final GameClient game;
-	
-	Stage stage;
+
 	Skin skin;
 	ScrollPane scrollPane;
 	
 	
-	public GameScreen(final GameClient game, TiledMap map, RayHandler rayHandler) {
+	public GameScreen(final GameClient game, TiledMap map, RayHandler rayHandler, InputMultiplexer inputMultiplexer) {
 		this.game = game;
-		
+		this.inputMultiplexer = inputMultiplexer;
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
 		stage = new Stage();
+		inputMultiplexer.addProcessor(stage);
 		
 		renderer = new CustomTiledMapRenderer(map, MAP_SCALE, rayHandler);
 		camera = new OrthographicCamera();
@@ -54,7 +54,6 @@ public class GameScreen extends DebuggableScreen {
 		
 		scrollPane = new ScrollPane(list, skin);
 		stage.addActor(text);
-		Gdx.input.setInputProcessor(stage);
 	}
 
 	/* (non-Javadoc)
@@ -98,14 +97,6 @@ public class GameScreen extends DebuggableScreen {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see com.badlogic.gdx.Screen#dispose()
-	 */
-	@Override
-	public void dispose()
-	{
-		stage.dispose();
-	}
-	
+
 	
 }

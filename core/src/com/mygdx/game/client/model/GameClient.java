@@ -4,6 +4,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -42,7 +43,6 @@ public class GameClient extends Game {
 	private TiledMap clientMap;
 	
 	public SpriteBatch batch;
-	private CustomTiledMapRenderer renderer;
 
 	public static final int SCREEN_WIDTH = 800;
 	public static final int SCREEN_HEIGHT = 600;
@@ -50,7 +50,7 @@ public class GameClient extends Game {
 
 	private RayHandler rayHandler;
 
-	private OrthographicCamera camera;
+	private InputMultiplexer inputMultiplexer;
 
 	@Override
 	public void create() {
@@ -59,7 +59,10 @@ public class GameClient extends Game {
 		batch = new SpriteBatch();
 		
 		setupConsole();
-		setScreen(new MenuScreen(this));
+		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(console.getInputProcessor());
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		setScreen(new MenuScreen(this, inputMultiplexer));
 
 
 
@@ -71,6 +74,7 @@ public class GameClient extends Game {
 		// we pass rayHandler to the loader.
 
 		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler);
+
 	}
 
 	@Override
@@ -123,7 +127,7 @@ public class GameClient extends Game {
 	 * disconnect from the server and perform the accompanying display changes
 	 */
 	public void disconnect() {
-		setScreen(new MenuScreen(this));
+		setScreen(new MenuScreen(this, inputMultiplexer));
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -153,7 +157,7 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen(this, clientMap, rayHandler));
+		setScreen(new GameScreen(this, clientMap, rayHandler, inputMultiplexer));
 		console.log("Transitioned to in-game from lobby");
 	}
 
