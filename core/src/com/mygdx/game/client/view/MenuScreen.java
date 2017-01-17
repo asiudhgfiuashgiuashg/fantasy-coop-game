@@ -56,7 +56,6 @@ public class MenuScreen extends DebuggableScreen {
 		final Dialog diagBox = new Dialog("Server info", skin);
 		diagBox.addActor(serverInfo);
 		diagBox.setWidth(250);
-		diagBox.setHeight(250);
 		diagBox.setPosition(150, 150);
 		final TextButton connectButton = new TextButton("Connect", skin);
 		final TextButton cancelButton = new TextButton("Cancel", skin);
@@ -64,6 +63,7 @@ public class MenuScreen extends DebuggableScreen {
 		serverButtons.addActor(connectButton);
 		serverButtons.addActor(cancelButton);
 		serverButtons.padLeft(70f);
+		serverButtons.padBottom(50f);
 		
 		//The following creates the ui for the MenuScreen, as well as, decides what happens when the host and join buttons are clicked
 		final Label topPane = new Label("Select a Server option", skin);
@@ -72,6 +72,7 @@ public class MenuScreen extends DebuggableScreen {
 		hostButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
+				diagBox.setHeight(150);
 				serverInfo.clearChildren();
 				serverInfo.add(username);
 				serverInfo.add(usernameEntry);
@@ -109,6 +110,7 @@ public class MenuScreen extends DebuggableScreen {
 		joinButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y){
+				diagBox.setHeight(200);
 				serverInfo.clearChildren();
 				serverInfo.add(username);
 				serverInfo.add(usernameEntry);
@@ -147,7 +149,7 @@ public class MenuScreen extends DebuggableScreen {
 		pane.setFillParent(true);
 		
 		/*
-		 * This is used to exit out of a server option and back into the MenuScreen. Unfortunately, I couldn't find a way to remove specific actors 
+		 * This is used to exit out of a server option and move back into the MenuScreen. Unfortunately, I couldn't find a way to remove specific actors 
 		 * from the stage, so this listener must be placed
 		 */
 		cancelButton.addListener(new ClickListener() {
