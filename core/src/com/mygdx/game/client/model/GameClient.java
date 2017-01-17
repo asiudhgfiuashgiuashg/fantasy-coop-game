@@ -1,17 +1,16 @@
 package com.mygdx.game.client.model;
 
 import box2dLight.RayHandler;
-import com.badlogic.gdx.Game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.client.view.DebuggableScreen;
@@ -41,7 +40,9 @@ public class GameClient extends Game {
 
 	private ClientLobbyManager lobbyManager;
 	private TiledMap clientMap;
-
+	
+	public SpriteBatch batch;
+	private CustomTiledMapRenderer renderer;
 
 	public static final int SCREEN_WIDTH = 800;
 	public static final int SCREEN_HEIGHT = 600;
@@ -54,9 +55,11 @@ public class GameClient extends Game {
 	@Override
 	public void create() {
 		instance = this;
-
+		
+		batch = new SpriteBatch();
+		
 		setupConsole();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 
 
 
@@ -72,8 +75,11 @@ public class GameClient extends Game {
 
 	@Override
 	public void render() {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
-
+		batch.begin();
+		batch.end();
 		console.draw();
 
 		// temporary
@@ -117,8 +123,7 @@ public class GameClient extends Game {
 	 * disconnect from the server and perform the accompanying display changes
 	 */
 	public void disconnect() {
-		communicator.disconnect();
-		setScreen(new MenuScreen());
+		setScreen(new MenuScreen(this));
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -148,7 +153,7 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen(clientMap, rayHandler));
+		setScreen(new GameScreen(this, clientMap, rayHandler));
 		console.log("Transitioned to in-game from lobby");
 	}
 
@@ -156,5 +161,9 @@ public class GameClient extends Game {
 	public DebuggableScreen getScreen() {
 		return (DebuggableScreen) super.getScreen();
 	}
-
+	
+	@Override
+	public void dispose() {
+		batch.dispose();
+	}
 }
