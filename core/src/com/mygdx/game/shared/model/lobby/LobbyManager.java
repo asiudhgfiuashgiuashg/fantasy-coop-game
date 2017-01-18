@@ -1,5 +1,7 @@
 package com.mygdx.game.shared.model.lobby;
 
+import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
+import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 
 import java.util.ArrayList;
@@ -7,7 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by elimonent on 9/7/2016.
+ * represents/helps manage a lobby
+ * @param <T>
  */
 public abstract class LobbyManager<T extends LobbyPlayer> {
     protected List<T> lobbyPlayers = new ArrayList<T>();
@@ -44,5 +47,14 @@ public abstract class LobbyManager<T extends LobbyPlayer> {
 
     public List<ChatMessage> getChatMessages() {
         return Collections.unmodifiableList(chatMsgs);
+    }
+
+    public T getByUid(int uid) {
+        for (T lobbyPlayer: getLobbyPlayers()) {
+            if (lobbyPlayer.getUid() == uid) {
+                return lobbyPlayer;
+            }
+        }
+        return null;
     }
 }

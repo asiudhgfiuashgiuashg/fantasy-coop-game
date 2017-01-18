@@ -29,14 +29,6 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
     	//update client lobby view here
     }
 
-    public ClientLobbyPlayer getByUid(int uid) {
-        for (ClientLobbyPlayer lobbyPlayer: getLobbyPlayers()) {
-            if (lobbyPlayer.getUid() == uid) {
-                return lobbyPlayer;
-            }
-        }
-        return null;
-    }
 
     public void setLocalLobbyPlayer(ClientLobbyPlayer player) {
     	localLobbyPlayer = player;

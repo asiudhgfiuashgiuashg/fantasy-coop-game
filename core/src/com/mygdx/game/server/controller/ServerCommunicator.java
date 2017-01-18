@@ -68,6 +68,8 @@ public class ServerCommunicator extends Communicator {
 					chatMsg.except = false;
 					queueMessage(chatMsg);
 				}
+				System.out.println("connection id: " + connection.getID() +
+						" connected");
 			}
 
 			@Override
@@ -136,7 +138,7 @@ public class ServerCommunicator extends Communicator {
 			
 			if (msg instanceof ChooseUsernameMessage) {
 				// Alert everyone else that a player connected with the given username
-				ServerLobbyPlayer player = manager.getLobbyPlayers().get(msg.uid - 1); // TODO fix this. all of these are BAD, the -1 is because connection id's start at 1
+				ServerLobbyPlayer player = manager.getByUid(msg.uid);
 				player.setUsername(((ChooseUsernameMessage) msg).username);
 				msg.recipient = msg.uid;
 				msg.except = true;
@@ -148,7 +150,7 @@ public class ServerCommunicator extends Communicator {
 				PlayerClass requestedClass = ((ClassAssignmentMessage) msg).playerClass;
 				if (manager.classNotTakenYet(requestedClass)) {
 					// Tell the player they got the class they wanted
-					ServerLobbyPlayer player = manager.getLobbyPlayers().get(msg.uid - 1);
+					ServerLobbyPlayer player = manager.getByUid(msg.uid);
 					player.setPlayerClass(requestedClass);
 					queueMessage(msg);
 					
@@ -163,7 +165,7 @@ public class ServerCommunicator extends Communicator {
 			
 			if (msg instanceof ReadyStatusMessage) {
 				// Set player ready status
-				ServerLobbyPlayer player = manager.getLobbyPlayers().get(msg.uid - 1);
+				ServerLobbyPlayer player = manager.getByUid(msg.uid);
 				player.setReady(((ReadyStatusMessage) msg).ready);
 				
 				// Tell everyone else

@@ -7,7 +7,7 @@ package com.mygdx.game.shared.network;
  *
  */
 public abstract class Message {
-	/** UID of client who sent the message */
+	/** UID of client who sent the message - */
 	public int uid;
 	/**
 	 * UID of client who should receive message. Used by server only. Default value is
