@@ -107,12 +107,17 @@ public class ServerCommunicator extends Communicator {
 				return;
 
 			if (msg.recipient == 0) {
+				System.out.println("sent a message to everyone!");
 				server.sendToAllTCP(msg);
 			} else {
 				if (msg.except) {
 					server.sendToAllExceptTCP(msg.recipient, msg);
+					System.out.println("sent message to all except " + msg
+							.recipient);
 				} else {
 					server.sendToTCP(msg.recipient, msg);
+					System.out.println("sending msg to one recipient " + msg
+							.recipient);
 				}
 			}
 		}
@@ -144,7 +149,8 @@ public class ServerCommunicator extends Communicator {
 				msg.except = true;
 				queueMessage(msg);
 			}
-			
+
+			// a player has requested a class assignment
 			if (msg instanceof ClassAssignmentMessage) {
 				// Check if this class is available
 				PlayerClass requestedClass = ((ClassAssignmentMessage) msg).playerClass;
@@ -152,13 +158,17 @@ public class ServerCommunicator extends Communicator {
 					// Tell the player they got the class they wanted
 					ServerLobbyPlayer player = manager.getByUid(msg.uid);
 					player.setPlayerClass(requestedClass);
+					msg.recipient = msg.uid;
+					msg.except = false;
 					queueMessage(msg);
 					
 					// And tell everyone else too
 					OtherClassAssignmentMessage otherMsg = new OtherClassAssignmentMessage();
-					otherMsg.recipient = msg.uid;
+					otherMsg.recipient = msg.uid; // send to everyone except
+					// msg.uid (the requesting connection)
 					otherMsg.except = true;
 					otherMsg.playerClass = requestedClass;
+					otherMsg.uid = msg.uid;
 					queueMessage(otherMsg);
 				}
 			}

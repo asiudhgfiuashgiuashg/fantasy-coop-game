@@ -20,7 +20,7 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
 
     /**
      * Add the player to the client lobby if their uid isn't already there.
-     * If their uid is already their, update their info.
+     * If their uid is already there, update their info.
      * @param player the player to add/update
      */
     @Override

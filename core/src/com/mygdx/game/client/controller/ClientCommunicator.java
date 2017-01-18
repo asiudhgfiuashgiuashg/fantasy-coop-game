@@ -88,7 +88,8 @@ public class ClientCommunicator extends Communicator {
 			
 			if (msg instanceof ClassAssignmentMessage) {
 				ClassAssignmentMessage classMsg = (ClassAssignmentMessage) msg;
-				console.log("Got a class assignment for myself: " + classMsg.playerClass);
+				console.log("Got a class assignment for this client: " +
+						classMsg.playerClass);
 		        manager.getLocalLobbyPlayer().setPlayerClass(classMsg.playerClass);
 			}
 			

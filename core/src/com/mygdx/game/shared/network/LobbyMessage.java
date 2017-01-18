@@ -15,7 +15,8 @@ public class LobbyMessage extends Message {
 		public PlayerClass playerClass;
 	}
 	
-	public static class OtherClassAssignmentMessage extends ClassAssignmentMessage {
+	public static class OtherClassAssignmentMessage extends LobbyMessage {
+		public PlayerClass playerClass;
 	}
 	
 	public static class GameStartMessage extends LobbyMessage {
