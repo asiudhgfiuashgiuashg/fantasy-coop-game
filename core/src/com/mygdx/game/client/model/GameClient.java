@@ -88,7 +88,6 @@ public class GameClient extends Game {
 
 		// temporary
 		communicator.readMessages();
-		communicator.sendMessages();
 	}
 
 	@Override
@@ -131,8 +130,8 @@ public class GameClient extends Game {
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
-	public void queueMessage(Message msg) {
-		communicator.queueMessage(msg);
+	public void sendToServer(Message msg) {
+		communicator.sendToServer(msg);
 	}
 
 	/**

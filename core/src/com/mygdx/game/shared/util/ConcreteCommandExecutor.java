@@ -115,7 +115,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 		try {
 			ClassAssignmentMessage msg = new ClassAssignmentMessage();
 			msg.playerClass = playerClass;
-			gameClient.queueMessage(msg);
+			gameClient.sendToServer(msg);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -153,7 +153,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void message(String msg) {
 		ChatMessage chatMsg = new ChatMessage();
 		chatMsg.message = msg;
-		gameClient.queueMessage(chatMsg);
+		gameClient.sendToServer(chatMsg);
 	}
 
 	/**

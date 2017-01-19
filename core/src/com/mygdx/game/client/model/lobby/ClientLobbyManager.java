@@ -47,7 +47,7 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
         localLobbyPlayer.setReady(ready);
         ReadyStatusMessage msg = new ReadyStatusMessage();
         msg.ready = ready;
-        client.queueMessage(msg);
+        client.sendToServer(msg);
         //TODO update view
     }
 

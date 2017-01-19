@@ -42,11 +42,10 @@ public class ServerCommunicator extends Communicator {
 				// currently-connected player.
 				for (LobbyPlayer lobbyPlayer : manager.getLobbyPlayers()) {
 					LobbyPlayerInfoMessage msg = new LobbyPlayerInfoMessage();
-					msg.recipient = connection.getID();
 					msg.uid = lobbyPlayer.getUid();
 					msg.username = lobbyPlayer.getUsername();
 					msg.playerClass = lobbyPlayer.getPlayerClass();
-					queueMessage(msg);
+					sendTo(msg, connection.getID());
 				}
 
 				ServerLobbyPlayer newLobbyPlayer = new ServerLobbyPlayer(connection);
@@ -57,16 +56,12 @@ public class ServerCommunicator extends Communicator {
 				// This uid will be referenced when providing info updates like
 				// username in the lobby's future
 				LobbyPlayerInfoMessage msg = new LobbyPlayerInfoMessage();
-				msg.recipient = connection.getID();
 				msg.uid = newLobbyPlayer.getUid();
-				msg.except = true;
-				queueMessage(msg);
+				sendToAllExcept(msg, connection.getID());
 
 				// send the newly-connected player all previous chat messages.
 				for (ChatMessage chatMsg : manager.getChatMessages()) {
-					chatMsg.recipient = connection.getID();
-					chatMsg.except = false;
-					queueMessage(chatMsg);
+					sendTo(chatMsg, connection.getID());
 				}
 				System.out.println("connection id: " + connection.getID() +
 						" connected");
@@ -99,28 +94,31 @@ public class ServerCommunicator extends Communicator {
 		}
 	}
 
-	@Override
-	public void sendMessages() {
-		while (!outgoingBuffer.isEmpty()) {
-			Message msg = outgoingBuffer.poll();
-			if (msg == null)
-				return;
 
-			if (msg.recipient == 0) {
-				System.out.println("sent a message to everyone!");
-				server.sendToAllTCP(msg);
-			} else {
-				if (msg.except) {
-					server.sendToAllExceptTCP(msg.recipient, msg);
-					System.out.println("sent message to all except " + msg
-							.recipient);
-				} else {
-					server.sendToTCP(msg.recipient, msg);
-					System.out.println("sending msg to one recipient " + msg
-							.recipient);
-				}
-			}
-		}
+	/**
+	 * send a message to everyone
+	 * @param msg
+	 */
+	public void sendToAll(Message msg) {
+		server.sendToAllTCP(msg);
+	}
+
+	/**
+	 * send a message to everyone except a certain uid
+	 * @param msg
+	 * @param exceptId
+	 */
+	public void sendToAllExcept(Message msg, int exceptId) {
+		server.sendToAllExceptTCP(exceptId, msg);
+	}
+
+	/**
+	 * send a message to a single connection
+	 * @param msg
+	 * @param recipientId
+	 */
+	public void sendTo(Message msg, int recipientId) {
+		server.sendToTCP(recipientId, msg);
 	}
 
 	@Override
@@ -136,18 +134,14 @@ public class ServerCommunicator extends Communicator {
 			if (msg instanceof ChatMessage) {
 				manager.addChatMessage((ChatMessage) msg);
 				// Send chat message to everybody except the sender
-				msg.recipient = msg.uid; 
-				msg.except = true;
-				queueMessage(msg);
+				sendToAllExcept(msg, msg.uid);
 			}
 			
 			if (msg instanceof ChooseUsernameMessage) {
 				// Alert everyone else that a player connected with the given username
 				ServerLobbyPlayer player = manager.getByUid(msg.uid);
 				player.setUsername(((ChooseUsernameMessage) msg).username);
-				msg.recipient = msg.uid;
-				msg.except = true;
-				queueMessage(msg);
+				sendToAllExcept(msg, msg.uid);
 			}
 
 			// a player has requested a class assignment
@@ -158,18 +152,14 @@ public class ServerCommunicator extends Communicator {
 					// Tell the player they got the class they wanted
 					ServerLobbyPlayer player = manager.getByUid(msg.uid);
 					player.setPlayerClass(requestedClass);
-					msg.recipient = msg.uid;
-					msg.except = false;
-					queueMessage(msg);
+					sendTo(msg, msg.uid);
 					
 					// And tell everyone else too
 					OtherClassAssignmentMessage otherMsg = new OtherClassAssignmentMessage();
-					otherMsg.recipient = msg.uid; // send to everyone except
 					// msg.uid (the requesting connection)
-					otherMsg.except = true;
 					otherMsg.playerClass = requestedClass;
 					otherMsg.uid = msg.uid;
-					queueMessage(otherMsg);
+					sendToAllExcept(otherMsg, msg.uid);
 				}
 			}
 			
@@ -179,9 +169,7 @@ public class ServerCommunicator extends Communicator {
 				player.setReady(((ReadyStatusMessage) msg).ready);
 				
 				// Tell everyone else
-				msg.recipient = msg.uid;
-				msg.except = true;
-				queueMessage(msg);
+				sendToAllExcept(msg, msg.uid);
 				
 				manager.checkForGameStart();
 			}

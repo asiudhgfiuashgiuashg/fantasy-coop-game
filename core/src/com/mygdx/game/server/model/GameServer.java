@@ -143,8 +143,6 @@ public class GameServer implements Runnable {
 			// TODO process buffered client messages
 			communicator.readMessages();
 			// TODO update game simulation using elapsedTime here
-			// TODO send outgoing updates to the ServerCommunicator here
-			communicator.sendMessages();
 
 			// Now sleep until the next tick (approximately).
 			long timeTaken = System.nanoTime() - prevTime;
@@ -177,14 +175,6 @@ public class GameServer implements Runnable {
 		return running.get();
 	}
 
-	/**
-	 * Queues a network message to be sent to clients.
-	 * 
-	 * @param msg
-	 */
-	public void queueMessage(Message msg) {
-		communicator.queueMessage(msg);
-	}
 
 	/**
 	 * Gets the lobby manager
@@ -265,4 +255,7 @@ public class GameServer implements Runnable {
 		return players;
 	}
 
+	public ServerCommunicator getCommunicator() {
+		return communicator;
+	}
 }

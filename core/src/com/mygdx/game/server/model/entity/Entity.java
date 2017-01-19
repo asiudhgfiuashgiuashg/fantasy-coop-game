@@ -44,7 +44,7 @@ public abstract class Entity extends PolygonObject {
 		msg.position = position;
 		msg.spriteName = spriteName;
 		msg.visLayer = visLayer;
-		server.queueMessage(msg);
+		server.getCommunicator().sendToAll(msg);
 	}
 
 	/**

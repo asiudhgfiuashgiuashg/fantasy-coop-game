@@ -14,11 +14,4 @@ public abstract class Message {
 	 *
 	 */
 	public int uid;
-	/**
-	 * UID of client who should receive message. Used by server only. Default value is
-	 * sent to all clients
-	 */
-	public int recipient;
-	/** If true, server will send message to all clients EXCEPT recipient */
-	public boolean except;
 }

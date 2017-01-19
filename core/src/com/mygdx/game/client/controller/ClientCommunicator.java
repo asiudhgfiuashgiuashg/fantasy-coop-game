@@ -56,17 +56,10 @@ public class ClientCommunicator extends Communicator {
 												// enables them to be
 												// serialized/deserialized)
 	}
-	
-	@Override
-	public void sendMessages() {
-		while (!outgoingBuffer.isEmpty()) {
-			Message msg = outgoingBuffer.poll();
-			if (msg == null) {
-				return;
-			}
-			
-			client.sendTCP(msg);
-		}
+
+
+	public void sendToServer(Message msg) {
+		client.sendTCP(msg);
 	}
 
 	@Override
@@ -156,7 +149,7 @@ public class ClientCommunicator extends Communicator {
 			
 			ChooseUsernameMessage msg = new ChooseUsernameMessage();
 			msg.username = username;
-			queueMessage(msg);
+			sendToServer(msg);
 		} catch (IOException e) {
 			console.log(e.getMessage(), LogLevel.ERROR);
 		}

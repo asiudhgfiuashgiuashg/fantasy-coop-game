@@ -31,7 +31,7 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 			}
 		}
 		System.out.println("server: " + server);
-		server.queueMessage(new GameStartMessage());
+		server.getCommunicator().sendToAll(new GameStartMessage());
 
 	}
 }
