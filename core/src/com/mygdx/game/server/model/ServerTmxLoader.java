@@ -235,11 +235,16 @@ public class ServerTmxLoader {
 			int visLayer = 0;
 
 			Element properties = null;
+			boolean solid = false;
 			if ((properties = layer.getChildByName("properties")) != null) {
-				Element visLayerProp = null;
-				if ((visLayerProp = properties.getChildByName("visLayer")) != null) {
+				Element prop = null;
+				if ((prop = properties.getChildByName("visLayer")) != null) {
 					// If visLayer was explicitly set, override default value
-					visLayer = visLayerProp.getIntAttribute("value");
+					visLayer = prop.getIntAttribute("value");
+				}
+				if ((prop = properties.getChildByName("solid")) != null) {
+					// if solid property was set
+					solid = prop.getBoolean("value");
 				}
 			}
 
@@ -250,12 +255,14 @@ public class ServerTmxLoader {
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
-				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class);
+				Constructor<?> cons = c.getDeclaredConstructor(String.class,
+						Vector2.class, int.class, boolean.class);
 				cons.setAccessible(true); // need to call this for non-public
 											// constructor
-				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
+				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y)
+						, visLayer, solid);
 				map.addEnemy(enemy);
-			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
+			} else if (type.equalsIgnoreCase(MapLoaderConstants.FRIENDLY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
 				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);

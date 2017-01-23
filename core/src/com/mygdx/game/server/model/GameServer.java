@@ -7,7 +7,8 @@ import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.shared.model.exceptions.MapLoaderException;
-import com.mygdx.game.shared.network.Message;
+import com.mygdx.game.shared.network.GameMessage;
+import com.mygdx.game.shared.network.LobbyMessage;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
@@ -185,8 +186,38 @@ public class GameServer implements Runnable {
 						.ERROR);
 			} catch (IllegalArgumentException e) { // negative number
 				SingletonGUIConsole.getInstance().log("Issue with system time " +
-						"" + "resulted in a negative delta t", LogLevel.ERROR);
+						"" + "" + "resulted in a negative delta t", LogLevel
+						.ERROR);
 			}
+		}
+	}
+
+	/**
+	 * change the GameState and do other things that need to be done when
+	 * transitioning from lobby to in-game
+	 */
+	public void startGame() {
+		setState(GameState.GAME);
+		communicator.sendToAll(new LobbyMessage.GameStartMessage());
+		initDynamicEntitiesOnClients();
+	}
+
+	/**
+	 * when the game starts, tell the clients what dynamic entities they
+	 * should intantiate/spawn initially
+	 * <p>
+	 * right now, every dynamic entity on the map will be instantiated, but
+	 * in the future we may want to only tell clients about nearby dynamic
+	 * entities
+	 */
+	private void initDynamicEntitiesOnClients() {
+		for (DynamicEntity entity : map.getDynamicEntities()) {
+			GameMessage.InitDynamicEntityMsg entInitMsg = new GameMessage
+					.InitDynamicEntityMsg();
+			entInitMsg.clazz = entity.getClass();
+			entInitMsg.pos = entity.getPosition();
+			entInitMsg.entUid = entity.getUid();
+			communicator.sendToAll(entInitMsg);
 		}
 	}
 

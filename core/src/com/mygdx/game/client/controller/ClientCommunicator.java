@@ -104,6 +104,9 @@ public class ClientCommunicator extends Communicator {
 				String chatBoxStr = username + ": " + chatMsg.message;
 		        console.log("CHAT: " + chatBoxStr);
 		        gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
+			} else {
+				System.out.println("unhandled network message of type " + msg
+						.getClass());
 			}
 		}
 	}

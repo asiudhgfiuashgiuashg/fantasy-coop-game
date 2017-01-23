@@ -10,7 +10,6 @@ import com.mygdx.game.server.model.Actable;
  * An entity which is updated every tick with act()
  */
 public abstract class DynamicEntity extends Entity implements Actable {
-
 	protected DynamicEntity(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
 	}
