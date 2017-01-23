@@ -214,7 +214,7 @@ public class GameServer implements Runnable {
 		for (DynamicEntity entity : map.getDynamicEntities()) {
 			GameMessage.InitDynamicEntityMsg entInitMsg = new GameMessage
 					.InitDynamicEntityMsg();
-			entInitMsg.clazz = entity.getClass();
+			entInitMsg.className = entity.getClass().getSimpleName();
 			entInitMsg.pos = entity.getPosition();
 			entInitMsg.entUid = entity.getUid();
 			communicator.sendToAll(entInitMsg);

@@ -28,7 +28,7 @@ public class GameMessage extends Message {
 
 	/** tells client to initialize a dynamic entity (spawn it on the map) */
 	public static class InitDynamicEntityMsg extends Message {
-		public Class<? extends DynamicEntity> clazz;
+		public String className;
 		public Vector2 pos;
 		public String entUid;
 	}

@@ -4,6 +4,7 @@ import box2dLight.Light;
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
@@ -27,5 +28,7 @@ public class ClientTiledMap extends TiledMap {
 			HashMap<Integer, List<FlickerPointLight>>();
 	public final List<StaticEntity> staticEntities = new
 			ArrayList<StaticEntity>();
+	public final List<DynamicEntity> dynamicEntities = new ArrayList
+			<DynamicEntity>();
 
 }

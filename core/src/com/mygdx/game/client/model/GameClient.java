@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.client.view.DebuggableScreen;
@@ -40,7 +41,7 @@ public class GameClient extends Game {
 	private ClientCommunicator communicator;
 
 	private ClientLobbyManager lobbyManager;
-	private TiledMap clientMap;
+	private ClientTiledMap clientMap;
 	
 	public SpriteBatch batch;
 
@@ -51,6 +52,13 @@ public class GameClient extends Game {
 	private RayHandler rayHandler;
 
 	private InputMultiplexer inputMultiplexer;
+
+	/** renders the map */
+	private CustomTiledMapRenderer renderer;
+
+	private static final float MAP_SCALE = 4f; // how much to scale polygons,
+	// tiles, etc. ex) A scale of 2.0 means that every pixel in a loaded image
+	// will take up 2 pixels in the game window.
 
 	@Override
 	public void create() {
@@ -74,7 +82,7 @@ public class GameClient extends Game {
 		// we pass rayHandler to the loader.
 
 		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler);
-
+		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE, rayHandler);
 	}
 
 	@Override
@@ -156,7 +164,8 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen(this, clientMap, rayHandler, inputMultiplexer));
+		setScreen(new GameScreen(this, clientMap, rayHandler,
+				inputMultiplexer, renderer));
 		console.log("Transitioned to in-game from lobby");
 	}
 
@@ -168,5 +177,16 @@ public class GameClient extends Game {
 	@Override
 	public void dispose() {
 		batch.dispose();
+	}
+
+
+	/**
+	 * add a dynamic entity to the map and register it with the renderer so
+	 * it will be rendered
+	 * @param newEntity
+	 */
+	public void addDynamicEntity(DynamicEntity newEntity) {
+		clientMap.dynamicEntities.add(newEntity);
+		renderer.registerEntity(newEntity);
 	}
 }

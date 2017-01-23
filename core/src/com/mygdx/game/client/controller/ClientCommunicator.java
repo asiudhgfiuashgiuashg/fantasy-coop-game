@@ -8,12 +8,14 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.controller.Communicator;
+import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChooseUsernameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
@@ -102,8 +104,17 @@ public class ClientCommunicator extends Communicator {
 				ChatMessage chatMsg = (ChatMessage) msg;
 				String username = manager.getByUid(chatMsg.uid).getUsername();
 				String chatBoxStr = username + ": " + chatMsg.message;
-		        console.log("CHAT: " + chatBoxStr);
-		        gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
+				console.log("CHAT: " + chatBoxStr);
+				gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
+			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
+				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage
+						.InitDynamicEntityMsg) msg;
+				System.out.println("initializing  Dynamic " +
+						"Entity " + initMsg.className);
+				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
+						initMsg.className, initMsg.pos);
+				gameClient.addDynamicEntity(newEntity);
+
 			} else {
 				System.out.println("unhandled network message of type " + msg
 						.getClass());
