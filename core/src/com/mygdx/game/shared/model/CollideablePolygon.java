@@ -47,12 +47,13 @@ public class CollideablePolygon extends Polygon {
 	 *            polygon to copy
 	 */
 	public CollideablePolygon(CollideablePolygon polygon) {
-		this(Arrays.copyOf(polygon.getVertices(), polygon.getVertices().length));
+		this(polygon.getVertices());
 		setOrigin(polygon.getOriginX(), polygon.getOriginY());
 		setPosition(polygon.getX(), polygon.getY());
 		setRotation(polygon.getRotation());
 		setScale(polygon.getScaleX(), polygon.getScaleY());
 	}
+
 
 	/**
 	 * estimate the y position (relative to the collideablepolygon origin) above

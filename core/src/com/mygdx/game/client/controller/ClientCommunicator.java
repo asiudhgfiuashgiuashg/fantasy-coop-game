@@ -1,6 +1,7 @@
 package com.mygdx.game.client.controller;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -77,39 +78,27 @@ public class ClientCommunicator extends Communicator {
 				console.log("Added player to lobby with uid " + infoMsg.uid);
 		        ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg.uid, infoMsg.username, infoMsg.playerClass);
 		        manager.addLobbyPlayer(lobbyPlayer);
-			}
-			
-			if (msg instanceof ClassAssignmentMessage) {
+			} else if (msg instanceof ClassAssignmentMessage) {
 				ClassAssignmentMessage classMsg = (ClassAssignmentMessage) msg;
 				console.log("Got a class assignment for this client: " +
 						classMsg.playerClass);
 		        manager.getLocalLobbyPlayer().setPlayerClass(classMsg.playerClass);
-			}
-			
-			if (msg instanceof OtherClassAssignmentMessage) {
+			} else if (msg instanceof OtherClassAssignmentMessage) {
 				OtherClassAssignmentMessage classMsg = (OtherClassAssignmentMessage) msg;
 				console.log("Got a class assignment message for some lobby player besides myself: "
 		                + classMsg.playerClass + "/" + "uid:" + classMsg.uid);
 		        manager.getByUid(classMsg.uid).setPlayerClass(classMsg.playerClass);
-			}
-			
-			if (msg instanceof ChooseUsernameMessage) {
+			} else if (msg instanceof ChooseUsernameMessage) {
 				ChooseUsernameMessage usrMsg = (ChooseUsernameMessage) msg;
 				ClientLobbyPlayer lobbyPlayer = manager.getByUid(usrMsg.uid);
 				lobbyPlayer.setUsername(usrMsg.username);
-			}
-			
-			if (msg instanceof ReadyStatusMessage) {
+			} else if (msg instanceof ReadyStatusMessage) {
 				ReadyStatusMessage rdyMsg = (ReadyStatusMessage) msg;
 				ClientLobbyPlayer lobbyPlayer = manager.getByUid(rdyMsg.uid); //find out who the uid refers to
 		        lobbyPlayer.setReady(rdyMsg.ready);
-			}
-			
-			if (msg instanceof GameStartMessage) {
+			} else if (msg instanceof GameStartMessage) {
 				gameClient.transitionToInGame();
-			}
-			
-			if (msg instanceof ChatMessage) {
+			} else if (msg instanceof ChatMessage) {
 				ChatMessage chatMsg = (ChatMessage) msg;
 				String username = manager.getByUid(chatMsg.uid).getUsername();
 				String chatBoxStr = username + ": " + chatMsg.message;
@@ -128,7 +117,11 @@ public class ClientCommunicator extends Communicator {
 	}
 
 	public void host(int tcpPort) throws ServerAlreadyInitializedException {
-		GameServer.getInstance().init(tcpPort);
+		try {
+			GameServer.getInstance().init(tcpPort, "prototypeMap.tmx");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException {

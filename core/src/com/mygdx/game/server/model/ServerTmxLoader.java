@@ -27,6 +27,11 @@ import com.mygdx.game.shared.model.MapLoaderConstants;
 
 /**
  * Loads the portions of the map that the server cares about
+ * The server cares about:
+ *  -dynamic entities
+ *  -static entities (not their lights or textures though)
+ *  -boundaries
+ *  -triggers
  */
 public class ServerTmxLoader {
 	private static final XmlReader XML = new XmlReader();
@@ -196,7 +201,7 @@ public class ServerTmxLoader {
 			String uid = UniqueIDAssigner.generateStaticEntityUID(name, mapName, id);
 			Tile tile = tiles.get(tileGid);
 			CollideablePolygon hitboxPolygon = null;
-			if (null != tile) {
+			if (null != tile && null != tile.hitbox) {
 				hitboxPolygon = new CollideablePolygon(tile.hitbox);
 			}
 
@@ -249,13 +254,13 @@ public class ServerTmxLoader {
 				cons.setAccessible(true); // need to call this for non-public
 											// constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.getEnemies().add(enemy);
+				map.addEnemy(enemy);
 			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
 				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
 				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.getFriendlies().add(friendly);
+				map.addFriendly(friendly);
 			} else {
 				throw new MapLoaderException();
 			}
