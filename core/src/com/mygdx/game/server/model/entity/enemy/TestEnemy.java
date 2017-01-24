@@ -10,7 +10,7 @@ public class TestEnemy extends Enemy {
 
 	@Override
 	public void act() {
-		position.add(0, -1);
+		//position.add(0, -1);
 		draw();
 	}
 

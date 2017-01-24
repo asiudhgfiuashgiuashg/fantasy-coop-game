@@ -148,7 +148,7 @@
   <object id="52" gid="36" x="92" y="127.333" width="20" height="40"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
-  <object id="53" name="TestEnemy" type="Enemy" x="154.5" y="130" width="12.5" height="15.25">
+  <object id="53" name="TestEnemy" type="Enemy" x="69.75" y="142.75" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
