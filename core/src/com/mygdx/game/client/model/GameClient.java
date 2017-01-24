@@ -189,4 +189,8 @@ public class GameClient extends Game {
 		clientMap.dynamicEntities.add(newEntity);
 		renderer.registerEntity(newEntity);
 	}
+
+	public ClientTiledMap getMap() {
+		return clientMap;
+	}
 }

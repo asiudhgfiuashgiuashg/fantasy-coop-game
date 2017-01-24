@@ -19,11 +19,13 @@ import java.util.Map;
 public class DynamicEntity extends MapEntity {
 	// maps animation name (specified in aseprite) to an animation (a
 	// sequence of frames drawn in aseprite)
+	// TODO load animation map (a class exists in util package for this)
 	private Map<String, Animation> nameToAnimationMap;
 	// position of this entity in the previous 2 position updates (to be used
 	// for interpolation)
 	private Vector2[] prevPos;
 	private TextureRegion currTextureRegion;
+	private Animation currAnimation;
 
 	public DynamicEntity(String entUid, String className, Vector2 pos) {
 		super();
@@ -37,5 +39,9 @@ public class DynamicEntity extends MapEntity {
 	//TODO return the texture region which should be drawn
 	public TextureRegion getTextureRegion() {
 		return currTextureRegion;
+	}
+
+	public void setAnimation(String animationName) {
+		this.currAnimation = nameToAnimationMap.get(animationName);
 	}
 }

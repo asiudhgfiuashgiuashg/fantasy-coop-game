@@ -31,4 +31,12 @@ public class ClientTiledMap extends TiledMap {
 	public final List<DynamicEntity> dynamicEntities = new ArrayList
 			<DynamicEntity>();
 
+	public DynamicEntity getDynamicEntityByUid(String entityUID) {
+		for (DynamicEntity entity: dynamicEntities) {
+			if (entity.getUid().equals(entityUID)) {
+				return entity;
+			}
+		}
+		return null;
+	}
 }

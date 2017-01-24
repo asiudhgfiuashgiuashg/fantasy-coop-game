@@ -42,7 +42,7 @@ public abstract class Entity extends PolygonObject {
 		DrawMessage msg = new DrawMessage();
 		msg.entityUID = uid;
 		msg.position = position;
-		msg.spriteName = spriteName;
+		msg.animationName = spriteName;
 		msg.visLayer = visLayer;
 		server.getCommunicator().sendToAll(msg);
 	}
@@ -75,7 +75,7 @@ public abstract class Entity extends PolygonObject {
 	/**
 	 * Gets the name of the entity's sprite
 	 * 
-	 * @return spriteName
+	 * @return animationName
 	 */
 	public String getSpriteName() {
 		return spriteName;
@@ -126,7 +126,7 @@ public abstract class Entity extends PolygonObject {
 
 	@Override
 	public String toString() {
-		return "Entity [uid=" + uid + ", position=" + position + ", spriteName=" + spriteName + ", visLayer=" + visLayer
+		return "Entity [uid=" + uid + ", position=" + position + ", animationName=" + spriteName + ", visLayer=" + visLayer
 				+ "]";
 	}
 }

@@ -54,4 +54,11 @@ public abstract class MapEntity {
 		return hitbox == null ? getPos().y : hitbox.getTransformedCutoffY();
 	}
 
+	public String getUid() {
+		return uid;
+	}
+
+	public void setPosition(Vector2 position) {
+		this.position = position;
+	}
 }

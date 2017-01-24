@@ -1,7 +1,6 @@
 package com.mygdx.game.client.controller;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -107,13 +106,21 @@ public class ClientCommunicator extends Communicator {
 				console.log("CHAT: " + chatBoxStr);
 				gameClient.getLobbyManager().addChatMessage(chatMsg); //save the chat message
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
-				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage
-						.InitDynamicEntityMsg) msg;
-				System.out.println("initializing  Dynamic " +
-						"Entity " + initMsg.className);
-				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
-						initMsg.className, initMsg.pos);
+				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
+				System.out.println("initializing  Dynamic " + "Entity " + initMsg.className);
+				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
 				gameClient.addDynamicEntity(newEntity);
+			} else if (msg instanceof GameMessage.DrawMessage){
+				GameMessage.DrawMessage drawMsg = (GameMessage.DrawMessage)
+						msg;
+				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid
+						(drawMsg.entityUID);
+				if (drawMsg.position != null) {
+					entity.setPosition(drawMsg.position);
+				}
+				if (drawMsg.animationName != null) {
+					entity.setAnimation(drawMsg.animationName);
+				}
 
 			} else {
 				System.out.println("unhandled network message of type " + msg

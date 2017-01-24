@@ -7,7 +7,7 @@ public class GameMessage extends Message {
 	public static class DrawMessage extends GameMessage {
 		public String entityUID;
 		public Vector2 position;
-		public String spriteName;
+		public String animationName;
 		public int visLayer;
 	}
 	
