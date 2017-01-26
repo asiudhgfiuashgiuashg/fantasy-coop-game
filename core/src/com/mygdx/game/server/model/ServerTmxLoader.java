@@ -69,6 +69,8 @@ public class ServerTmxLoader {
 
 		Element root = XML.parse(file);
 		tileHeight = root.getInt("tileheight");
+		// need this value to convert the Tiled y values (y axis pointing
+		// down) to in-game y values (y axis pointing up)
 		float mapHeight = root.getFloat("height") * tileHeight;
 
 		// TODO: trim .tmx from mapName
@@ -230,11 +232,12 @@ public class ServerTmxLoader {
 			String name = entity.get("name");
 			String type = entity.get("type");
 
-			// Entity position
-			float x = entity.getFloatAttribute("x");
+			/* Entity position - the bottom left corner of the entity will be
+			in the center of the Tiled oval */
+			float x = entity.getFloatAttribute("x") + entity
+					.getFloatAttribute("width") / 2;
 			float y = mapHeight - entity.getFloatAttribute("y") - entity
-					.getFloatAttribute("height", 0);
-			System.out.println("y: " + y + "mapHeight: " + mapHeight);
+					.getFloatAttribute("height", 0) / 2;
 
 			// By default visLayer is zero
 			int visLayer = 0;

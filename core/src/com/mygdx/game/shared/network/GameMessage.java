@@ -4,11 +4,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.entity.DynamicEntity;
 
 public class GameMessage extends Message {
-	public static class DrawMessage extends GameMessage {
+	public static class PosUpdateMessage extends GameMessage {
 		public String entityUID;
 		public Vector2 position;
-		public String animationName;
 		public int visLayer;
+	}
+
+	public static class AnimationUpateMessage extends GameMessage {
+		public String animationName;
+		public String entityUID;
 	}
 	
 	public static class MoveMessage extends GameMessage {

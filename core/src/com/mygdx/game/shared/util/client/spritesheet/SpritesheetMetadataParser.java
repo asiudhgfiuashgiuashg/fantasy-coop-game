@@ -82,9 +82,9 @@ public class SpritesheetMetadataParser {
 			for (int i = frameTagMetadata.from; i <= frameTagMetadata.to; i++) {
 				frameTagFrames.add(frameTextureRegions.get(i));
 			}
-			Animation animation = new Animation(.025f, frameTagFrames);
+			Animation animation = new Animation(.5f, frameTagFrames);
 			/*
-			 * put the animaiton in the map under its name
+			 * put the animation in the map under its name
 			 */
 			animationsMap.put(frameTagMetadata.name, animation);
 		}
@@ -93,7 +93,7 @@ public class SpritesheetMetadataParser {
 	}
 
 	static FileHandle getMetadataFileHandle(FileHandle file) {
-		String name = file.path().replace(".png", ".json");
+		String name = file.path().replace("-sheet.png", ".json");
 		System.out.println("fetching metadata with filename: " + name);
 		return Gdx.files.internal(name);
 	}

@@ -19,7 +19,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	/** Mass affects acceleration of forces via Newton's Law F = ma */
 	private float mass;
 	/** Velocity of entity in units of pixels/tick */
-	private Vector2 velocity;
+	private Vector2 velocity = new Vector2(0, 0);
 	/** Sum of all forces acting on entity */
 	private Vector2 netForce;
 
@@ -38,7 +38,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	}
 
 	@Override
-	public void act() {
+	public void act(long elapsedTime) {
 		if (isSolid()) {
 			// Number of iterations to achieve sub pixel precision
 			int N = MathUtils.ceil(MathUtils.log2(velocity.len()));

@@ -135,7 +135,11 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * and lobby update view
 	 */
 	public void ready() {
-		gameClient.getLobbyManager().setReady(true);
+		try {
+			gameClient.getLobbyManager().setReady(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

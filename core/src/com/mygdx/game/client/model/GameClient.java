@@ -187,7 +187,7 @@ public class GameClient extends Game {
 	 */
 	public void addDynamicEntity(DynamicEntity newEntity) {
 		clientMap.dynamicEntities.add(newEntity);
-		renderer.registerEntity(newEntity);
+		renderer.registerDynamicEntity(newEntity);
 	}
 
 	public ClientTiledMap getMap() {

@@ -1,6 +1,7 @@
 package com.mygdx.game.server.model.entity.enemy;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.PolygonObject;
 
 public class SpiderBoss extends Enemy {
 
@@ -9,8 +10,13 @@ public class SpiderBoss extends Enemy {
 	}
 
 	@Override
-	public void act() {
+	public void act(long elapsedTime) {
+		super.act(elapsedTime);
+	}
 
+	@Override
+	public void onBumpInto(PolygonObject other) {
+		//(NOTHIN);
 	}
 
 }

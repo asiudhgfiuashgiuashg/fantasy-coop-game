@@ -70,6 +70,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 	 * @param rayHandler needed to instantiate box2dlights
 	 */
 	private void loadEntities(ClientTiledMap tiledMap, RayHandler rayHandler) {
+		// client only loads static entities from map, not dynamic
 		loadStaticEntities(tiledMap, rayHandler);
 	}
 

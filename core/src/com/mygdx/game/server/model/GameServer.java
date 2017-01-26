@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.server.controller.ServerCommunicator;
 import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
@@ -158,10 +159,10 @@ public class GameServer implements Runnable {
 		running.set(true);
 
 		// Main server loop
-		long prevTime = System.nanoTime();
+		long prevTime = TimeUtils.millis();
 		while (running.get()) {
 			// Update times
-			long currTime = System.nanoTime();
+			long currTime = TimeUtils.millis();
 			long elapsedTime = currTime - prevTime;
 			prevTime = currTime;
 
@@ -171,13 +172,13 @@ public class GameServer implements Runnable {
 			/* if in-game (not in lobby or paused etc) */
 			if (GameState.GAME == state) {
 				for (DynamicEntity entity : map.getDynamicEntities()) {
-					entity.act();
+					entity.act(elapsedTime);
 				}
 			}
 
 			// Now sleep until the next tick (approximately).
-			long timeTaken = System.nanoTime() - prevTime;
-			long tickTimeRemaining = (long) (TICKRATE * NANOSECONDS) -
+			long timeTaken = TimeUtils.millis() - prevTime;
+			long tickTimeRemaining = (long) (TICKRATE * MILLISECONDS) -
 					timeTaken;
 			try {
 				Thread.sleep(tickTimeRemaining / MILLISECONDS);

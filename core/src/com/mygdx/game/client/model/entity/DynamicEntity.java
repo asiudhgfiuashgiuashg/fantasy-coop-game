@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.mygdx.game.shared.util.client.spritesheet.SpritesheetMetadataParser;
 
 import java.util.Map;
 
@@ -26,22 +28,50 @@ public class DynamicEntity extends MapEntity {
 	private Vector2[] prevPos;
 	private TextureRegion currTextureRegion;
 	private Animation currAnimation;
+	/**
+	 * when the current animation began - needed to get current frame
+	 */
+	private float timeSinceAnimationBegan = 0;
+
+	// used to load animations from aseprite metadata and associated pngs
+	private static SpritesheetMetadataParser spritesheetParser = new
+			SpritesheetMetadataParser();
 
 	public DynamicEntity(String entUid, String className, Vector2 pos) {
 		super();
 		this.uid = entUid;
 		this.position = pos;
 		currTextureRegion = new TextureRegion(new Texture(Gdx.files.internal
-				("prototype/tall_test.png")));
+				("prototype/blank.png")));
+		String animationsImageFileName = className + "-sheet.png";
+		nameToAnimationMap = spritesheetParser.getAnimations(Gdx.files
+				.internal(animationsImageFileName));
+		this.currAnimation = nameToAnimationMap.get(nameToAnimationMap.keySet
+				().toArray()[0]);
 	}
 
+	/**
+	 * call every tick to add to time since animation started. Animation needs
+	 * this value to calculate the current frame.
+	 *
+	 * @param deltaT
+	 */
+	public void tick(float deltaT) {
+		timeSinceAnimationBegan += deltaT;
+	}
+
+	// TODO - separate out dynamic entities in the map and uupdate them all
+	// so they can update their time elapsed every tick
 	@Override
 	//TODO return the texture region which should be drawn
 	public TextureRegion getTextureRegion() {
+		currTextureRegion = currAnimation.getKeyFrame(timeSinceAnimationBegan);
 		return currTextureRegion;
 	}
 
 	public void setAnimation(String animationName) {
-		this.currAnimation = nameToAnimationMap.get(animationName);
+		currAnimation = nameToAnimationMap.get(animationName);
+		currAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		timeSinceAnimationBegan = 0;
 	}
 }
