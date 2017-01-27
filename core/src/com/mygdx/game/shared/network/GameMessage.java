@@ -2,6 +2,7 @@ package com.mygdx.game.shared.network;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.entity.DynamicEntity;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 public class GameMessage extends Message {
 	public static class PosUpdateMessage extends GameMessage {
@@ -31,10 +32,16 @@ public class GameMessage extends Message {
 	}
 
 	/** tells client to initialize a dynamic entity (spawn it on the map) */
-	public static class InitDynamicEntityMsg extends Message {
+	public static class InitDynamicEntityMsg extends GameMessage {
 		public String className;
 		public Vector2 pos;
 		public String entUid;
+		public boolean solid;
+	}
+
+	public static class HitboxUpdateMessage extends GameMessage {
+		public String entityUID;
+		public CollideablePolygon newHitbox;
 	}
 	// and many more to come! These are just some examples
 }

@@ -1,4 +1,4 @@
-package com.mygdx.game.shared.util.client.spritesheet;
+package com.mygdx.game.client.view.spritesheet;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -58,6 +58,10 @@ public class SpritesheetMetadataParser {
 		List<TextureRegion> frameTextureRegions = new ArrayList<TextureRegion>();
 		for (JsonValue frame: frames) {
 			JsonValue frameInfo = frame.get("frame");
+			/* how long this frame should last in milliseconds (value not
+			used yet
+			 */
+			int duration = frame.getInt("duration");
 			FrameMetadata frameMetadata = json.readValue(FrameMetadata.class, frameInfo);
 			TextureRegion frameTextureRegion = new TextureRegion(spritesheetTexture, frameMetadata.x, frameMetadata.y, frameMetadata.w, frameMetadata.h);
 			frameTextureRegions.add(frameTextureRegion);

@@ -1,13 +1,11 @@
 package com.mygdx.game.client.model.entity;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.mygdx.game.shared.util.client.spritesheet.SpritesheetMetadataParser;
+import com.mygdx.game.client.view.spritesheet.SpritesheetMetadataParser;
 
 import java.util.Map;
 
