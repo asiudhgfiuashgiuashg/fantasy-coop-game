@@ -21,7 +21,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	/** Velocity of entity in units of pixels/tick */
 	private Vector2 velocity = new Vector2(0, 0);
 	/** Sum of all forces acting on entity */
-	private Vector2 netForce;
+	private Vector2 netForce = new Vector2(0, 0);
 
 	/**
 	 * Constructs a VelocityEntity with a given mass
@@ -39,9 +39,19 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	@Override
 	public void act(long elapsedTime) {
+		// Time elapsed in units of ticks
+		float dt = elapsedTime / GameServer.TICKRATE;
+		
+		// Update velocity based on forces (dv = 1/m F dt)
+		Vector2 dv = netForce.scl(dt).scl(1/mass);
+		velocity.add(dv);
+		netForce.set(0, 0);
+		
+		// Compute displacement (dx = v dt)
+		Vector2 dx = getVelocity().scl(dt);
 		if (isSolid()) {
 			// Number of iterations to achieve sub pixel precision
-			int N = MathUtils.ceil(MathUtils.log2(velocity.len()));
+			int N = MathUtils.ceil(MathUtils.log2(dx.len()));
 			MathUtils.clamp(N, 1, N); // N >= 1
 
 			// Collision lists
@@ -62,7 +72,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 				// Try moving in direction
 				Vector2 pos = new Vector2(startX, startY);
-				Vector2 addVec = getVelocity();
+				Vector2 addVec = new Vector2(dx);
 				addVec.scl((float) Math.pow(2, -i));
 				pos.add(addVec);
 				getPolygon().setPosition(pos.x, pos.y);
@@ -100,7 +110,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 		} else {
 			// Non-solid, no need to check
 			Vector2 pos = getPosition();
-			pos.add(velocity);
+			pos.add(dx);
 			setPosition(pos);
 		}
 	}
