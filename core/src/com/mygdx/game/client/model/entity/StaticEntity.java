@@ -55,7 +55,6 @@ public class StaticEntity extends MapEntity {
 		// flip y axis
 		float yPos = mapHeight + tileMapObject.getProperties().get("y", Float
 				.class);
-		//for some reason yPos needs negated or the y values are flipped..
 		this.position = new Vector2(xPos, yPos);
 
 		setupHitbox(hitbox);

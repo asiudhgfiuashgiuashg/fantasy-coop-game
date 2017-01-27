@@ -5,7 +5,6 @@ import com.mygdx.game.server.model.entity.DamageableEntity;
 
 /**
  * An AI who can damage the player.
- * @author elimonent
  *
  */
 public abstract class Enemy extends DamageableEntity {

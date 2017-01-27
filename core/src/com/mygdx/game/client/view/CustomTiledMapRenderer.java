@@ -14,7 +14,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.client.model.ClientTiledMap;
+import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.MapEntity;
+import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.*;
@@ -60,6 +62,7 @@ public class CustomTiledMapRenderer extends
 	private Color ambientColor;
 
 	private FPSLogger fpsLogger;
+	private List<DynamicEntity> dynamicEntities;
 
 	public CustomTiledMapRenderer(TiledMap map, RayHandler rayHandler) {
 		this(map, DEFAULT_UNIT_SCALE, rayHandler);
@@ -82,6 +85,7 @@ public class CustomTiledMapRenderer extends
 		setAmbientAlpha(.15f);
 		fpsLogger = new FPSLogger();
 		updateLights(1f);
+		dynamicEntities = new ArrayList<DynamicEntity>();
 	}
 
 	/**
@@ -153,6 +157,11 @@ public class CustomTiledMapRenderer extends
 			shapeRenderer.end();
 			fpsLogger.log();
 		}
+
+		// update dynamic entity animation frame
+		for (DynamicEntity entity: dynamicEntities) {
+			entity.tick(Gdx.graphics.getDeltaTime());
+		}
 	}
 
 	/**
@@ -220,19 +229,15 @@ public class CustomTiledMapRenderer extends
 	 * draws an entity's texture and its associated lights
 	 * @param staticEntity
 	 */
-	private void renderEntity(MapEntity staticEntity ) {
-		drawEntityTexture(staticEntity);
-		drawEntityLights(staticEntity);
+	private void renderEntity(MapEntity entity ) {
+		drawEntityTexture(entity);
 	}
 
-	private void drawEntityLights(MapEntity staticEntity) {
 
-	}
+	private void drawEntityTexture(MapEntity entity) {
+		TextureRegion toDraw = entity.getTextureRegion();
 
-	private void drawEntityTexture(MapEntity staticEntity) {
-		TextureRegion toDraw = staticEntity.getTextureRegion();
-
-		batch.draw(toDraw, staticEntity.getPos().x * unitScale, staticEntity
+		batch.draw(toDraw, entity.getPos().x * unitScale, entity
 				.getPos().y * unitScale, toDraw.getRegionWidth() *
 				unitScale, toDraw.getRegionHeight() * unitScale);
 	}
@@ -257,8 +262,8 @@ public class CustomTiledMapRenderer extends
 	 * communication with the server starts a moment after the map loads.
 	 */
 	private void populateEntitiesLists() {
-		for (MapEntity entity: ((ClientTiledMap) map).staticEntities) {
-			registerEntity(entity);
+		for (StaticEntity entity: ((ClientTiledMap) map).staticEntities) {
+			registerStaticEntity(entity);
 		}
 	}
 
@@ -269,7 +274,21 @@ public class CustomTiledMapRenderer extends
 	 * Also use this when instantiating the renderer with the map after the map
 	 * has been loaded
 	 */
-	public void registerEntity(MapEntity entity) {
+	public void registerStaticEntity(StaticEntity entity) {
+		putInVisLayerList(entity);
+	}
+
+	/**
+	 * keep track of dynamic entities in a separate list so you can update
+	 * their animations in render loop
+	 * @param entity
+	 */
+	public void registerDynamicEntity(DynamicEntity entity) {
+		dynamicEntities.add(entity);
+		putInVisLayerList(entity);
+	}
+
+	private void putInVisLayerList(MapEntity entity) {
 		int visLayer = entity.getVisLayer();
 		if (-1 == visLayer) {
 			layerNegOneEntities.add(entity);
@@ -315,6 +334,7 @@ public class CustomTiledMapRenderer extends
 		} else if (1 == visLayer) {
 			layerOneEntities.remove(entity);
 		}
+		dynamicEntities.remove(entity);
 	}
 
 	/**

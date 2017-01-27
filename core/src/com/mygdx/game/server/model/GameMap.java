@@ -1,7 +1,9 @@
 package com.mygdx.game.server.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.VelocityEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
@@ -16,6 +18,7 @@ import com.mygdx.game.server.model.trigger.Trigger;
  *
  */
 public class GameMap {
+	private final ArrayList<DynamicEntity> dynamicEntities;
 	private String name;
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Friendly> friendlies;
@@ -41,6 +44,7 @@ public class GameMap {
 		triggers = new ArrayList<Trigger>();
 		staticEntities = new ArrayList<StaticEntity>();
 		solidObjects = new ArrayList<PolygonObject>();
+		dynamicEntities = new ArrayList<DynamicEntity>();
 	}
 
 	public String getName() {
@@ -77,5 +81,20 @@ public class GameMap {
 	
 	public ArrayList<PolygonObject> getSolidObjects() {
 		return solidObjects;
+	}
+
+	public List<DynamicEntity> getDynamicEntities() {
+		return dynamicEntities;
+	}
+
+	public void addEnemy(Enemy enemy) {
+		enemies.add(enemy);
+		dynamicEntities.add(enemy);
+		System.out.println("added enemy to map");
+	}
+
+	public void addFriendly(Friendly friendly) {
+		friendlies.add(friendly);
+		dynamicEntities.add(friendly);
 	}
 }

@@ -136,7 +136,7 @@ public class ServerCommunicator extends Communicator {
 				// Send chat message to everybody except the sender
 				sendToAllExcept(msg, msg.uid);
 			}
-			
+
 			if (msg instanceof ChooseUsernameMessage) {
 				// Alert everyone else that a player connected with the given username
 				ServerLobbyPlayer player = manager.getByUid(msg.uid);

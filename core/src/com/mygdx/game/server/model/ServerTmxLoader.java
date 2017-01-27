@@ -27,6 +27,11 @@ import com.mygdx.game.shared.model.MapLoaderConstants;
 
 /**
  * Loads the portions of the map that the server cares about
+ * The server cares about:
+ *  -dynamic entities
+ *  -static entities (not their lights or textures though)
+ *  -boundaries
+ *  -triggers
  */
 public class ServerTmxLoader {
 	private static final XmlReader XML = new XmlReader();
@@ -64,6 +69,9 @@ public class ServerTmxLoader {
 
 		Element root = XML.parse(file);
 		tileHeight = root.getInt("tileheight");
+		// need this value to convert the Tiled y values (y axis pointing
+		// down) to in-game y values (y axis pointing up)
+		float mapHeight = root.getFloat("height") * tileHeight;
 
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
@@ -71,7 +79,7 @@ public class ServerTmxLoader {
 		tiles = new HashMap<Integer, Tile>();
 
 		loadTileSets(root);
-		loadLayers(root);
+		loadLayers(root, mapHeight);
 
 		// Clear up tile memory because they have served their purpose
 		tiles.clear();
@@ -133,20 +141,20 @@ public class ServerTmxLoader {
 	 * @throws various
 	 *             reflection-related exceptions
 	 */
-	private void loadLayers(Element root)
+	private void loadLayers(Element root, float mapHeight)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		for (Element layer : root.getChildrenByName("objectgroup")) {
 			String name = layer.getAttribute("name");
 			if (name.equals(MapLoaderConstants.STATIC_ENTITIES_LAYER_NAME)) {
-				loadStaticEntities(layer);
+				loadStaticEntities(layer, mapHeight);
 			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
-				loadDynamicEntities(layer);
+				loadDynamicEntities(layer, mapHeight);
 			} else if (name.equals(MapLoaderConstants.TRIGGERS_LAYER_NAME)) {
-				loadTriggers(layer);
+				loadTriggers(layer, mapHeight);
 			} else if (name.equals(MapLoaderConstants.BOUNDARIES_LAYER_NAME)) {
-				loadBoundaries(layer);
+				loadBoundaries(layer, mapHeight);
 			}
 		}
 	}
@@ -157,7 +165,7 @@ public class ServerTmxLoader {
 	 * @param layer
 	 *            static entity layer XML element
 	 */
-	private void loadStaticEntities(Element layer) {
+	private void loadStaticEntities(Element layer, float mapHeight) {
 		for (Element entity : layer.getChildrenByName("object")) {
 			// Object id from Tiled
 			int id = entity.getIntAttribute("id");
@@ -169,7 +177,8 @@ public class ServerTmxLoader {
 
 			// Entity position
 			float x = entity.getFloatAttribute("x");
-			float y = entity.getFloatAttribute("y");
+			float y = mapHeight - entity.getFloatAttribute("y") - entity
+					.getFloatAttribute("height", 0);
 
 			// By default visLayer is zero
 			int visLayer = 0;
@@ -196,7 +205,7 @@ public class ServerTmxLoader {
 			String uid = UniqueIDAssigner.generateStaticEntityUID(name, mapName, id);
 			Tile tile = tiles.get(tileGid);
 			CollideablePolygon hitboxPolygon = null;
-			if (null != tile) {
+			if (null != tile && null != tile.hitbox) {
 				hitboxPolygon = new CollideablePolygon(tile.hitbox);
 			}
 
@@ -209,12 +218,13 @@ public class ServerTmxLoader {
 	 * 
 	 * @param layer
 	 *            dynamic entity layer XML element
+	 * @param mapHeight
 	 * @throws MapLoaderException
 	 *             if the entity is not a valid class type
 	 * @throws various
 	 *             reflection-related exceptions
 	 */
-	private void loadDynamicEntities(Element layer)
+	private void loadDynamicEntities(Element layer, float mapHeight)
 			throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		for (Element entity : layer.getChildrenByName("object")) {
@@ -222,19 +232,27 @@ public class ServerTmxLoader {
 			String name = entity.get("name");
 			String type = entity.get("type");
 
-			// Entity position
-			float x = entity.getFloatAttribute("x");
-			float y = entity.getFloatAttribute("y");
+			/* Entity position - the bottom left corner of the entity will be
+			in the center of the Tiled oval */
+			float x = entity.getFloatAttribute("x") + entity
+					.getFloatAttribute("width") / 2;
+			float y = mapHeight - entity.getFloatAttribute("y") - entity
+					.getFloatAttribute("height", 0) / 2;
 
 			// By default visLayer is zero
 			int visLayer = 0;
 
 			Element properties = null;
+			boolean solid = false;
 			if ((properties = layer.getChildByName("properties")) != null) {
-				Element visLayerProp = null;
-				if ((visLayerProp = properties.getChildByName("visLayer")) != null) {
+				Element prop = null;
+				if ((prop = properties.getChildByName("visLayer")) != null) {
 					// If visLayer was explicitly set, override default value
-					visLayer = visLayerProp.getIntAttribute("value");
+					visLayer = prop.getIntAttribute("value");
+				}
+				if ((prop = properties.getChildByName("solid")) != null) {
+					// if solid property was set
+					solid = prop.getBoolean("value");
 				}
 			}
 
@@ -245,17 +263,19 @@ public class ServerTmxLoader {
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
-				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class);
+				Constructor<?> cons = c.getDeclaredConstructor(String.class,
+						Vector2.class, int.class, boolean.class);
 				cons.setAccessible(true); // need to call this for non-public
 											// constructor
-				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.getEnemies().add(enemy);
-			} else if (type.equals(MapLoaderConstants.FRIENDLY_TYPE)) {
+				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y)
+						, visLayer, solid);
+				map.addEnemy(enemy);
+			} else if (type.equalsIgnoreCase(MapLoaderConstants.FRIENDLY_TYPE)) {
 				Class<?> c = Class
 						.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
 				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
 				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
-				map.getFriendlies().add(friendly);
+				map.addFriendly(friendly);
 			} else {
 				throw new MapLoaderException();
 			}
@@ -267,12 +287,13 @@ public class ServerTmxLoader {
 	 * 
 	 * @param layer
 	 *            trigger layer XML element
+	 * @param mapHeight
 	 * @throws various
 	 *             reflection-related exceptions TODO - make it so that trigger
 	 *             constructors can have arbitrary parameters (which will be
 	 *             specified in Tiled)
 	 */
-	private void loadTriggers(Element layer) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
+	private void loadTriggers(Element layer, float mapHeight) throws ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		for (Element trigger : layer.getChildrenByName("object")) {
 			// Trigger name and type (used for reflection, instantiation)
@@ -286,7 +307,7 @@ public class ServerTmxLoader {
 
 			// Trigger position, width, height
 			float x = trigger.getFloatAttribute("x");
-			float y = trigger.getFloatAttribute("y");
+			float y = mapHeight - trigger.getFloatAttribute("y");
 			float width = trigger.getFloatAttribute("width");
 			float height = trigger.getFloatAttribute("height");
 
@@ -323,18 +344,19 @@ public class ServerTmxLoader {
 
 	/**
 	 * Loads boundaries from boundaries layer.
-	 * 
+	 *
 	 * @param layer
 	 *            boundaries layer XML element
+	 * @param mapHeight
 	 */
-	private void loadBoundaries(Element layer) {
+	private void loadBoundaries(Element layer, float mapHeight) {
 		for (Element object : layer.getChildrenByName("object")) {
 			// Load polygon			
 			CollideablePolygon p = TilePolygonLoader.loadPolygon(object, tileHeight);
 			
 			// Boundary position
 			float x = object.getFloatAttribute("x");
-			float y = object.getFloatAttribute("y");
+			float y = mapHeight - object.getFloatAttribute("y");
 			p.setPosition(x, y);
 			
 			Boundary b = new Boundary(p);

@@ -3,6 +3,7 @@ package com.mygdx.game.server.model.lobby;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.server.model.GameState;
 import com.mygdx.game.shared.model.lobby.LobbyManager;
 import com.mygdx.game.shared.network.LobbyMessage.GameStartMessage;
 
@@ -26,12 +27,10 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 	
 	public void checkForGameStart() {
 		for (ServerLobbyPlayer player : lobbyPlayers) {
-			if (!player.isReady() || player.getPlayerClass() == null) {
+			if (!player.isReady() || null == player.getPlayerClass()) {
 				return;
 			}
 		}
-		System.out.println("server: " + server);
-		server.getCommunicator().sendToAll(new GameStartMessage());
-
+		server.startGame();
 	}
 }

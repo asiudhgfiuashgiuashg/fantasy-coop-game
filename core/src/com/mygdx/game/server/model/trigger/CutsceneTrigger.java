@@ -15,7 +15,7 @@ public class CutsceneTrigger extends Trigger {
 	}
 
 	@Override
-	public void act() {
+	public void act(long elapsedTime) {
 		// TODO Auto-generated method stub
 		
 	}

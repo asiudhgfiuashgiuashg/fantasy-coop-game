@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="53">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="55">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="18" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
@@ -147,7 +147,14 @@
   <object id="51" gid="36" x="88.3333" y="235" width="20" height="40"/>
   <object id="52" gid="36" x="92" y="127.333" width="20" height="40"/>
  </objectgroup>
- <objectgroup name="Dynamic Entities"/>
+ <objectgroup name="Dynamic Entities">
+  <object id="53" name="TestEnemy" type="Enemy" x="69.75" y="142.75" width="12.5" height="15.25">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+ </objectgroup>
  <objectgroup name="Triggers"/>
  <objectgroup name="Boundaries"/>
 </map>
