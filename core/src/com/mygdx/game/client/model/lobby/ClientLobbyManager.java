@@ -27,6 +27,7 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
     public void addLobbyPlayer(ClientLobbyPlayer player) {
     	super.addLobbyPlayer(player);
     	//update client lobby view here
+    	
     }
 
 
@@ -58,6 +59,8 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
     @Override
     public void addChatMessage(ChatMessage msg) {
         super.addChatMessage(msg);
+        System.out.println("UID: " + msg.uid + "User: " + getByUid(msg.uid));
+        client.sendToServer(msg);
         //TODO display message on screen
     }
 }

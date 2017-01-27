@@ -106,6 +106,7 @@ public class MenuScreen extends DebuggableScreen {
 						}
 						
 						if (game.isConnected()) {
+							
 							game.setScreen(new LobbyScreen(game, inputMultiplexer));
 						}
 						

@@ -33,7 +33,7 @@ public class DebuggableScreen extends ScreenAdapter
 	@Override
 	public void dispose()
 	{
-		inputMultiplexer.removeProcessor(inputMultiplexer.size() - 1);
+		inputMultiplexer.removeProcessor(stage);
 		stage.dispose();
 	}
 
