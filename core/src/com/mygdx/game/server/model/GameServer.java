@@ -38,7 +38,7 @@ public class GameServer implements Runnable {
 	/**
 	 * Tickrate of game server i.e. how often the model is updated
 	 */
-	private static final float TICKRATE = .05f;
+	public static final float TICKRATE = .05f;
 
 	/**
 	 * Time conversions

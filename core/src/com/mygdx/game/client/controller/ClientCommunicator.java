@@ -124,12 +124,12 @@ public class ClientCommunicator extends Communicator {
 						initMsg.className, initMsg.pos);
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
-				GameMessage.PosUpdateMessage drawMsg = (GameMessage
+				GameMessage.PosUpdateMessage posMsg = (GameMessage
 						.PosUpdateMessage) msg;
 				DynamicEntity entity = gameClient.getMap()
-						.getDynamicEntityByUid(drawMsg.entityUID);
-				if (drawMsg.position != null) {
-					entity.setPosition(drawMsg.position);
+						.getDynamicEntityByUid(posMsg.entityUID);
+				if (posMsg.position != null) {
+					entity.setPosition(posMsg.position);
 				}
 			} else if (msg instanceof GameMessage.AnimationUpateMessage) {
 				GameMessage.AnimationUpateMessage animationUpdateMessage =
