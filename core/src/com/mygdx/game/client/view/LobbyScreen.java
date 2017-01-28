@@ -118,7 +118,6 @@ public class LobbyScreen extends DebuggableScreen {
 		int counter = 0;
 		while (playerIterator.hasNext()) {
 			currentPlayer = playerIterator.next();
-			System.out.println("Player: " + currentPlayer.getUsername() + "UID: " + currentPlayer.getUid());
 			String line = currentPlayer.getUsername() + ": ";
 			if (currentPlayer.isReady()) {
 				line += "Ready";
@@ -134,7 +133,8 @@ public class LobbyScreen extends DebuggableScreen {
 		ListIterator<ChatMessage> chatIterator = lobby.getChatMessages().listIterator();
 		log.clearChildren();
 		while (chatIterator.hasNext()) {
-			log.add(chatIterator.next().message);
+			ChatMessage chatLine = chatIterator.next();
+			log.add(lobby.getByUid(chatLine.uid) + ": " + chatLine.message);
 			log.row();
 		}
 		log.add(chatField);
@@ -142,7 +142,8 @@ public class LobbyScreen extends DebuggableScreen {
 	
 	//TODO: Messages aren't being sent over the server, need to fix.
 	public void sendMessage() {
-		lobby.addChatMessage(new ChatMessage(lobby.getLocalLobbyPlayer().getUsername() + ": " + chatField.getText()));
+		System.out.println("LobbyScreen: check");
+        game.sendToServer(new ChatMessage(chatField.getText()));
 		updateChat();
 		chatField.setText("");
 		stage.setKeyboardFocus(chatField);

@@ -59,8 +59,8 @@ public class ClientLobbyManager extends LobbyManager<ClientLobbyPlayer> {
     @Override
     public void addChatMessage(ChatMessage msg) {
         super.addChatMessage(msg);
-        System.out.println("UID: " + msg.uid + "User: " + getByUid(msg.uid));
-        client.sendToServer(msg);
+        System.out.println("ClientLobbyManager: check");
+        System.out.println("UID: " + msg.uid + " User: " + getByUid(msg.uid));
         //TODO display message on screen
     }
 }

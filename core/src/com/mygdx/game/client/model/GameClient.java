@@ -140,6 +140,7 @@ public class GameClient extends Game {
 
 	public void sendToServer(Message msg) {
 		communicator.sendToServer(msg);
+		System.out.println("GameClient: check");
 	}
 
 	/**
