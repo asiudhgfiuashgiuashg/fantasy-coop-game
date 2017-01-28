@@ -25,6 +25,10 @@ public class DebuggableScreen extends ScreenAdapter
 	public void toggleDebug() {
 		
 	}
+	
+	public void updateUI() {
+		
+	}
 
 	/**
 	 * dispose of this screen's stage (gui) and remove the stage as an input processor.

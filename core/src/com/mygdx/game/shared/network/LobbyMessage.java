@@ -5,10 +5,6 @@ import com.mygdx.game.shared.model.lobby.PlayerClass;
 public class LobbyMessage extends Message {
 	public static class ChatMessage extends LobbyMessage {
 		public String message;
-		
-		public ChatMessage(String text) {
-			message = text;
-		}
 	}
 	
 	public static class ChooseUsernameMessage extends LobbyMessage {

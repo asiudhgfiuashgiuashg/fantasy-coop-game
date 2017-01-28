@@ -107,14 +107,12 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameStartMessage) {
 				gameClient.transitionToInGame();
 			} else if (msg instanceof ChatMessage) {
-				System.out.println("ClientCommunicator: working...");
 				ChatMessage chatMsg = (ChatMessage) msg;
 				String username = manager.getByUid(chatMsg.uid).getUsername();
 				String chatBoxStr = username + ": " + chatMsg.message;
 				console.log("CHAT: " + chatBoxStr);
-				gameClient.getLobbyManager().addChatMessage(chatMsg); //save
+				manager.addChatMessage(chatMsg); //save
 				// the chat message
-				System.out.println("ClientCommunicator: check");
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage
 						.InitDynamicEntityMsg) msg;
@@ -143,6 +141,7 @@ public class ClientCommunicator extends Communicator {
 				System.out.println("unhandled network message of type " + msg
 						.getClass());
 			}
+			gameClient.getScreen().updateUI();
 		}
 	}
 

@@ -102,13 +102,19 @@ public class LobbyScreen extends DebuggableScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
         cam.update();
-        updatePlayers();	//TODO: add a change state to the addPlayer function of the lobby, and then have a listener that would only update when it notices a change state.
+        	//TODO: add a change state to the addPlayer function of the lobby, and then have a listener that would only update when it notices a change state.
         
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         game.batch.end();
         
         stage.draw();
+	}
+	
+	@Override
+	public void updateUI() {
+		updatePlayers();
+		updateChat();
 	}
 	
 	public void updatePlayers() {
@@ -134,7 +140,7 @@ public class LobbyScreen extends DebuggableScreen {
 		log.clearChildren();
 		while (chatIterator.hasNext()) {
 			ChatMessage chatLine = chatIterator.next();
-			log.add(lobby.getByUid(chatLine.uid) + ": " + chatLine.message);
+			log.add(lobby.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message);
 			log.row();
 		}
 		log.add(chatField);
@@ -142,8 +148,11 @@ public class LobbyScreen extends DebuggableScreen {
 	
 	//TODO: Messages aren't being sent over the server, need to fix.
 	public void sendMessage() {
-		System.out.println("LobbyScreen: check");
-        game.sendToServer(new ChatMessage(chatField.getText()));
+		ChatMessage temp = new ChatMessage();
+		temp.message = chatField.getText();
+		temp.uid = -1;
+        game.sendToServer(temp);
+        lobby.addChatMessage(temp);
 		updateChat();
 		chatField.setText("");
 		stage.setKeyboardFocus(chatField);

@@ -55,6 +55,7 @@ public abstract class LobbyManager<T extends LobbyPlayer> {
                 return lobbyPlayer;
             }
         }
+        System.out.println("Searching for: " + uid);
         return null;
     }
 }

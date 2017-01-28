@@ -155,7 +155,8 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * @param msg the message to send
 	 */
 	public void message(String msg) {
-		ChatMessage chatMsg = new ChatMessage(msg);
+		ChatMessage chatMsg = new ChatMessage();
+		chatMsg.message = msg;
 		gameClient.sendToServer(chatMsg);
 	}
 
