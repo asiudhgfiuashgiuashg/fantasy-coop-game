@@ -9,20 +9,28 @@ import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.shared.model.lobby.LobbyPlayer;
+import com.mygdx.game.shared.model.lobby.PlayerClass;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
+import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
+import com.mygdx.game.shared.network.LobbyMessage.ReadyStatusMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * Handles rendering for the lobby.
@@ -32,17 +40,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 public class LobbyScreen extends DebuggableScreen {
 	final GameClient game;
 	ClientLobbyManager lobby;
-	Skin skin;
+	Skin skin;		//Default skin.
 	Table players; //should rename this. Might get confusing due to the number of variables with player in their name.
 	Label [] labels;	//holds the player name and status
-	ScrollPane scrollPane;
-	Table log;
-	TextField chatField;
+	ScrollPane chat;	//This holds the log and the chatField for the chat system
+	Table log;		//This holds the chat log
+	TextField chatField;	//This is the chat bar in the chat system
+	TextButton startButton;
 	
 	OrthographicCamera cam;
 	
-	public LobbyScreen(GameClient game, InputMultiplexer inputMultiplexer) {
-		this.game = game;
+	public LobbyScreen(GameClient gameTemp, InputMultiplexer inputMultiplexer) {
+		game = gameTemp;
 		this.inputMultiplexer = inputMultiplexer;
 		lobby = game.getLobbyManager();
 		
@@ -80,15 +89,72 @@ public class LobbyScreen extends DebuggableScreen {
 				}
 			}
 		});
+		chat = new ScrollPane(log, skin);
+
 		updateChat();
-		log.add(chatField);
-		ScrollPane chat = new ScrollPane(log, skin);
+		
+		VerticalGroup lobbyOptions = new VerticalGroup();
+		HorizontalGroup serverOptions = new HorizontalGroup();
+		
+		TextButton readyButton = new TextButton("Ready", skin);
+		readyButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				readyButtonPressed();
+			}
+		});		
+		startButton = new TextButton("Start Game", skin);
+		startButton.setTouchable(Touchable.disabled);
+		startButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.transitionToInGame();
+			}
+		});
+		serverOptions.addActor(readyButton);
+		serverOptions.addActor(startButton);
+		
+		//Sets up the class selection buttons
+		HorizontalGroup classOptions = new HorizontalGroup();
+		Label classLabel = new Label("Class: ", skin);
+		TextButton rangerButton = new TextButton("Ranger Guy", skin);
+		rangerButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changePlayerClass(PlayerClass.RANGER);
+			}
+		});
+		TextButton shieldButton = new TextButton("Shield Guy", skin);
+		shieldButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changePlayerClass(PlayerClass.SHIELD);
+			}
+		});
+		TextButton mageButton = new TextButton("Mage Guy", skin);
+		mageButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changePlayerClass(PlayerClass.MAGE);
+			}
+		});
+		classOptions.addActor(classLabel);
+		classOptions.addActor(rangerButton);
+		classOptions.addActor(shieldButton);
+		classOptions.addActor(mageButton);
+		
+		lobbyOptions.addActor(classOptions);
+		lobbyOptions.addActor(serverOptions);
 		
 		
-		SplitPane splitpane = new SplitPane(players, chat, true, skin);
+		SplitPane topSplitPane = new SplitPane(players, lobbyOptions, false, skin);
 		
-		splitpane.setFillParent(true);
-		stage.addActor(splitpane);
+		
+		SplitPane mainSplitPane = new SplitPane(topSplitPane, chat, true, skin);
+		
+		
+		mainSplitPane.setFillParent(true);
+		stage.addActor(mainSplitPane);
 		
 	}
 
@@ -102,19 +168,21 @@ public class LobbyScreen extends DebuggableScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
         cam.update();
-        	//TODO: add a change state to the addPlayer function of the lobby, and then have a listener that would only update when it notices a change state.
         
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         game.batch.end();
         
         stage.draw();
+        stage.act();
 	}
+	
 	
 	@Override
 	public void updateUI() {
 		updatePlayers();
 		updateChat();
+		isLobbyReady();
 	}
 	
 	public void updatePlayers() {
@@ -130,6 +198,7 @@ public class LobbyScreen extends DebuggableScreen {
 			} else {
 				line += "Not Ready";
 			}
+			line += "    Class: " + currentPlayer.getPlayerClass();
 			labels[counter].setText(line);
 			counter++;
 		}
@@ -144,18 +213,68 @@ public class LobbyScreen extends DebuggableScreen {
 			log.row();
 		}
 		log.add(chatField);
+		log.row();
+		chat.scrollTo(0, 0, 800, 50);
 	}
 	
-	//TODO: Messages aren't being sent over the server, need to fix.
 	public void sendMessage() {
-		ChatMessage temp = new ChatMessage();
-		temp.message = chatField.getText();
-		temp.uid = -1;
-        game.sendToServer(temp);
-        lobby.addChatMessage(temp);
+		ChatMessage message = new ChatMessage();
+		message.message = chatField.getText();
+		message.uid = -1;
+        game.sendToServer(message);
+        lobby.addChatMessage(message);
 		updateChat();
 		chatField.setText("");
 		stage.setKeyboardFocus(chatField);
+	}
+	
+	public void readyButtonPressed() {
+		ClientLobbyPlayer player = lobby.getLocalLobbyPlayer();
+		if (player.isReady()) {
+			player.setReady(false);
+		} else {
+			player.setReady(true);
+		}
+		sendReadyMessage(player.isReady());
+	}
+	
+	public void sendReadyMessage(boolean ready) {
+		ReadyStatusMessage message = new ReadyStatusMessage(); 
+		message.ready = ready;
+		message.uid = -1;
+		game.sendToServer(message);
+		lobby.getLocalLobbyPlayer().setReady(ready);
+		updatePlayers();
+		isLobbyReady();
+	}
+	
+	/**
+	 * 
+	 * This method checks to see if everyone in the lobby is ready 
+	 *
+	 * @return returns a true or false result
+	 */
+	public void isLobbyReady() {
+		ListIterator<ClientLobbyPlayer> playerIterator = lobby.getLobbyPlayers().listIterator();
+		boolean result = true;
+		while (playerIterator.hasNext()) {
+			ClientLobbyPlayer player = playerIterator.next();
+			if (!player.isReady()) {
+				result = false;
+			}
+		}
+		if (result) {
+			startButton.setTouchable(Touchable.enabled);
+		} else {
+			startButton.setTouchable(Touchable.disabled);
+		}
+	}
+	
+	public void changePlayerClass(PlayerClass classType) {
+		lobby.getLocalLobbyPlayer().setPlayerClass(classType);
+		ClassAssignmentMessage message = new ClassAssignmentMessage();
+		game.sendToServer(message);
+		updatePlayers();
 	}
 	
 	@Override

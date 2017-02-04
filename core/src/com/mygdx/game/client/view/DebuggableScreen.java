@@ -26,6 +26,12 @@ public class DebuggableScreen extends ScreenAdapter
 		
 	}
 	
+	/**
+	 * 
+	 * This method updates all the UI elements within a screen. Do not use this method
+	 * in the create method of a screen. It can potentially cause NullPointExceptions
+	 *
+	 */
 	public void updateUI() {
 		
 	}
