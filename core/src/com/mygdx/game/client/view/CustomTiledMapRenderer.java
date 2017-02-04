@@ -180,7 +180,7 @@ public class CustomTiledMapRenderer extends
 	}
 
 	private void debugRenderEntity(MapEntity entity) {
-		CollideablePolygon hitbox = entity.getHitbox();
+		CollideablePolygon hitbox = entity.hitbox;
 		if (hitbox != null) {
 			debugDrawCollideablePolygon(hitbox);
 		}

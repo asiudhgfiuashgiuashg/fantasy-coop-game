@@ -2,6 +2,7 @@ package com.mygdx.game.server.model.entity.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.PolygonObject;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * An example/test-bed enemy
@@ -13,9 +14,12 @@ public class TestEnemy extends Enemy {
 
 	boolean sentAnimationName = false;
 	long timeSinceAnimationChange = 0;
-
+	private float[] hitbox = {32, 0, 0, 0, 0, 32, 32, 32};
 	protected TestEnemy(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
+		CollideablePolygon hitbox = new CollideablePolygon(this.hitbox);
+		hitbox.setPosition(position.x, position.y);
+		setPolygon(hitbox);
 	}
 
 	/**

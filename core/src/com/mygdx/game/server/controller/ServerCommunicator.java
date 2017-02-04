@@ -146,6 +146,7 @@ public class ServerCommunicator extends Communicator {
 
 			// a player has requested a class assignment
 			if (msg instanceof ClassAssignmentMessage) {
+				System.out.println("class assignment requested");
 				// Check if this class is available
 				PlayerClass requestedClass = ((ClassAssignmentMessage) msg).playerClass;
 				if (manager.classNotTakenYet(requestedClass)) {
@@ -160,6 +161,7 @@ public class ServerCommunicator extends Communicator {
 					otherMsg.playerClass = requestedClass;
 					otherMsg.uid = msg.uid;
 					sendToAllExcept(otherMsg, msg.uid);
+					System.out.println("requested class granted");
 				}
 			}
 			
@@ -170,7 +172,8 @@ public class ServerCommunicator extends Communicator {
 				
 				// Tell everyone else
 				sendToAllExcept(msg, msg.uid);
-				
+
+				System.out.println("got ready message");
 				manager.checkForGameStart();
 			}
 		}

@@ -58,6 +58,7 @@ public class LobbyScreen extends DebuggableScreen {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		stage = new Stage();
+		stage.setDebugAll(true);
 		inputMultiplexer.addProcessor(stage);
 		
 		cam = new OrthographicCamera();
@@ -273,6 +274,7 @@ public class LobbyScreen extends DebuggableScreen {
 	public void changePlayerClass(PlayerClass classType) {
 		lobby.getLocalLobbyPlayer().setPlayerClass(classType);
 		ClassAssignmentMessage message = new ClassAssignmentMessage();
+		message.playerClass = classType;
 		game.sendToServer(message);
 		updatePlayers();
 	}

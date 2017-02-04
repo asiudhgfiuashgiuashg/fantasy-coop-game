@@ -11,7 +11,7 @@ public class GameMessage extends Message {
 		public int visLayer;
 	}
 
-	public static class AnimationUpateMessage extends GameMessage {
+	public static class AnimationUpdateMessage extends GameMessage {
 		public String animationName;
 		public String entityUID;
 	}

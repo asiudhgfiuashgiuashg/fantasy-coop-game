@@ -2,6 +2,7 @@ package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
+import com.mygdx.game.shared.model.CollideablePolygon;
 import com.mygdx.game.shared.network.GameMessage;
 
 /**
@@ -41,10 +42,25 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	 * (on the client side)
 	 */
 	public void sendAnimation() {
-		GameMessage.AnimationUpateMessage msg = new GameMessage
-				.AnimationUpateMessage();
+		GameMessage.AnimationUpdateMessage msg = new GameMessage.AnimationUpdateMessage();
 		msg.entityUID = getUid();
 		msg.animationName = animationName;
 		server.getCommunicator().sendToAll(msg);
+	}
+
+	/**
+	 * send polygon updates to client and update the polygon field
+	 * @param polygon
+	 */
+	@Override
+	public void setPolygon(CollideablePolygon polygon) {
+		super.setPolygon(polygon);
+		GameMessage.HitboxUpdateMessage hitboxMsg = new GameMessage
+				.HitboxUpdateMessage();
+		hitboxMsg.entityUID = getUid();
+		hitboxMsg.newHitbox = polygon;
+
+		server.getCommunicator().sendToAll(hitboxMsg);
+		System.out.println("sent hitbox update message");
 	}
 }

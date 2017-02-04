@@ -69,6 +69,7 @@ public class ClientCommunicator extends Communicator {
 	public void readMessages() {
 		while (!incomingBuffer.isEmpty()) {
 			Message msg = incomingBuffer.poll();
+			System.out.println("MESSAGE: " + msg.getClass().getSimpleName());
 			if (msg == null) {
 				return;
 			}
@@ -106,6 +107,7 @@ public class ClientCommunicator extends Communicator {
 				lobbyPlayer.setReady(rdyMsg.ready);
 			} else if (msg instanceof GameStartMessage) {
 				gameClient.transitionToInGame();
+				System.out.println("got game start message");
 			} else if (msg instanceof ChatMessage) {
 				ChatMessage chatMsg = (ChatMessage) msg;
 				String username = manager.getByUid(chatMsg.uid).getUsername();
@@ -116,8 +118,6 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage
 						.InitDynamicEntityMsg) msg;
-				System.out.println("initializing  Dynamic " + "Entity " +
-						initMsg.className);
 				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
 						initMsg.className, initMsg.pos);
 				gameClient.addDynamicEntity(newEntity);
@@ -129,14 +129,18 @@ public class ClientCommunicator extends Communicator {
 				if (posMsg.position != null) {
 					entity.setPosition(posMsg.position);
 				}
-			} else if (msg instanceof GameMessage.AnimationUpateMessage) {
-				GameMessage.AnimationUpateMessage animationUpdateMessage =
-						(GameMessage.AnimationUpateMessage) msg;
+			} else if (msg instanceof GameMessage.AnimationUpdateMessage) {
+				GameMessage.AnimationUpdateMessage animationUpdateMessage = (GameMessage.AnimationUpdateMessage) msg;
 
-				DynamicEntity entity = gameClient.getMap()
-						.getDynamicEntityByUid(animationUpdateMessage.entityUID);
+				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(animationUpdateMessage.entityUID);
 				entity.setAnimation(animationUpdateMessage.animationName);
-
+			} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
+				System.out.println("got a hitbox update");
+				GameMessage.HitboxUpdateMessage hitboxMsg =  (GameMessage
+						.HitboxUpdateMessage) msg;
+				DynamicEntity entity = gameClient.getMap()
+						.getDynamicEntityByUid(hitboxMsg.entityUID);
+				entity.hitbox = hitboxMsg.newHitbox;
 			} else {
 				System.out.println("unhandled network message of type " + msg
 						.getClass());

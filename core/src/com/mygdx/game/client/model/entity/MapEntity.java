@@ -17,7 +17,7 @@ public abstract class MapEntity {
 	protected String uid;
 	protected Vector2 position; // map position
 	protected int visLayer; // affects whether the entity is drawn above or
-	protected CollideablePolygon hitbox; // specified in Tiled for static
+	public CollideablePolygon hitbox; // specified in Tiled for static
 	// entities. Specified in java code for dynamic entities.
 
 	public List<PointLight> box2dLights;
@@ -41,10 +41,6 @@ public abstract class MapEntity {
 	 * @return
 	 */
 	public abstract TextureRegion getTextureRegion();
-
-	public CollideablePolygon getHitbox() {
-		return hitbox;
-	}
 
 	/**
 	 * a value used for rendering order in layer zero

@@ -31,6 +31,7 @@ public class ServerLobbyManager extends LobbyManager<ServerLobbyPlayer> {
 				return;
 			}
 		}
+		System.out.println("starting game");
 		server.startGame();
 	}
 }

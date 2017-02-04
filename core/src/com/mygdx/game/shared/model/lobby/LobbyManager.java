@@ -35,6 +35,8 @@ public abstract class LobbyManager<T extends LobbyPlayer> {
     public boolean classNotTakenYet(PlayerClass requestedClass) {
         for (T player: lobbyPlayers) {
             if (player.getPlayerClass() == requestedClass) {
+                System.out.println(player.getPlayerClass());
+                System.out.println(requestedClass);
                 return false;
             }
         }
