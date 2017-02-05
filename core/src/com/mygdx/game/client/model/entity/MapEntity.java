@@ -56,5 +56,7 @@ public abstract class MapEntity {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
+		//hitbox position should be the same as entity position
+		hitbox.setPosition(position.x, position.y);
 	}
 }

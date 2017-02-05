@@ -79,13 +79,15 @@ public abstract class VelocityEntity extends DynamicEntity {
 				Vector2 addVec = new Vector2(dx);
 				addVec.scl((float) Math.pow(2, -i));
 				pos.add(addVec);
-				getPolygon().setPosition(pos.x, pos.y);
+				//getPolygon().setPosition(pos.x, pos.y);
+				setPosition(new Vector2(pos.x, pos.y));
 
 				// Check for collisions with other solid objects
 				for (PolygonObject solidObj : GameServer.getInstance().getMap().getSolidObjects()) {
 					if (this.collides(solidObj)) {
 						// Revert to starting position of this iteration
-						getPolygon().setPosition(startX, startY);
+						//getPolygon().setPosition(startX, startY);
+						setPosition(new Vector2(startX, startY));
 
 						// Add to collision list
 						currList.add(solidObj);
