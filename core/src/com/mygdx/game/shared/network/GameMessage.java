@@ -37,6 +37,7 @@ public class GameMessage extends Message {
 		public Vector2 pos;
 		public String entUid;
 		public boolean solid;
+		public CollideablePolygon hitbox;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

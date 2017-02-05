@@ -44,7 +44,7 @@ public class GameServer implements Runnable {
 	 * Time conversions
 	 */
 	private static final float NANOSECONDS = 1000000000;
-	private static final long MILLISECONDS = 1000000;
+	private static final long MILLISECONDS = 1000;
 
 	/**
 	 * Singleton instance
@@ -163,7 +163,7 @@ public class GameServer implements Runnable {
 		while (running.get()) {
 			// Update times
 			long currTime = TimeUtils.millis();
-			long elapsedTime = currTime - prevTime;
+			long elapsedTime = TimeUtils.timeSinceMillis(prevTime);
 			prevTime = currTime;
 
 			// TODO process buffered client messages
@@ -181,7 +181,7 @@ public class GameServer implements Runnable {
 			long tickTimeRemaining = (long) (TICKRATE * MILLISECONDS) -
 					timeTaken;
 			try {
-				Thread.sleep(tickTimeRemaining / MILLISECONDS);
+				Thread.sleep(tickTimeRemaining);
 			} catch (InterruptedException e) {
 				SingletonGUIConsole.getInstance().log(e.getMessage(), LogLevel
 						.ERROR);
@@ -218,6 +218,7 @@ public class GameServer implements Runnable {
 			entInitMsg.className = entity.getClass().getSimpleName();
 			entInitMsg.pos = entity.getPosition();
 			entInitMsg.entUid = entity.getUid();
+			entInitMsg.hitbox = entity.getPolygon();
 			communicator.sendToAll(entInitMsg);
 		}
 	}

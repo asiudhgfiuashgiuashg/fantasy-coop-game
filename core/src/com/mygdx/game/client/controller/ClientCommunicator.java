@@ -120,6 +120,7 @@ public class ClientCommunicator extends Communicator {
 						.InitDynamicEntityMsg) msg;
 				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
 						initMsg.className, initMsg.pos);
+				newEntity.hitbox = initMsg.hitbox;
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
 				GameMessage.PosUpdateMessage posMsg = (GameMessage

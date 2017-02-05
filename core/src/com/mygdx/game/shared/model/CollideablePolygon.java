@@ -23,16 +23,25 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * The y position above which another entity should be rendered behind
-	 * instead of in front of the entity with this CollideablePolygon hitbox.
+	 * instead of in front of the entity with this CollideablePolygon
+	 * hitbox.
 	 * Relative to the polygon's origin NOT the world origin. Use
 	 * getTransformedCutoffY for that.
 	 */
 	private float cutoffY;
 
 	/**
-	 * The maximum distance from the polygon's origin to any of its vertices.
+	 * The maximum distance from the polygon's origin to any of its
+	 * vertices.
 	 */
 	private float maxLength;
+
+	/**
+	 * no-arg constructor for serialization
+	 */
+	public CollideablePolygon() {
+
+	}
 
 	public CollideablePolygon(float[] vertices) {
 		super(vertices);
@@ -43,8 +52,7 @@ public class CollideablePolygon extends Polygon {
 	/**
 	 * Constructs a copy of a given polygon.
 	 *
-	 * @param polygon
-	 *            polygon to copy
+	 * @param polygon polygon to copy
 	 */
 	public CollideablePolygon(CollideablePolygon polygon) {
 		this(polygon.getVertices());
@@ -56,8 +64,11 @@ public class CollideablePolygon extends Polygon {
 
 
 	/**
-	 * estimate the y position (relative to the collideablepolygon origin) above
-	 * which another entity should be rendered behind instead of in front of the
+	 * estimate the y position (relative to the collideablepolygon origin)
+	 * above
+	 * which another entity should be rendered behind instead of in
+	 * front of
+	 * the
 	 * entity CollideablePolygon hitbox
 	 *
 	 * @return
@@ -78,11 +89,13 @@ public class CollideablePolygon extends Polygon {
 		 */
 		for (int i = 0; i < vertices.length; i += 2) {
 
-			Vector2 vectorOne = new Vector2(vertices[wrapIndex(i + 2, vertices.length)] - vertices[i],
-					vertices[wrapIndex(i + 3, vertices.length)] - vertices[i + 1]);
-			Vector2 vectorTwo = new Vector2(
-					vertices[wrapIndex(i + 4, vertices.length)] - vertices[wrapIndex(i + 2, vertices.length)],
-					vertices[wrapIndex(i + 5, vertices.length)] - vertices[wrapIndex(i + 3, vertices.length)]);
+			Vector2 vectorOne = new Vector2(vertices[wrapIndex(i + 2, vertices
+					.length)] - vertices[i], vertices[wrapIndex(i + 3,
+					vertices.length)] - vertices[i + 1]);
+			Vector2 vectorTwo = new Vector2(vertices[wrapIndex(i + 4, vertices
+					.length)] - vertices[wrapIndex(i + 2, vertices.length)],
+					vertices[wrapIndex(i + 5, vertices.length)] -
+							vertices[wrapIndex(i + 3, vertices.length)]);
 			crossProductPositive = vectorOne.crs(vectorTwo) > 0;
 
 			if (!crossProductPositive) { // found nook
@@ -97,9 +110,11 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * Uses the largest dimension of the bounding rectangle as the maxLength for
+	 * Uses the largest dimension of the bounding rectangle as the
+	 * maxLength
+	 * for
 	 * collisions.
-	 * 
+	 *
 	 * @return max[ rectangle width, rectangle height ]
 	 */
 	private float calcMaxLength() {
@@ -108,12 +123,11 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * @param other
-	 *            The other CollideablePolygon - vertices must be in
-	 *            counter-clockwise order
-	 * @param mtv
-	 *            The minimum magnitude vector required to push {@code this}
-	 *            polygon out of collision with {@code other}
+	 * @param other The other CollideablePolygon - vertices must be in
+	 *              counter-clockwise order
+	 * @param mtv   The minimum magnitude vector required to push {@code
+	 *              this}
+	 *              polygon out of collision with {@code other}
 	 * @return true if there is collision. Also populates mtv.
 	 */
 	public boolean collides(CollideablePolygon other) {
@@ -121,14 +135,13 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * A helper method to allow graceful iteration through all consecutive edge
+	 * A helper method to allow graceful iteration through all consecutive
+	 * edge
 	 * pairs in areVerticesConvex() using index wrapping. AKA treating the
 	 * linear array as a circular array.
 	 *
-	 * @param i
-	 *            The virtual index
-	 * @param arrLength
-	 *            The length of the array.
+	 * @param i         The virtual index
+	 * @param arrLength The length of the array.
 	 * @return The actual index. == i if i < arrLength.
 	 */
 	private int wrapIndex(int i, int arrLength) {
@@ -137,7 +150,7 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * Returns the untransformed cutoffY used for rendering.
-	 * 
+	 *
 	 * @return cutoffY
 	 */
 	public float getCutoffY() {
@@ -146,7 +159,7 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * Returns the maxLength used for collision checking.
-	 * 
+	 *
 	 * @return maxLength
 	 */
 	public float getMaxLength() {
@@ -154,9 +167,10 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * Returns the transformed cutoffY which accounts for the polygon's scaleY
+	 * Returns the transformed cutoffY which accounts for the polygon's
+	 * scaleY
 	 * and y and originY values.
-	 * 
+	 *
 	 * @return transformed cutoffY
 	 */
 	public float getTransformedCutoffY() {

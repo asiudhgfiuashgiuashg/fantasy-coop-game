@@ -10,21 +10,21 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  * - alternates between a 4-frame animation and a single-frame animation
  * every four seconds
  */
-public class TestEnemy extends Enemy {
+public class TestEnemy2 extends Enemy {
 
 	boolean sentAnimationName = false;
 	long timeSinceAnimationChange = 0;
 	private float[] hitbox = {24, 0, 0, 0, 0, 24, 12, 24, 24, 24};
-	private boolean movedRight = false;
+	private boolean movedLeft;
 
-	protected TestEnemy(String uid, Vector2 position, int visLayer, boolean solid) {
+	protected TestEnemy2(String uid, Vector2 position, int visLayer, boolean
+			solid) {
 		super(uid, position, visLayer, solid);
 		CollideablePolygon hitbox = new CollideablePolygon(this.hitbox);
 		hitbox.setPosition(position.x, position.y);
 		setPolygon(hitbox);
 		setMass(1000f);
-
-}
+	}
 
 	/**
 	 * act out one game tick (animation changes, velocity changes etc)
@@ -34,9 +34,9 @@ public class TestEnemy extends Enemy {
 	@Override
 	public void act(long elapsedTime) {
 		super.act(elapsedTime);
-		if (!movedRight) {
-			applyForce(new Vector2(0.001f, 0f));
-			movedRight = true;
+		if (!movedLeft) {
+			applyForce(new Vector2(-0.001f, 0f));
+			movedLeft = true;
 		}
 
 		if (!sentAnimationName) { // only send this test animation name one

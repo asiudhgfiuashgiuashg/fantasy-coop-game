@@ -37,14 +37,18 @@ public abstract class VelocityEntity extends DynamicEntity {
 		this.mass = mass;
 	}
 
+
 	@Override
 	public void act(long elapsedTime) {
 		// Time elapsed in units of ticks
 		float dt = elapsedTime / GameServer.TICKRATE;
-		
+
+
 		// Update velocity based on forces (dv = 1/m F dt)
-		Vector2 dv = netForce.scl(dt).scl(1/mass);
+		Vector2 dv = netForce.scl(dt).scl(1 / mass);
+
 		velocity.add(dv);
+
 		netForce.set(0, 0);
 		
 		// Compute displacement (dx = v dt)
