@@ -31,9 +31,6 @@ public abstract class PolygonObject {
 	public PolygonObject(CollideablePolygon polygon, boolean solid) {
 		this.polygon = polygon;
 		this.solid = solid;
-		if (solid) {
-			GameServer.getInstance().getMap().getSolidObjects().add(this);
-		}
 	}
 
 	/**

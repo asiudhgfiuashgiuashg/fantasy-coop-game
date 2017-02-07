@@ -69,7 +69,6 @@ public class ClientCommunicator extends Communicator {
 	public void readMessages() {
 		while (!incomingBuffer.isEmpty()) {
 			Message msg = incomingBuffer.poll();
-			System.out.println("MESSAGE: " + msg.getClass().getSimpleName());
 			if (msg == null) {
 				return;
 			}

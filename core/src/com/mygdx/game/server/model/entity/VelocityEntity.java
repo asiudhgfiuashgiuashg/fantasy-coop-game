@@ -53,7 +53,8 @@ public abstract class VelocityEntity extends DynamicEntity {
 		
 		// Compute displacement (dx = v dt)
 		Vector2 dx = getVelocity().scl(dt);
-		if (isSolid()) {
+		// make sure dx isn't zero to avoid log2 issues
+		if (isSolid() && !fuzzyEquals(dx.len(), 0)) {
 			// Number of iterations to achieve sub pixel precision
 			int N = MathUtils.ceil(MathUtils.log2(dx.len()));
 			MathUtils.clamp(N, 1, N); // N >= 1
@@ -84,7 +85,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 				// Check for collisions with other solid objects
 				for (PolygonObject solidObj : GameServer.getInstance().getMap().getSolidObjects()) {
-					if (this.collides(solidObj)) {
+					if (!this.equals(solidObj) && this.collides(solidObj)) {
 						// Revert to starting position of this iteration
 						//getPolygon().setPosition(startX, startY);
 						setPosition(new Vector2(startX, startY));
@@ -119,6 +120,18 @@ public abstract class VelocityEntity extends DynamicEntity {
 			pos.add(dx);
 			setPosition(pos);
 		}
+	}
+
+	/**
+	 * test if two floats are about equal
+	 * http://stackoverflow.com/a/3728560
+	 * @param a first float
+	 * @param b second float
+	 * @return true if close enough to equal
+	 */
+	private boolean fuzzyEquals(float a, float b) {
+		float eps = 0.0000001f; // how close the floats must be
+		return Math.abs(a - b) < eps;
 	}
 
 	/**

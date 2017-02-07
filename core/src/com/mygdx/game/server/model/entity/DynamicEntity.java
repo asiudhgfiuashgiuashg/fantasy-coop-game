@@ -46,6 +46,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		msg.entityUID = getUid();
 		msg.animationName = animationName;
 		server.getCommunicator().sendToAll(msg);
+		System.out.println("sent animation " + animationName);
 	}
 
 	/**

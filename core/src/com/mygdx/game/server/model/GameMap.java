@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mygdx.game.server.model.entity.DynamicEntity;
+import com.mygdx.game.server.model.entity.Entity;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.VelocityEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
@@ -89,12 +90,24 @@ public class GameMap {
 
 	public void addEnemy(Enemy enemy) {
 		enemies.add(enemy);
-		dynamicEntities.add(enemy);
-		System.out.println("added enemy to map");
+		addToDynamicEntities(enemy);
 	}
+
 
 	public void addFriendly(Friendly friendly) {
 		friendlies.add(friendly);
-		dynamicEntities.add(friendly);
+		addToDynamicEntities(friendly);
+	}
+
+	/**
+	 * add a dynamic entity to the dynamic entities list and put it in the
+	 * solids list if it's solid
+	 * @param entity
+	 */
+	private void addToDynamicEntities(DynamicEntity entity) {
+		dynamicEntities.add(entity);
+		if (entity.isSolid()) {
+			solidObjects.add(entity);
+		}
 	}
 }

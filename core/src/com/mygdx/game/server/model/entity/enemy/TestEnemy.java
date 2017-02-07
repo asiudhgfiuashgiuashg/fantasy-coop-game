@@ -35,7 +35,8 @@ public class TestEnemy extends Enemy {
 	public void act(long elapsedTime) {
 		super.act(elapsedTime);
 		if (!movedRight) {
-			applyForce(new Vector2(0.001f, 0f));
+			//applyForce(new Vector2(0, 0.001f));
+			applyForce(new Vector2(0.001f, 0));
 			movedRight = true;
 		}
 
@@ -47,7 +48,6 @@ public class TestEnemy extends Enemy {
 			} else {
 				this.animationName = "blueAnimation";
 			}
-			timeSinceAnimationChange += elapsedTime;
 
 			sendAnimation();
 			sentAnimationName = true;

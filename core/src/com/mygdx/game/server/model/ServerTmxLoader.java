@@ -244,15 +244,17 @@ public class ServerTmxLoader {
 
 			Element properties = null;
 			boolean solid = false;
-			if ((properties = layer.getChildByName("properties")) != null) {
-				Element prop = null;
-				if ((prop = properties.getChildByName("visLayer")) != null) {
-					// If visLayer was explicitly set, override default value
-					visLayer = prop.getIntAttribute("value");
-				}
-				if ((prop = properties.getChildByName("solid")) != null) {
-					// if solid property was set
-					solid = prop.getBoolean("value");
+			if ((properties = entity.getChildByName("properties")) != null) {
+				for (Element prop: properties.getChildrenByName
+						("property")) {
+					if ((prop.getAttribute("name", "")).equalsIgnoreCase("visLayer")) {
+						// If visLayer was explicitly set, override default value
+						visLayer = prop.getIntAttribute("value");
+					} else if ((prop.getAttribute("name", "")).equalsIgnoreCase
+							("solid")) {
+						// if solid property was set
+						solid = prop.getBoolean("value");
+					}
 				}
 			}
 
