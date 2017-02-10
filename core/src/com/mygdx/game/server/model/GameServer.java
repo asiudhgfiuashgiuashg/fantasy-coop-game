@@ -93,8 +93,6 @@ public class GameServer implements Runnable {
 	 */
 	private ServerLobbyManager lobbyManager;
 
-	public int instanceNum;
-	public static int instanceInc;
 
 	/**
 	 * Private constructor enforces singleton pattern. Actual server
@@ -102,8 +100,6 @@ public class GameServer implements Runnable {
 	 */
 	private GameServer() {
 		initialized = false;
-		instanceNum = instanceInc;
-		instanceInc++;
 	}
 
 	/**

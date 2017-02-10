@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
@@ -15,10 +16,11 @@ public class Boundary extends PolygonObject {
 	/**
 	 * Constructs a solid boundary using the given polygon
 	 * 
-	 * @param polygon
+	 * @param polygon the hitbox of the boundary
+	 * @param position where to place the hitbox (in world coordinates)
 	 */
-	public Boundary(CollideablePolygon polygon) {
-		super(polygon, true);
+	public Boundary(CollideablePolygon polygon, Vector2 position) {
+		super(polygon, true, position);
 	}
 
 }

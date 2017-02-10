@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model.trigger;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
@@ -9,8 +10,9 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public class CutsceneTrigger extends Trigger {
 
-	public CutsceneTrigger(CollideablePolygon polygon, String name) {
-		super(polygon);
+	public CutsceneTrigger(CollideablePolygon polygon, String name, Vector2
+			position) {
+		super(polygon, position);
 		// TODO load cutscene of name
 	}
 

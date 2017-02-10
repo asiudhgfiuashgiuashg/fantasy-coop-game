@@ -14,15 +14,15 @@ public class TestEnemy extends Enemy {
 
 	boolean sentAnimationName = false;
 	long timeSinceAnimationChange = 0;
-	private float[] hitbox = {24, 0, 0, 0, 0, 24, 12, 24, 24, 24};
-	private boolean movedRight = false;
+	private float[] hitbox = {20, 0, 0, 0, 10, 20};
+	private boolean movedUp = false;
 
 	protected TestEnemy(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
 		CollideablePolygon hitbox = new CollideablePolygon(this.hitbox);
-		hitbox.setPosition(position.x, position.y);
 		setPolygon(hitbox);
 		setMass(1000f);
+		System.out.println("created testenemy at pos " + position);
 
 }
 
@@ -34,10 +34,10 @@ public class TestEnemy extends Enemy {
 	@Override
 	public void act(long elapsedTime) {
 		super.act(elapsedTime);
-		if (!movedRight) {
-			//applyForce(new Vector2(0, 0.001f));
-			applyForce(new Vector2(0.001f, 0));
-			movedRight = true;
+		if (!movedUp) {
+			//applyForce(new Vector2(0, 0.0015f));
+			applyForce(new Vector2(0.0015f, 0));
+			movedUp = true;
 		}
 
 		if (!sentAnimationName) { // only send this test animation name one

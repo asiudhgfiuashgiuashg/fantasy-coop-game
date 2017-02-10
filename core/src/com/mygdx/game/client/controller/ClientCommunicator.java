@@ -120,6 +120,7 @@ public class ClientCommunicator extends Communicator {
 				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
 						initMsg.className, initMsg.pos);
 				newEntity.hitbox = initMsg.hitbox;
+				newEntity.hitbox.setPosition(newEntity.getPos());
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
 				GameMessage.PosUpdateMessage posMsg = (GameMessage
@@ -141,6 +142,7 @@ public class ClientCommunicator extends Communicator {
 				DynamicEntity entity = gameClient.getMap()
 						.getDynamicEntityByUid(hitboxMsg.entityUID);
 				entity.hitbox = hitboxMsg.newHitbox;
+				entity.hitbox.setPosition(entity.getPos());
 			} else {
 				System.out.println("unhandled network message of type " + msg
 						.getClass());

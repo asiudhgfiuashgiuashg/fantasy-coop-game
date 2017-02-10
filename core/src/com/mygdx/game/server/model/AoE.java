@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
@@ -14,9 +15,10 @@ public class AoE extends PolygonObject {
 	/**
 	 * Constructs an AoE as a non-solid PolygonObject
 	 * 
-	 * @param polygon
+	 * @param polygon the hitbox of the aoe
+	 * @param position where the place the aoe hitbox
 	 */
-	public AoE(CollideablePolygon polygon) {
-		super(polygon, false);
+	public AoE(CollideablePolygon polygon, Vector2 position) {
+		super(polygon, false, position);
 	}
 }

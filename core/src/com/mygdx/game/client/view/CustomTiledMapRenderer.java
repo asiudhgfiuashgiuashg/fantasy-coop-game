@@ -5,14 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.MapEntity;
@@ -21,33 +20,31 @@ import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.*;
 
-import static com.mygdx.game.client.model.GameClient.SCREEN_HEIGHT;
-import static com.mygdx.game.client.model.GameClient.console;
-
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
- *
+ * <p>
  * visLayers:
- *     -1 = always render below other entities
- *     0 = render in order according to y-position derived from hitbox and
- *     location -- DEFAULT VISLAYER
- *     1 = always render above other entities
- *
- *     Rendering order: Tile Layer -> visLayer -1 entities -> visLayer 0
- *     entities -> visLayer 1 entities
+ * -1 = always render below other entities
+ * 0 = render in order according to y-position derived from hitbox and
+ * location -- DEFAULT VISLAYER
+ * 1 = always render above other entities
+ * <p>
+ * Rendering order: Tile Layer -> visLayer -1 entities -> visLayer 0
+ * entities -> visLayer 1 entities
  */
-public class CustomTiledMapRenderer extends
-	OrthogonalTiledMapRenderer {
+public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	public static final int DEFAULT_VISLAYER = 0;
 	private static final float DEFAULT_UNIT_SCALE = 2f;
 	public static final int NUM_RAYS = 15; // affects the quality of lights
+	private static final float DEBUG_FONT_SCALE = .82f;
 	private final List<MapEntity> layerNegOneEntities = new
 			ArrayList<MapEntity>();
 	private final List<MapEntity> layerZeroEntities = new
 			LinkedList<MapEntity>();
-	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
+	private final List<MapEntity> layerOneEntities = new
+			ArrayList<MapEntity>();
 
-	public boolean debug = false; // should I draw things that developers use
+	public boolean debug = true; // should I draw things that developers use
 	// to debug?
 	private float debugLineWidth = 3;
 
@@ -64,12 +61,16 @@ public class CustomTiledMapRenderer extends
 	private FPSLogger fpsLogger;
 	private List<DynamicEntity> dynamicEntities;
 
+	/* used for debugging */
+	private final BitmapFont font = new BitmapFont();
+
 	public CustomTiledMapRenderer(TiledMap map, RayHandler rayHandler) {
 		this(map, DEFAULT_UNIT_SCALE, rayHandler);
 	}
 
 
-	public CustomTiledMapRenderer(TiledMap map, float unitScale, RayHandler rayHandler) {
+	public CustomTiledMapRenderer(TiledMap map, float unitScale, RayHandler
+			rayHandler) {
 		super(map, unitScale);
 		this.rayHandler = rayHandler;
 		setup();
@@ -86,11 +87,13 @@ public class CustomTiledMapRenderer extends
 		fpsLogger = new FPSLogger();
 		updateLights(1f);
 		dynamicEntities = new ArrayList<DynamicEntity>();
+		font.getData().setScale(DEBUG_FONT_SCALE);
 	}
 
 	/**
 	 * scale box2d light positions with unitScale and also scale the radius
 	 * of the lights. Call this when changing/setting camera zoom (unitScale);
+	 *
 	 * @param oldScale the old unitScale
 	 */
 	private void updateLights(float oldScale) {
@@ -101,14 +104,14 @@ public class CustomTiledMapRenderer extends
 
 	private void updateEntityListLights(List<MapEntity> entities, float
 			oldScale) {
-		for (MapEntity entity: entities) {
+		for (MapEntity entity : entities) {
 			updateEntityLights(entity, oldScale);
 		}
 	}
 
 	private void updateEntityLights(MapEntity entity, float oldScale) {
 		float multiplier = unitScale * oldScale;
-		for (PointLight light: entity.box2dLights) {
+		for (PointLight light : entity.box2dLights) {
 			light.setPosition(light.getPosition().scl(multiplier));
 		}
 	}
@@ -120,6 +123,7 @@ public class CustomTiledMapRenderer extends
 
 	/**
 	 * good for simulating time of day
+	 *
 	 * @param alpha
 	 */
 	public void setAmbientAlpha(float alpha) {
@@ -141,8 +145,8 @@ public class CustomTiledMapRenderer extends
 	@Override
 	public void render() {
 		beginRender();
-		TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers()
-				.get("Tile Layer 1");
+		TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get
+				("Tile Layer 1");
 		renderTileLayer(tileLayer); // render tiles before entities so tiles
 		// are on the bottom
 		renderEntities();
@@ -152,29 +156,62 @@ public class CustomTiledMapRenderer extends
 		// endRender() which calls batch.end(). Otherwise rendering gets
 		// messed up and some textureregions don't draw for some reason...
 		if (debug) {
+			// draw hitboxes
 			shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-			debugRenderEntities();
+			debugRenderEntityLines();
 			shapeRenderer.end();
-			fpsLogger.log();
+			//fpsLogger.log();
+			// render text info like position
+			beginRender();
+			debugRenderTextInfos();
+			endRender();
 		}
 
 		// update dynamic entity animation frame
-		for (DynamicEntity entity: dynamicEntities) {
+		for (DynamicEntity entity : dynamicEntities) {
 			entity.tick(Gdx.graphics.getDeltaTime());
 		}
 	}
 
 	/**
-	 * render debug info about entities (hitboxes)
+	 * render textual debug information about entities
 	 */
-	private void debugRenderEntities() {
+	private void debugRenderTextInfos() {
+		debugRenderEntityTextInfosList(layerNegOneEntities);
+		debugRenderEntityTextInfosList(layerZeroEntities);
+		debugRenderEntityTextInfosList(layerOneEntities);
+	}
+
+	private void debugRenderEntityTextInfosList(List<MapEntity> entities) {
+		for (MapEntity entity : entities) {
+			debugRenderEntityTextInfo(entity);
+		}
+	}
+
+	private void debugRenderEntityTextInfo(MapEntity entity) {
+		float posDrawX = entity.getPos().x * unitScale;
+		float posDrawY = entity.getPos().y * unitScale;
+
+		float visLayerDrawX = posDrawX;
+		float visLayerDrawY = posDrawY - DEBUG_FONT_SCALE * 15;
+
+		font.draw(batch, entity.getPos().toString(), posDrawX, posDrawY);
+		font.draw(batch, "vislayer: " + entity.getVisLayer(), visLayerDrawX,
+				visLayerDrawY);
+	}
+
+	/**
+	 * use shaperenderer to render debug info about entities that needs to be
+	 * rendered as lines or simple shapes
+	 */
+	private void debugRenderEntityLines() {
 		debugRenderEntityList(layerNegOneEntities);
 		debugRenderEntityList(layerZeroEntities);
 		debugRenderEntityList(layerOneEntities);
 	}
 
 	private void debugRenderEntityList(List<MapEntity> entities) {
-		for (MapEntity entity: entities) {
+		for (MapEntity entity : entities) {
 			debugRenderEntity(entity);
 		}
 	}
@@ -188,14 +225,15 @@ public class CustomTiledMapRenderer extends
 
 	/**
 	 * used for debugging -- polygons shouldn't be drawn normally
+	 *
 	 * @param hitbox
 	 */
 	private void debugDrawCollideablePolygon(CollideablePolygon hitbox) {
 		CollideablePolygon scaledHitbox = new CollideablePolygon(hitbox);//
 		// scale the hitbox to render on top of the scaled images properly
 		scaledHitbox.setScale(unitScale, unitScale);
-		scaledHitbox.setPosition(scaledHitbox.getX() * unitScale,
-				scaledHitbox.getY() * unitScale);
+		scaledHitbox.setPosition(scaledHitbox.getX() * unitScale, scaledHitbox
+				.getY() * unitScale);
 		shapeRenderer.setColor(Color.FIREBRICK);
 		shapeRenderer.polygon(scaledHitbox.getTransformedVertices());
 
@@ -203,15 +241,15 @@ public class CustomTiledMapRenderer extends
 		Rectangle boundingRect = scaledHitbox.getBoundingRectangle(); // used
 		// to draw ycuttoff line
 		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.line(boundingRect.getX(), scaledHitbox.getTransformedCutoffY(),
-				boundingRect.getX() + boundingRect.getWidth(), scaledHitbox
-						.getTransformedCutoffY());
+		shapeRenderer.line(boundingRect.getX(), scaledHitbox
+				.getTransformedCutoffY(), boundingRect.getX() + boundingRect
+				.getWidth(), scaledHitbox.getTransformedCutoffY());
 
 	}
 
 	/**
 	 * draw static and dynamic entities by layer
-	 *  TODO render dynamic entities
+	 * TODO render dynamic entities
 	 */
 	private void renderEntities() {
 		renderEntityList(layerNegOneEntities);
@@ -220,16 +258,17 @@ public class CustomTiledMapRenderer extends
 	}
 
 	private void renderEntityList(List<MapEntity> entityList) {
-		for (MapEntity entity: entityList) {
+		for (MapEntity entity : entityList) {
 			renderEntity(entity);
 		}
 	}
 
 	/**
 	 * draws an entity's texture and its associated lights
+	 *
 	 * @param staticEntity
 	 */
-	private void renderEntity(MapEntity entity ) {
+	private void renderEntity(MapEntity entity) {
 		drawEntityTexture(entity);
 	}
 
@@ -237,9 +276,9 @@ public class CustomTiledMapRenderer extends
 	private void drawEntityTexture(MapEntity entity) {
 		TextureRegion toDraw = entity.getTextureRegion();
 
-		batch.draw(toDraw, entity.getPos().x * unitScale, entity
-				.getPos().y * unitScale, toDraw.getRegionWidth() *
-				unitScale, toDraw.getRegionHeight() * unitScale);
+		batch.draw(toDraw, entity.getPos().x * unitScale, entity.getPos().y *
+				unitScale, toDraw.getRegionWidth() * unitScale, toDraw
+				.getRegionHeight() * unitScale);
 	}
 
 
@@ -251,18 +290,16 @@ public class CustomTiledMapRenderer extends
 	}
 
 
-
-
 	/**
 	 * used by constructors to initially populate lists of entities in each
 	 * visLayer for easier rendering.
-	 *
+	 * <p>
 	 * Initially there will only be static entities, so don't worry about
 	 * dynamic entities. These will be inserted into the lists when
 	 * communication with the server starts a moment after the map loads.
 	 */
 	private void populateEntitiesLists() {
-		for (StaticEntity entity: ((ClientTiledMap) map).staticEntities) {
+		for (StaticEntity entity : ((ClientTiledMap) map).staticEntities) {
 			registerStaticEntity(entity);
 		}
 	}
@@ -270,7 +307,7 @@ public class CustomTiledMapRenderer extends
 	/**
 	 * when a new entity appears on the map, tell the renderer to keep track
 	 * of it also
-	 *
+	 * <p>
 	 * Also use this when instantiating the renderer with the map after the map
 	 * has been loaded
 	 */
@@ -281,6 +318,7 @@ public class CustomTiledMapRenderer extends
 	/**
 	 * keep track of dynamic entities in a separate list so you can update
 	 * their animations in render loop
+	 *
 	 * @param entity
 	 */
 	public void registerDynamicEntity(DynamicEntity entity) {
@@ -301,6 +339,7 @@ public class CustomTiledMapRenderer extends
 
 	/**
 	 * put this entity into an already-sorted layer 0
+	 *
 	 * @param entity
 	 */
 	private void insertIntoLayerZero(MapEntity entity) {

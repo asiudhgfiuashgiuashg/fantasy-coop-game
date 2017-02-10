@@ -1,38 +1,48 @@
 package com.mygdx.game.server.model.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * A VelocityEntity is an entity with a mass and velocity-based movement. Forces
  * can be applied to it to accelerate the entity, and solid VelocityEntities
  * check for collisions with other solid objects to ensure no overlap occurs.
- * 
- * @author Sawyer Harris
  *
+ * @author Sawyer Harris
  */
 public abstract class VelocityEntity extends DynamicEntity {
-	/** Mass affects acceleration of forces via Newton's Law F = ma */
+	/**
+	 * Mass affects acceleration of forces via Newton's Law F = ma
+	 */
 	private float mass;
-	/** Velocity of entity in units of pixels/tick */
+	/**
+	 * Velocity of entity in units of pixels/tick
+	 */
 	private Vector2 velocity = new Vector2(0, 0);
-	/** Sum of all forces acting on entity */
+	/**
+	 * Sum of all forces acting on entity
+	 */
 	private Vector2 netForce = new Vector2(0, 0);
+
+
 
 	/**
 	 * Constructs a VelocityEntity with a given mass
-	 * 
+	 *
 	 * @param uid
 	 * @param position
 	 * @param visLayer
 	 * @param solid
 	 * @param mass
 	 */
-	public VelocityEntity(String uid, Vector2 position, int visLayer, boolean solid, float mass) {
+	public VelocityEntity(String uid, Vector2 position, int visLayer, boolean
+			solid, float mass) {
 		super(uid, position, visLayer, solid);
 		this.mass = mass;
 	}
@@ -50,7 +60,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 		velocity.add(dv);
 
 		netForce.set(0, 0);
-		
+
 		// Compute displacement (dx = v dt)
 		Vector2 dx = getVelocity().scl(dt);
 		// make sure dx isn't zero to avoid log2 issues
@@ -72,8 +82,11 @@ public abstract class VelocityEntity extends DynamicEntity {
 				currList = temp;
 
 				// Starting position
-				float startX = getPolygon().getX();
-				float startY = getPolygon().getY();
+				//float startX = getPolygon().getX();
+				//float startY = getPolygon().getY();]
+
+				float startX = position.x;
+				float startY = position.y;
 
 				// Try moving in direction
 				Vector2 pos = new Vector2(startX, startY);
@@ -82,12 +95,11 @@ public abstract class VelocityEntity extends DynamicEntity {
 				pos.add(addVec);
 				//getPolygon().setPosition(pos.x, pos.y);
 				setPosition(new Vector2(pos.x, pos.y));
-
 				// Check for collisions with other solid objects
-				for (PolygonObject solidObj : GameServer.getInstance().getMap().getSolidObjects()) {
+				for (PolygonObject solidObj : GameServer.getInstance().getMap
+						().getSolidObjects()) {
 					if (!this.equals(solidObj) && this.collides(solidObj)) {
 						// Revert to starting position of this iteration
-						//getPolygon().setPosition(startX, startY);
 						setPosition(new Vector2(startX, startY));
 
 						// Add to collision list
@@ -125,6 +137,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	/**
 	 * test if two floats are about equal
 	 * http://stackoverflow.com/a/3728560
+	 *
 	 * @param a first float
 	 * @param b second float
 	 * @return true if close enough to equal
@@ -138,7 +151,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	 * Applies a force to the entity, which will be resolved in the next act().
 	 * The force is added to the netForce vector, so multiple forces may act on
 	 * an entity.
-	 * 
+	 *
 	 * @param force
 	 */
 	public void applyForce(Vector2 force) {
@@ -147,7 +160,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	/**
 	 * Returns the entity's mass
-	 * 
+	 *
 	 * @return mass
 	 */
 	public float getMass() {
@@ -156,7 +169,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	/**
 	 * Sets the entity's mass
-	 * 
+	 *
 	 * @param mass
 	 */
 	public void setMass(float mass) {
@@ -165,7 +178,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	/**
 	 * Returns a copy of the entity's velocity vector
-	 * 
+	 *
 	 * @return copy of velocity
 	 */
 	public Vector2 getVelocity() {
@@ -175,7 +188,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	/**
 	 * Sets the entity's velocity vector. Should only be used when applying a
 	 * force is not appropriate.
-	 * 
+	 *
 	 * @param velocity
 	 */
 	public void setVelocity(Vector2 velocity) {
@@ -184,7 +197,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	/**
 	 * Returns the net force vector acting on the entity.
-	 * 
+	 *
 	 * @return netForce
 	 */
 	public Vector2 getNetForce() {
@@ -194,7 +207,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	/**
 	 * Sets the net force vector. Should only be used when previous forces
 	 * applied to entity should be ignored!
-	 * 
+	 *
 	 * @param netForce
 	 */
 	public void setNetForce(Vector2 netForce) {
@@ -203,9 +216,8 @@ public abstract class VelocityEntity extends DynamicEntity {
 
 	/**
 	 * Called when two solid objects collide with each other.
-	 * 
-	 * @param other
-	 *            other polygon object
+	 *
+	 * @param other other polygon object
 	 */
 	public abstract void onBumpInto(PolygonObject other);
 
