@@ -144,8 +144,8 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	}
 
 	private void debugRenderEntityTextInfo(MapEntity entity) {
-		float posDrawX = entity.getPos().x * unitScale;
-		float posDrawY = entity.getPos().y * unitScale;
+		float posDrawX = entity.getPos().x;
+		float posDrawY = entity.getPos().y;
 
 		float visLayerDrawX = posDrawX;
 		float visLayerDrawY = posDrawY - DEBUG_FONT_SCALE * 15;
@@ -183,19 +183,15 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 * @param hitbox
 	 */
 	private void debugDrawCollideablePolygon(CollideablePolygon hitbox) {
-		CollideablePolygon scaledHitbox = new CollideablePolygon(hitbox);//
-		// scale the hitbox to render on top of the scaled images properly
-		scaledHitbox.setScale(unitScale, unitScale);
-		scaledHitbox.setPosition(scaledHitbox.getX() * unitScale, scaledHitbox.getY() * unitScale);
 		shapeRenderer.setColor(Color.FIREBRICK);
-		shapeRenderer.polygon(scaledHitbox.getTransformedVertices());
+		shapeRenderer.polygon(hitbox.getTransformedVertices());
 
 		// draw a line representing the cutoffy
-		Rectangle boundingRect = scaledHitbox.getBoundingRectangle(); // used
+		Rectangle boundingRect = hitbox.getBoundingRectangle(); // used
 		// to draw ycuttoff line
 		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.line(boundingRect.getX(), scaledHitbox.getTransformedCutoffY(),
-				boundingRect.getX() + boundingRect.getWidth(), scaledHitbox.getTransformedCutoffY());
+		shapeRenderer.line(boundingRect.getX(), hitbox.getTransformedCutoffY(),
+				boundingRect.getX() + boundingRect.getWidth(), hitbox.getTransformedCutoffY());
 
 	}
 
@@ -226,8 +222,8 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private void drawEntityTexture(MapEntity entity) {
 		TextureRegion toDraw = entity.getTextureRegion();
 
-		batch.draw(toDraw, entity.getPos().x * unitScale, entity.getPos().y * unitScale,
-				toDraw.getRegionWidth() * unitScale, toDraw.getRegionHeight() * unitScale);
+		batch.draw(toDraw, entity.getPos().x, entity.getPos().y,
+				toDraw.getRegionWidth(), toDraw.getRegionHeight());
 	}
 
 	@Override
