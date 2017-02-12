@@ -83,7 +83,7 @@
     <object id="2" name="light" x="8.81818" y="8.63636" width="2.54545" height="2.63636">
      <properties>
       <property name="color" value="42cbf4FF"/>
-      <property name="distance" type="float" value="100"/>
+      <property name="distance" type="float" value="50"/>
       <property name="flickerRate" type="float" value="1.1000000000000001"/>
       <property name="minFlickerAlphaMult" type="float" value="0.94999999999999996"/>
       <property name="minFlickerDistMult" type="float" value="0.95999999999999996"/>
@@ -98,7 +98,7 @@
     <object id="1" name="light" x="8.81818" y="8.45455" width="2.36364" height="2.90909">
      <properties>
       <property name="color" value="ce1286FF"/>
-      <property name="distance" type="float" value="100"/>
+      <property name="distance" type="float" value="50"/>
       <property name="flickerRate" type="float" value="1.1000000000000001"/>
       <property name="minFlickerAlphaMult" type="float" value="0.94999999999999996"/>
       <property name="minFlickerDistMult" type="float" value="0.95999999999999996"/>

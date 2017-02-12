@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.client.model.FlickerPointLight;
 import com.mygdx.game.client.model.entity.StaticEntity;
-import com.mygdx.game.client.view.CustomTiledMapRenderer;
+import com.mygdx.game.client.view.renderer.CustomTiledMapRenderer;
 import com.mygdx.game.shared.model.TilePolygonLoader;
 import com.mygdx.game.shared.model.CollideablePolygon;
 

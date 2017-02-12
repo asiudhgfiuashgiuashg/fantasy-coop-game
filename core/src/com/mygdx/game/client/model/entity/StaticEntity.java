@@ -6,14 +6,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.client.model.FlickerPointLight;
-import com.mygdx.game.client.view.CustomTiledMapRenderer;
+import com.mygdx.game.client.view.renderer.CustomTiledMapRenderer;
 import com.mygdx.game.shared.model.CollideablePolygon;
+
+import static com.mygdx.game.client.view.renderer.CustomTiledMapRenderer.DEFAULT_VISLAYER;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.mygdx.game.client.view.CustomTiledMapRenderer
-		.DEFAULT_VISLAYER;
 
 /**
  * A non-moving object visualized on the screen by a StaticTiledMapTile or an
