@@ -34,7 +34,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		posMsg.entityUID = uid;
 		posMsg.position = position;
 		posMsg.visLayer = visLayer;
-		server.getCommunicator().sendToAll(posMsg);
+		server.sendToAll(posMsg);
 	}
 
 	/**
@@ -45,7 +45,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		GameMessage.AnimationUpdateMessage msg = new GameMessage.AnimationUpdateMessage();
 		msg.entityUID = getUid();
 		msg.animationName = animationName;
-		server.getCommunicator().sendToAll(msg);
+		server.sendToAll(msg);
 		System.out.println("sent animation " + animationName);
 	}
 
@@ -61,7 +61,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		hitboxMsg.entityUID = getUid();
 		hitboxMsg.newHitbox = polygon;
 
-		server.getCommunicator().sendToAll(hitboxMsg);
+		server.sendToAll(hitboxMsg);
 		System.out.println("sent hitbox update message");
 	}
 }

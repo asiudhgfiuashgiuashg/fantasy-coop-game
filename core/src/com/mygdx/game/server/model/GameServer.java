@@ -10,6 +10,7 @@ import com.mygdx.game.server.model.player.Player;
 import com.mygdx.game.shared.model.exceptions.MapLoaderException;
 import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage;
+import com.mygdx.game.shared.network.Message;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 
@@ -319,8 +320,30 @@ public class GameServer implements Runnable {
 	public List<Player> getPlayers() {
 		return players;
 	}
+	
+	/**
+	 * send a message to everyone
+	 * @param msg
+	 */
+	public void sendToAll(Message msg) {
+		communicator.sendToAll(msg);
+	}
 
-	public ServerCommunicator getCommunicator() {
-		return communicator;
+	/**
+	 * send a message to everyone except a certain uid
+	 * @param msg
+	 * @param exceptId
+	 */
+	public void sendToAllExcept(Message msg, int exceptId) {
+		communicator.sendToAllExcept(msg, exceptId);
+	}
+
+	/**
+	 * send a message to a single connection
+	 * @param msg
+	 * @param recipientId
+	 */
+	public void sendTo(Message msg, int recipientId) {
+		communicator.sendTo(msg, recipientId);
 	}
 }
