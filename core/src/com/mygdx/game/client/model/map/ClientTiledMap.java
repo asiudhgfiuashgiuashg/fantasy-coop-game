@@ -1,9 +1,10 @@
-package com.mygdx.game.client.model;
+package com.mygdx.game.client.model.map;
 
 import box2dLight.Light;
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.mygdx.game.client.model.FlickerPointLight;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.shared.model.CollideablePolygon;

@@ -166,4 +166,16 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void debug() {
 		gameClient.getScreen().toggleDebug();
 	}
+	
+	public void resolution(int width, int height) {
+		gameClient.setResolution(width, height);
+	}
+	
+	public void fullscreen() {
+		gameClient.setFullscreen(true);
+	}
+	
+	public void windowed() {
+		gameClient.setFullscreen(false);
+	}
 }

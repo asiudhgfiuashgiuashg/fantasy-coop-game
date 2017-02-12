@@ -4,7 +4,7 @@ import box2dLight.Light;
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.client.model.ClientTiledMap;
+import com.mygdx.game.client.model.map.ClientTiledMap;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.List;

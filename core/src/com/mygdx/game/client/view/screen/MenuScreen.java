@@ -1,14 +1,10 @@
-package com.mygdx.game.client.view;
+package com.mygdx.game.client.view.screen;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,34 +14,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
-
-import static com.mygdx.game.client.model.GameClient.console;
 
 /**
  * Handles rendering for the main menu which appears when the game is first started.
  */
 
 public class MenuScreen extends DebuggableScreen {
-	final GameClient game;
-	
-	OrthographicCamera cam;
-	Skin skin;
+	private final GameClient game;
 
 	/**
 	 *
-	 * @param game
-	 * @param inputMultiplexer add the stage's input to this
 	 */
-	public MenuScreen(final GameClient game, final InputMultiplexer inputMultiplexer) {
-		this.game = game;
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false, 800, 480);
-		stage = new Stage();
-		this.inputMultiplexer = inputMultiplexer;
-		inputMultiplexer.addProcessor(stage);
+	public MenuScreen(Viewport viewport, Batch batch) {
+		super(viewport, batch);
+		game = GameClient.getInstance();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		/* To understand better how the ui is organized, think of a hierarchy of layout widgets (e.x. SplitPane), which is what organizes everything on the screen,
@@ -107,7 +93,7 @@ public class MenuScreen extends DebuggableScreen {
 						
 						if (game.isConnected()) {
 							
-							game.setScreen(new LobbyScreen(game, inputMultiplexer));
+							//game.setScreen(new LobbyScreen(game, inputMultiplexer));
 						}
 						
 					}
@@ -146,7 +132,7 @@ public class MenuScreen extends DebuggableScreen {
 						}
 						
 						if (game.isConnected()) {
-							game.setScreen(new LobbyScreen(game, inputMultiplexer));
+							//game.setScreen(new LobbyScreen(game, inputMultiplexer));
 						}
 					}
 				});
@@ -181,17 +167,17 @@ public class MenuScreen extends DebuggableScreen {
 	{
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        cam.update();
-        game.batch.begin();
-        game.batch.setProjectionMatrix(cam.combined);
-        
+     
         stage.draw();
-        game.batch.end();
 	}
 	
 	@Override
 	public void toggleDebug() {
 	
+	}
+
+	@Override
+	public void updateUI() {
+		// TODO Auto-generated method stub
 	}
 }

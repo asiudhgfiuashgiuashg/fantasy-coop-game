@@ -5,24 +5,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.game.client.model.ClientTiledMap;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
+import com.mygdx.game.client.model.map.ClientTiledMap;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.*;
-
-import static com.mygdx.game.client.model.GameClient.SCREEN_HEIGHT;
-import static com.mygdx.game.client.model.GameClient.console;
 
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
@@ -64,13 +60,13 @@ public class CustomTiledMapRenderer extends
 	private FPSLogger fpsLogger;
 	private List<DynamicEntity> dynamicEntities;
 
-	public CustomTiledMapRenderer(TiledMap map, RayHandler rayHandler) {
-		this(map, DEFAULT_UNIT_SCALE, rayHandler);
+	public CustomTiledMapRenderer(TiledMap map, Batch batch, RayHandler rayHandler) {
+		this(map, DEFAULT_UNIT_SCALE, batch, rayHandler);
 	}
 
 
-	public CustomTiledMapRenderer(TiledMap map, float unitScale, RayHandler rayHandler) {
-		super(map, unitScale);
+	public CustomTiledMapRenderer(TiledMap map, float unitScale, Batch batch, RayHandler rayHandler) {
+		super(map, unitScale, batch);
 		this.rayHandler = rayHandler;
 		setup();
 	}
@@ -80,7 +76,7 @@ public class CustomTiledMapRenderer extends
 	 */
 	private void setup() {
 		populateEntitiesLists();
-		rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
+		//rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
 		ambientColor = Color.CLEAR;
 		setAmbientAlpha(.15f);
 		fpsLogger = new FPSLogger();
@@ -246,6 +242,7 @@ public class CustomTiledMapRenderer extends
 	@Override
 	public void setView(OrthographicCamera camera) {
 		super.setView(camera);
+		rayHandler.setCombinedMatrix(camera);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		Gdx.gl20.glLineWidth(debugLineWidth / camera.zoom);
 	}

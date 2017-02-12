@@ -4,21 +4,26 @@ import box2dLight.RayHandler;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
+import com.mygdx.game.client.model.map.ClientTiledMap;
+import com.mygdx.game.client.model.map.ClientTmxLoader;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
-import com.mygdx.game.client.view.DebuggableScreen;
-import com.mygdx.game.client.view.GameScreen;
-import com.mygdx.game.client.view.MenuScreen;
+import com.mygdx.game.client.view.screen.DebuggableScreen;
+import com.mygdx.game.client.view.screen.GameScreen;
+import com.mygdx.game.client.view.screen.LobbyScreen;
+import com.mygdx.game.client.view.screen.MenuScreen;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
+import com.mygdx.game.shared.model.PreferencesConstants;
 import com.mygdx.game.shared.network.Message;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
@@ -42,47 +47,89 @@ public class GameClient extends Game {
 
 	private ClientLobbyManager lobbyManager;
 	private ClientTiledMap clientMap;
+
+	private SpriteBatch batch;
+
+	public static final int WORLD_HEIGHT = 240;
 	
-	public SpriteBatch batch;
-
-	public static final int SCREEN_WIDTH = 800;
-	public static final int SCREEN_HEIGHT = 600;
-
-
-	private RayHandler rayHandler;
+	private StretchViewport gameViewport;
+	private StretchViewport uiViewport;
+	
+	private int screenWidth;
+	private int screenHeight;
+	private float aspectRatio;
+	private boolean fullscreen;
+	
+	private MenuScreen menuScreen;
+	private LobbyScreen lobbyScreen;
+	private GameScreen gameScreen;
 
 	private InputMultiplexer inputMultiplexer;
 
 	/** renders the map */
 	private CustomTiledMapRenderer renderer;
 
-	private static final float MAP_SCALE = 4f; // how much to scale polygons,
+	private RayHandler rayHandler;
+
+	private static final float MAP_SCALE = 2f; // how much to scale polygons,
 	// tiles, etc. ex) A scale of 2.0 means that every pixel in a loaded image
 	// will take up 2 pixels in the game window.
 
 	@Override
 	public void create() {
+		// Load screen resolution preferences
+		Preferences prefs = Gdx.app.getPreferences(PreferencesConstants.RESOLUTION_PREFS);
+		fullscreen = prefs.getBoolean(PreferencesConstants.FULLSCREEN, PreferencesConstants.FULLSCREEN_DEFAULT);
+		screenWidth = prefs.getInteger(PreferencesConstants.SCREEN_WIDTH,
+				PreferencesConstants.SCREEN_WIDTH_DEFAULT);
+		screenHeight = prefs.getInteger(PreferencesConstants.SCREEN_HEIGHT,
+				PreferencesConstants.SCREEN_HEIGHT_DEFAULT);
+
+		// Apply screen resolution, fullscreen/windowed mode
+		setFullscreen(fullscreen);
+
+		// Set singleton instance
 		instance = this;
-		
-		batch = new SpriteBatch();
-		
+
 		setupConsole();
-		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(console.getInputProcessor());
-		Gdx.input.setInputProcessor(inputMultiplexer);
-		setScreen(new MenuScreen(this, inputMultiplexer));
 
-
-
+		batch = new SpriteBatch();
 		communicator = new ClientCommunicator();
 		lobbyManager = new ClientLobbyManager();
+
+		inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(console.getInputProcessor());
+		// TODO: inputMultiplexer.addProcessor(keyboardProcessor);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		rayHandler = new RayHandler(new World(new Vector2(0, 0), false));
 		// box2d lights need a rayhandler to be instantiated, so that's why
 		// we pass rayHandler to the loader.
 
 		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler);
-		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE, rayHandler);
+		renderer = new CustomTiledMapRenderer(clientMap, MAP_SCALE, batch, rayHandler);
+
+		aspectRatio = screenWidth / (float) screenHeight;
+
+		gameViewport = new StretchViewport(WORLD_HEIGHT * aspectRatio, WORLD_HEIGHT);
+		uiViewport = new StretchViewport(screenWidth, screenHeight);
+		
+		menuScreen = new MenuScreen(uiViewport, batch);
+		lobbyScreen = new LobbyScreen(uiViewport, batch);
+		gameScreen = new GameScreen(gameViewport, uiViewport, batch, rayHandler, renderer);
+		setScreen(menuScreen);
+	}
+
+	public float getAspectRatio() {
+		return aspectRatio;
+	}
+	
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+	
+	public int getScreenHeight() {
+		return screenHeight;
 	}
 
 	@Override
@@ -90,8 +137,6 @@ public class GameClient extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
-		batch.begin();
-		batch.end();
 		console.draw();
 
 		// temporary
@@ -100,7 +145,8 @@ public class GameClient extends Game {
 
 	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
+		uiViewport.update(width, height, true);
+		gameViewport.update(width, height);
 		console.refresh();
 	}
 
@@ -124,6 +170,8 @@ public class GameClient extends Game {
 			throws AlreadyConnectedException, ServerAlreadyInitializedException {
 		communicator.host(tcpPort);
 		connect(ClientCommunicator.LOCAL_HOST, tcpPort, username);
+
+		setScreen(lobbyScreen);
 	}
 
 	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException {
@@ -134,7 +182,7 @@ public class GameClient extends Game {
 	 * disconnect from the server and perform the accompanying display changes
 	 */
 	public void disconnect() {
-		setScreen(new MenuScreen(this, inputMultiplexer));
+		setScreen(menuScreen);
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -143,16 +191,17 @@ public class GameClient extends Game {
 	}
 
 	/**
-	 * Override to automatically dispose of previous screen.
+	 * Switches input processor to the new screen's stage.
 	 * 
 	 * @param screen
 	 */
 	@Override
 	public void setScreen(Screen screen) {
-		if (getScreen() != null) {
-			getScreen().dispose();
-		}
+		DebuggableScreen current = (DebuggableScreen) this.screen;
+		if (current != null) inputMultiplexer.removeProcessor(current.getStage());
 		super.setScreen(screen);
+		DebuggableScreen next = (DebuggableScreen) screen;
+		inputMultiplexer.addProcessor(next.getStage());
 	}
 
 	public boolean isConnected() {
@@ -164,8 +213,7 @@ public class GameClient extends Game {
 	}
 
 	public void transitionToInGame() {
-		setScreen(new GameScreen(this, clientMap, rayHandler,
-				inputMultiplexer, renderer));
+		setScreen(gameScreen);
 		console.log("Transitioned to in-game from lobby");
 	}
 
@@ -173,16 +221,16 @@ public class GameClient extends Game {
 	public DebuggableScreen getScreen() {
 		return (DebuggableScreen) super.getScreen();
 	}
-	
+
 	@Override
 	public void dispose() {
 		batch.dispose();
 	}
 
-
 	/**
-	 * add a dynamic entity to the map and register it with the renderer so
-	 * it will be rendered
+	 * add a dynamic entity to the map and register it with the renderer so it
+	 * will be rendered
+	 * 
 	 * @param newEntity
 	 */
 	public void addDynamicEntity(DynamicEntity newEntity) {
@@ -192,5 +240,28 @@ public class GameClient extends Game {
 
 	public ClientTiledMap getMap() {
 		return clientMap;
+	}
+
+	public void setResolution(int width, int height) {
+		screenWidth = width;
+		screenHeight = height;
+		aspectRatio = width / (float) height;
+
+		uiViewport.setWorldWidth(width);
+		uiViewport.setWorldHeight(height);
+		
+		gameViewport.setWorldWidth(WORLD_HEIGHT * aspectRatio);
+		
+		setFullscreen(fullscreen);
+	}
+	
+	public void setFullscreen(boolean full) {
+		fullscreen = full;
+		if (full) {
+			DisplayMode displayMode = Gdx.graphics.getDisplayMode();
+			Gdx.graphics.setFullscreenMode(displayMode);
+		} else {
+			Gdx.graphics.setWindowedMode(screenWidth, screenHeight);
+		}
 	}
 }

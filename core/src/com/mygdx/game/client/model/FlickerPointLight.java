@@ -15,9 +15,9 @@ public class FlickerPointLight extends PointLight {
 	// how many times to flicker per second - zero to not flicker
 	private float flickerRate;
 	// default for flickerDistMult
-	static final float DEFAULT_MIN_RADIUS_MULTIPLIER = .9f;
+	public static final float DEFAULT_MIN_RADIUS_MULTIPLIER = .9f;
 	// default for flickerAlphaMult
-	static final float DEFAULT_MIN_ALPHA_MULTIPLIER = .8f;
+	public static final float DEFAULT_MIN_ALPHA_MULTIPLIER = .8f;
 	// lowest distance that the light will flicker to
 	private float minDistance;
 	// whether the light is currently shrinking or expanding

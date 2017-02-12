@@ -1,6 +1,5 @@
-package com.mygdx.game.client.model;
+package com.mygdx.game.client.model.map;
 
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
+import com.mygdx.game.client.model.FlickerPointLight;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.client.view.CustomTiledMapRenderer;
 import com.mygdx.game.shared.model.TilePolygonLoader;

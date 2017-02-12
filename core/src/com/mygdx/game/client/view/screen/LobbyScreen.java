@@ -1,24 +1,20 @@
-package com.mygdx.game.client.view;
+package com.mygdx.game.client.view.screen;
 
-import java.util.List;
 import java.util.ListIterator;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
-import com.mygdx.game.shared.model.lobby.LobbyPlayer;
 import com.mygdx.game.shared.model.lobby.PlayerClass;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ReadyStatusMessage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -26,11 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Handles rendering for the lobby.
@@ -38,7 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * Created by elimonent on 8/18/16.
  */
 public class LobbyScreen extends DebuggableScreen {
-	final GameClient game;
+	private final GameClient game;
 	ClientLobbyManager lobby;
 	Skin skin;		//Default skin.
 	Table players; //should rename this. Might get confusing due to the number of variables with player in their name.
@@ -48,21 +44,14 @@ public class LobbyScreen extends DebuggableScreen {
 	TextField chatField;	//This is the chat bar in the chat system
 	TextButton startButton;
 	
-	OrthographicCamera cam;
-	
-	public LobbyScreen(GameClient gameTemp, InputMultiplexer inputMultiplexer) {
-		game = gameTemp;
-		this.inputMultiplexer = inputMultiplexer;
+	public LobbyScreen(Viewport viewport, Batch batch) {
+		super(viewport, batch);
+		game = GameClient.getInstance();
 		lobby = game.getLobbyManager();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
-		stage = new Stage();
+
 		stage.setDebugAll(true);
-		inputMultiplexer.addProcessor(stage);
-		
-		cam = new OrthographicCamera();
-		cam.setToOrtho(false, 800, 480);
 		
 		//The following is the setup for the list of players and their status, which is updated using the updatePlayers() function.
 		//TODO: Consider changing labels to use hash? instead, where the uid of the lobbyplayer is the key, and the lobbyplayer is the value.
@@ -167,13 +156,7 @@ public class LobbyScreen extends DebuggableScreen {
 	{
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
-        cam.update();
-        
-        game.batch.setProjectionMatrix(cam.combined);
-        game.batch.begin();
-        game.batch.end();
-        
+                
         stage.draw();
         stage.act();
 	}
