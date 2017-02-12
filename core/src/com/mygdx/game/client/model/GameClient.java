@@ -2,6 +2,8 @@ package com.mygdx.game.client.model;
 
 import box2dLight.RayHandler;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
@@ -273,15 +275,17 @@ public class GameClient extends Game {
 	 * @throws ServerAlreadyInitializedException
 	 */
 	public void hostServer(int tcpPort, String username)
-			throws AlreadyConnectedException, ServerAlreadyInitializedException {
+			throws AlreadyConnectedException, ServerAlreadyInitializedException, IOException {
 		communicator.host(tcpPort);
 		connect(ClientCommunicator.LOCAL_HOST, tcpPort, username);
 
 		setScreen(lobbyScreen);
 	}
 
-	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException {
+	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException, IOException {
 		communicator.connect(ip, tcpPort, username);
+		
+		setScreen(lobbyScreen);
 	}
 
 	/**
@@ -304,6 +308,10 @@ public class GameClient extends Game {
 		return lobbyManager;
 	}
 
+	public void showLobbyScreen() {
+		setScreen(lobbyScreen);
+	} 
+	
 	public void transitionToInGame() {
 		setScreen(gameScreen);
 		console.log("Transitioned to in-game from lobby");

@@ -1,5 +1,7 @@
 package com.mygdx.game.shared.util;
 
+import java.io.IOException;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
@@ -43,6 +45,9 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 
 		} catch (AlreadyConnectedException e) {
 			console.log("Already connected to a server!", LogLevel.ERROR);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -60,6 +65,9 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 			console.log(e.getMessage(), LogLevel.ERROR);
 		} catch (AlreadyConnectedException e) {
 			console.log(e.getMessage() + "--" + "You can't start a server when you are \n already connected to one!", LogLevel.ERROR);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 

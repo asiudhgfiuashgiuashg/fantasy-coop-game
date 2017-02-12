@@ -28,8 +28,7 @@ import com.strongjoshua.console.LogLevel;
 
 public class ClientCommunicator extends Communicator {
 	private static final GameClient gameClient = GameClient.getInstance();
-	private static final SingletonGUIConsole console = SingletonGUIConsole
-			.getInstance();
+	private static final SingletonGUIConsole console = SingletonGUIConsole.getInstance();
 	private ClientLobbyManager manager;
 
 	private static final int CONNECT_TIMEOUT = 5000; // timeout for connecting
@@ -60,7 +59,6 @@ public class ClientCommunicator extends Communicator {
 		// serialized/deserialized)
 	}
 
-
 	public void sendToServer(Message msg) {
 		client.sendTCP(msg);
 	}
@@ -72,29 +70,24 @@ public class ClientCommunicator extends Communicator {
 			if (msg == null) {
 				return;
 			}
-			
+
 			/* PROCESS MESSAGES */
 
 			if (msg instanceof LobbyPlayerInfoMessage) {
 				LobbyPlayerInfoMessage infoMsg = (LobbyPlayerInfoMessage) msg;
 				console.log("Added player to lobby with uid " + infoMsg.uid);
-				ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg
-						.uid, infoMsg.username, infoMsg.playerClass);
+				ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg.uid, infoMsg.username,
+						infoMsg.playerClass);
 				manager.addLobbyPlayer(lobbyPlayer);
 			} else if (msg instanceof ClassAssignmentMessage) {
 				ClassAssignmentMessage classMsg = (ClassAssignmentMessage) msg;
-				console.log("Got a class assignment for this client: " +
-						classMsg.playerClass);
-				manager.getLocalLobbyPlayer().setPlayerClass(classMsg
-						.playerClass);
+				console.log("Got a class assignment for this client: " + classMsg.playerClass);
+				manager.getLocalLobbyPlayer().setPlayerClass(classMsg.playerClass);
 			} else if (msg instanceof OtherClassAssignmentMessage) {
-				OtherClassAssignmentMessage classMsg =
-						(OtherClassAssignmentMessage) msg;
-				console.log("Got a class assignment message for some lobby " +
-						"player besides myself: " + classMsg.playerClass + "/"
-						+ "uid:" + classMsg.uid);
-				manager.getByUid(classMsg.uid).setPlayerClass(classMsg
-						.playerClass);
+				OtherClassAssignmentMessage classMsg = (OtherClassAssignmentMessage) msg;
+				console.log("Got a class assignment message for some lobby " + "player besides myself: "
+						+ classMsg.playerClass + "/" + "uid:" + classMsg.uid);
+				manager.getByUid(classMsg.uid).setPlayerClass(classMsg.playerClass);
 			} else if (msg instanceof ChooseUsernameMessage) {
 				ChooseUsernameMessage usrMsg = (ChooseUsernameMessage) msg;
 				ClientLobbyPlayer lobbyPlayer = manager.getByUid(usrMsg.uid);
@@ -102,7 +95,7 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof ReadyStatusMessage) {
 				ReadyStatusMessage rdyMsg = (ReadyStatusMessage) msg;
 				ClientLobbyPlayer lobbyPlayer = manager.getByUid(rdyMsg.uid);
-				//find out who the uid refers to
+				// find out who the uid refers to
 				lobbyPlayer.setReady(rdyMsg.ready);
 			} else if (msg instanceof GameStartMessage) {
 				gameClient.transitionToInGame();
@@ -112,20 +105,16 @@ public class ClientCommunicator extends Communicator {
 				String username = manager.getByUid(chatMsg.uid).getUsername();
 				String chatBoxStr = username + ": " + chatMsg.message;
 				console.log("CHAT: " + chatBoxStr);
-				manager.addChatMessage(chatMsg); //save
+				manager.addChatMessage(chatMsg); // save
 				// the chat message
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
-				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage
-						.InitDynamicEntityMsg) msg;
-				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid,
-						initMsg.className, initMsg.pos);
+				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
+				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
 				newEntity.hitbox = initMsg.hitbox;
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
-				GameMessage.PosUpdateMessage posMsg = (GameMessage
-						.PosUpdateMessage) msg;
-				DynamicEntity entity = gameClient.getMap()
-						.getDynamicEntityByUid(posMsg.entityUID);
+				GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
+				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(posMsg.entityUID);
 				if (posMsg.position != null) {
 					entity.setPosition(posMsg.position);
 				}
@@ -136,14 +125,11 @@ public class ClientCommunicator extends Communicator {
 				entity.setAnimation(animationUpdateMessage.animationName);
 			} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
 				System.out.println("got a hitbox update");
-				GameMessage.HitboxUpdateMessage hitboxMsg =  (GameMessage
-						.HitboxUpdateMessage) msg;
-				DynamicEntity entity = gameClient.getMap()
-						.getDynamicEntityByUid(hitboxMsg.entityUID);
+				GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
+				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
 				entity.hitbox = hitboxMsg.newHitbox;
 			} else {
-				System.out.println("unhandled network message of type " + msg
-						.getClass());
+				System.out.println("unhandled network message of type " + msg.getClass());
 			}
 			gameClient.getScreen().updateUI();
 		}
@@ -165,30 +151,23 @@ public class ClientCommunicator extends Communicator {
 		}
 	}
 
-	public void connect(String ip, int tcpPort, String username) throws
-			AlreadyConnectedException {
+	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException, IOException {
 		if (null != client && client.isConnected() == true) {
 			throw new AlreadyConnectedException();
 		}
 
-
 		client.start();
-		try {
-			client.connect(CONNECT_TIMEOUT, ip, tcpPort);
-			console.log("Connected to server", LogLevel.SUCCESS);
+		client.connect(CONNECT_TIMEOUT, ip, tcpPort);
+		console.log("Connected to server", LogLevel.SUCCESS);
 
-			ClientLobbyPlayer player = new ClientLobbyPlayer(ClientLobbyPlayer
-					.LOCAL_PLAYER_UID, username);
-			manager = gameClient.getLobbyManager();
-			manager.addLobbyPlayer(player);
-			manager.setLocalLobbyPlayer(player);
+		ClientLobbyPlayer player = new ClientLobbyPlayer(ClientLobbyPlayer.LOCAL_PLAYER_UID, username);
+		manager = gameClient.getLobbyManager();
+		manager.addLobbyPlayer(player);
+		manager.setLocalLobbyPlayer(player);
 
-			ChooseUsernameMessage msg = new ChooseUsernameMessage();
-			msg.username = username;
-			sendToServer(msg);
-		} catch (IOException e) {
-			console.log(e.getMessage(), LogLevel.ERROR);
-		}
+		ChooseUsernameMessage msg = new ChooseUsernameMessage();
+		msg.username = username;
+		sendToServer(msg);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.mygdx.game.client.view.screen;
 
+import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,14 +19,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
+import com.mygdx.game.shared.util.SingletonGUIConsole;
 
 /**
- * Handles rendering for the main menu which appears when the game is first started.
+ * Handles rendering for the main menu which appears when the game is first
+ * started.
  */
 
 public class MenuScreen extends DebuggableScreen {
 	private final GameClient game;
-
+	private static final SingletonGUIConsole console = SingletonGUIConsole.getInstance();
+	
 	/**
 	 *
 	 */
@@ -89,11 +93,15 @@ public class MenuScreen extends DebuggableScreen {
 							System.out.println("Neo, you're already in the Matrix");
 						} catch (ServerAlreadyInitializedException e) {
 							System.out.println("The world already exists, find a new one... scrub");
+						} catch (NumberFormatException e) {
+							console.log(e.getMessage());
+						} catch (IOException e) {
+							console.log(e.getMessage());
 						}
 						
 						if (game.isConnected()) {
 							
-							//game.setScreen(new LobbyScreen(game, inputMultiplexer));
+							game.showLobbyScreen();
 						}
 						
 					}
@@ -128,11 +136,15 @@ public class MenuScreen extends DebuggableScreen {
 						try {
 							game.connect(ipEntry.getText(), Integer.parseInt(portEntry.getText()), usernameEntry.getText());
 						} catch (AlreadyConnectedException e) {
-							System.out.println("Neo, you're already in the Matrix");
+							console.log(e.getMessage());
+						} catch (NumberFormatException e) {
+							console.log(e.getMessage());
+						} catch (IOException e) {
+							console.log(e.getMessage());
 						}
 						
 						if (game.isConnected()) {
-							//game.setScreen(new LobbyScreen(game, inputMultiplexer));
+							game.showLobbyScreen();
 						}
 					}
 				});
@@ -159,18 +171,19 @@ public class MenuScreen extends DebuggableScreen {
 		stage.addActor(pane);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.badlogic.gdx.Screen#render(float)
 	 */
 	@Override
-	public void render(float delta)
-	{    
-        stage.draw();
+	public void render(float delta) {
+		stage.draw();
 	}
-	
+
 	@Override
 	public void toggleDebug() {
-	
+
 	}
 
 	@Override
