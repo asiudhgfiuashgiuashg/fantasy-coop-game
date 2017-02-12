@@ -35,7 +35,7 @@ public class TestEnemy2 extends Enemy {
 	public void act(long elapsedTime) {
 		super.act(elapsedTime);
 		if (!movedLeft) {
-			applyForce(new Vector2(-0.001f, 0f));
+			applyForce(new Vector2(-0.0015f, 0f));
 			movedLeft = true;
 		}
 

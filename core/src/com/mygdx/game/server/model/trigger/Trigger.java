@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model.trigger;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.shared.model.CollideablePolygon;
@@ -14,8 +15,13 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public abstract class Trigger extends PolygonObject implements Actable {
 
-	protected Trigger(CollideablePolygon polygon) {
-		super(polygon, false);
+	/**
+	 *
+	 * @param polygon the hitbox of the trigger
+	 * @param position where to place the hitbox (the position of the trigger)
+	 */
+	protected Trigger(CollideablePolygon polygon, Vector2 position) {
+		super(polygon, false, position);
 	}
 
 }

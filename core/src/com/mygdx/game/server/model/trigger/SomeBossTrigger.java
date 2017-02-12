@@ -1,11 +1,12 @@
 package com.mygdx.game.server.model.trigger;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 public class SomeBossTrigger extends Trigger {
 
-	public SomeBossTrigger(CollideablePolygon polygon) {
-		super(polygon);
+	public SomeBossTrigger(CollideablePolygon polygon, Vector2 position) {
+		super(polygon, position);
 		// TODO Auto-generated constructor stub
 	}
 

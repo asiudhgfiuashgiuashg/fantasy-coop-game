@@ -17,9 +17,8 @@ public abstract class Entity extends PolygonObject {
 	static final GameServer server = GameServer.getInstance();
 
 	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
-		super(null, solid);
+		super(null, solid, position);
 		this.uid = uid;
-		this.position = position;
 		this.visLayer = visLayer;
 
 		// Draw on creation
@@ -30,10 +29,7 @@ public abstract class Entity extends PolygonObject {
 	 * Unique identifier synchronized between client and server
 	 */
 	protected String uid;
-	/**
-	 * Position in global coordinates
-	 */
-	protected Vector2 position;
+
 
 	/**
 	 * Visibility layer for rendering
@@ -52,15 +48,7 @@ public abstract class Entity extends PolygonObject {
 		server.sendToAll(msg);
 	}
 
-	/**
-	 * Returns a copy of the entity's position. All modifications must be done
-	 * via setPosition()
-	 *
-	 * @return copy of position
-	 */
-	public Vector2 getPosition() {
-		return new Vector2(position);
-	}
+
 
 	/**
 	 * Sets the entity's position along with its hitbox's position
@@ -116,5 +104,27 @@ public abstract class Entity extends PolygonObject {
 	public String toString() {
 		return "Entity [uid=" + uid + ", position=" + position + ", visLayer="
 				+ visLayer + "]";
+	}
+
+	/**
+	 * equal if uids are equal
+	 * @param other
+	 * @return
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other == this) {
+			return true;
+		}
+		if (!(other instanceof Entity)) {
+			return false;
+		}
+		Entity theOther = (Entity) other;
+		return this.getUid().equalsIgnoreCase(theOther.getUid());
+	}
+
+	@Override
+	public int hashCode() {
+		return 37 * getUid().hashCode();
 	}
 }

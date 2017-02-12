@@ -24,9 +24,10 @@ public class GameScreen extends DebuggableScreen {
 		game = GameClient.getInstance();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-		// TEST: Just an example of positioning the camera
-		camera.position.x = GameClient.WORLD_HEIGHT / 2;
-		camera.position.y = GameClient.WORLD_HEIGHT * game.getAspectRatio() / 2;
+		// TEST: Just an example of positioning the camera; completely arbitrary
+		camera.position.x = 120;
+		camera.position.y = 120;
+		camera.zoom = 1.2f;
 		
 		//Setting up a ScrollPane before adding it to the stage as an example
 		// of how it works.

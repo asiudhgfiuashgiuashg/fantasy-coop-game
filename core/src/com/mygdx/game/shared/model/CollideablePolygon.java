@@ -183,4 +183,8 @@ public class CollideablePolygon extends Polygon {
 
 		return transformedCutoffY;
 	}
+
+	public void setPosition(Vector2 position) {
+		setPosition(position.x, position.y);
+	}
 }

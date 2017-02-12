@@ -1,8 +1,9 @@
 package com.mygdx.game.server.model;
 
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.CollideablePolygon;
+
+import java.util.Arrays;
 
 /**
  * An object which has a CollideablePolygon as one of its fields. A
@@ -15,6 +16,7 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  *
  */
 public abstract class PolygonObject {
+
 	/** The polygon */
 	private CollideablePolygon polygon;
 
@@ -22,15 +24,36 @@ public abstract class PolygonObject {
 	private boolean solid;
 
 	/**
+	 * Position in global coordinates
+	 * polygon hitbox is here
+	 */
+	protected Vector2 position;
+
+	/* Since hitboxes are stored with origin at the object's position, need
+	to translate the hitboxes between two objects into these two
+	variables before collision checking.*/
+
+	private static final CollideablePolygon thisTranslatedPolygon = new
+			CollideablePolygon();
+	private static final CollideablePolygon otherTranslatedPolygon = new
+			CollideablePolygon();
+
+	/**
 	 * Constructs a PolygonObject and adds it to GameMap's list of solidObjects
 	 * if it is solid.
-	 * 
-	 * @param polygon
+	 *  @param polygon
 	 * @param solid
+	 * @param position
 	 */
-	public PolygonObject(CollideablePolygon polygon, boolean solid) {
+	public PolygonObject(CollideablePolygon polygon, boolean solid, Vector2
+			position) {
 		this.polygon = polygon;
 		this.solid = solid;
+		this.position = position;
+		if (polygon != null) {
+			polygon.setPosition(position);
+		}
+
 	}
 
 	/**
@@ -41,8 +64,10 @@ public abstract class PolygonObject {
 	 * @return true if there is a collision
 	 */
 	public boolean collides(PolygonObject other) {
-		CollideablePolygon p1 = this.polygon;
-		CollideablePolygon p2 = other.polygon;
+		CollideablePolygon p1 = new CollideablePolygon(this.polygon);
+		CollideablePolygon p2 = new CollideablePolygon(other.polygon);
+		p1.setPosition(this.position);
+		p2.setPosition(other.position);
 		Vector2 diff = new Vector2(p2.getX() - p1.getX(), p2.getY() - p1.getY());
 		if (diff.len() > p1.getMaxLength() + p2.getMaxLength()) {
 			return false;
@@ -98,6 +123,16 @@ public abstract class PolygonObject {
 			return GameServer.getInstance().getMap().getSolidObjects().remove(this);
 		}
 		return true;
+	}
+
+	/**
+	 * Returns a copy of the entity's position. All modifications must be done
+	 * via setPosition()
+	 *
+	 * @return copy of position
+	 */
+	public Vector2 getPosition() {
+		return new Vector2(position);
 	}
 
 }

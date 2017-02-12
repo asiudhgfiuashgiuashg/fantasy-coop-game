@@ -45,7 +45,7 @@ public class GameClient extends Game {
 	 * The guaranteed height of the game world to be shown. Invariant under
 	 * different resolutions.
 	 */
-	public static final int WORLD_HEIGHT = 120;
+	public static final int WORLD_HEIGHT = 180;
 
 	/** Console for logging and commands */
 	public static SingletonGUIConsole console;
