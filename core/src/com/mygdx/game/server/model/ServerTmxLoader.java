@@ -202,13 +202,9 @@ public class ServerTmxLoader {
 			String uid = UniqueIDAssigner.generateStaticEntityUID(name,
 					mapName, id);
 			Tile tile = tiles.get(tileGid);
-			CollideablePolygon hitboxPolygon = null;
-			if (null != tile && null != tile.hitbox) {
-				hitboxPolygon = new CollideablePolygon(tile.hitbox);
-			}
 
 			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y),
-					visLayer, solid, hitboxPolygon));
+					visLayer, solid, tile.hitbox.getVertices()));
 		}
 	}
 
@@ -321,7 +317,6 @@ public class ServerTmxLoader {
 
 			// Triggers are rectangles
 			float[] vertices = {0, 0, 0, height, width, height, width, 0};
-			CollideablePolygon hitbox = new CollideablePolygon(vertices);
 
 			// Check for special classes of triggers
 			// if a trigger's type is given, then use it to choose what generic
@@ -329,11 +324,12 @@ public class ServerTmxLoader {
 			// Use the name as an instantiation parameter for a generic tr
 			if (type != null) {
 				if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
-					trig = new CutsceneTrigger(hitbox, name, new Vector2(x,
+					trig = new CutsceneTrigger(vertices, name, new Vector2(x,
 							y));
 				} else if (type.equals(MapLoaderConstants
 						.MAPLOAD_TRIGGER_TYPE)) {
-					trig = new MapLoadTrigger(hitbox, name, new Vector2(x, y));
+					trig = new MapLoadTrigger(vertices, name, new Vector2(x,
+							y));
 				}
 				// if a trigger's type is not given, then use the name field to
 				// figure out what class to instantiate
@@ -344,7 +340,7 @@ public class ServerTmxLoader {
 				Constructor<?> cons = c.getConstructor(CollideablePolygon
 						.class);
 				Object o;
-				o = cons.newInstance(hitbox);
+				o = cons.newInstance(vertices);
 				trig = (Trigger) o;
 			}
 			map.getTriggers().add(trig);
@@ -360,14 +356,14 @@ public class ServerTmxLoader {
 	private void loadBoundaries(Element layer, float mapHeight) {
 		for (Element object : layer.getChildrenByName("object")) {
 			// Load polygon			
-			CollideablePolygon p = TilePolygonLoader.loadPolygon(object,
+			float[] vertices = TilePolygonLoader.loadPolygonVertices(object,
 					tileHeight);
 
 			// Boundary position
 			float x = object.getFloatAttribute("x");
 			float y = mapHeight - object.getFloatAttribute("y");
 
-			Boundary b = new Boundary(p, new Vector2(x, y));
+			Boundary b = new Boundary(vertices, new Vector2(x, y));
 			map.getBoundaries().add(b);
 		}
 	}

@@ -14,6 +14,7 @@ import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.controller.Communicator;
+import com.mygdx.game.shared.model.CollideablePolygon;
 import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChooseUsernameMessage;
@@ -110,7 +111,7 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
 				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
-				newEntity.hitbox = initMsg.hitbox;
+				newEntity.hitbox = new CollideablePolygon(initMsg.vertices);
 				newEntity.hitbox.setPosition(newEntity.getPos());
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
@@ -128,7 +129,7 @@ public class ClientCommunicator extends Communicator {
 				System.out.println("got a hitbox update");
 				GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
 				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
-				entity.hitbox = hitboxMsg.newHitbox;
+				entity.hitbox = new CollideablePolygon(hitboxMsg.vertices);
 				entity.hitbox.setPosition(entity.getPos());
 			} else {
 				System.out.println("unhandled network message of type " + msg.getClass());

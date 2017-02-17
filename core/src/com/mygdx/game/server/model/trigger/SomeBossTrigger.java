@@ -5,8 +5,8 @@ import com.mygdx.game.shared.model.CollideablePolygon;
 
 public class SomeBossTrigger extends Trigger {
 
-	public SomeBossTrigger(CollideablePolygon polygon, Vector2 position) {
-		super(polygon, position);
+	public SomeBossTrigger(float[] vertices, Vector2 position) {
+		super(vertices, position);
 		// TODO Auto-generated constructor stub
 	}
 

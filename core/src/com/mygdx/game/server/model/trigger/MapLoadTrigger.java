@@ -10,9 +10,9 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public class MapLoadTrigger extends Trigger {
 
-	public MapLoadTrigger(CollideablePolygon polygon, String name, Vector2
+	public MapLoadTrigger(float[] vertices, String name, Vector2
 			position) {
-		super(polygon, position);
+		super(vertices, position);
 		// TODO load map of name
 	}
 

@@ -37,12 +37,12 @@ public class GameMessage extends Message {
 		public Vector2 pos;
 		public String entUid;
 		public boolean solid;
-		public CollideablePolygon hitbox;
+		public float[] vertices;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {
 		public String entityUID;
-		public CollideablePolygon newHitbox;
+		public float[] vertices;
 	}
 	// and many more to come! These are just some examples
 }

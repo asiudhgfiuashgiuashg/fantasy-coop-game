@@ -15,28 +15,12 @@ import java.util.Arrays;
  * @author Sawyer Harris
  *
  */
-public abstract class PolygonObject {
+public abstract class PolygonObject extends CollideablePolygon {
 
-	/** The polygon */
-	private CollideablePolygon polygon;
 
 	/** If object is solid i.e. cannot overlap with another */
 	private boolean solid;
 
-	/**
-	 * Position in global coordinates
-	 * polygon hitbox is here
-	 */
-	protected Vector2 position;
-
-	/* Since hitboxes are stored with origin at the object's position, need
-	to translate the hitboxes between two objects into these two
-	variables before collision checking.*/
-
-	private static final CollideablePolygon thisTranslatedPolygon = new
-			CollideablePolygon();
-	private static final CollideablePolygon otherTranslatedPolygon = new
-			CollideablePolygon();
 
 	/**
 	 * Constructs a PolygonObject and adds it to GameMap's list of solidObjects
@@ -45,53 +29,14 @@ public abstract class PolygonObject {
 	 * @param solid
 	 * @param position
 	 */
-	public PolygonObject(CollideablePolygon polygon, boolean solid, Vector2
+	public PolygonObject(float[] vertices, boolean solid, Vector2
 			position) {
-		this.polygon = polygon;
+		super(vertices);
 		this.solid = solid;
-		this.position = position;
-		if (polygon != null) {
-			polygon.setPosition(position);
-		}
-
+		setPosition(position);
 	}
 
-	/**
-	 * Checks for a collision with another polygon object.
-	 * 
-	 * @param other
-	 *            the other polygonobject
-	 * @return true if there is a collision
-	 */
-	public boolean collides(PolygonObject other) {
-		CollideablePolygon p1 = new CollideablePolygon(this.polygon);
-		CollideablePolygon p2 = new CollideablePolygon(other.polygon);
-		p1.setPosition(this.position);
-		p2.setPosition(other.position);
-		Vector2 diff = new Vector2(p2.getX() - p1.getX(), p2.getY() - p1.getY());
-		if (diff.len() > p1.getMaxLength() + p2.getMaxLength()) {
-			return false;
-		}
-		return p2.collides(p1);
-	}
 
-	/**
-	 * Gets the polygon
-	 * 
-	 * @return polygon
-	 */
-	public CollideablePolygon getPolygon() {
-		return polygon;
-	}
-
-	/**
-	 * Sets the polygon
-	 * 
-	 * @param polygon
-	 */
-	public void setPolygon(CollideablePolygon polygon) {
-		this.polygon = polygon;
-	}
 
 	/**
 	 * Returns if the polygon is solid i.e. cannot overlap with others
@@ -132,7 +77,7 @@ public abstract class PolygonObject {
 	 * @return copy of position
 	 */
 	public Vector2 getPosition() {
-		return new Vector2(position);
+		return new Vector2(getX(), getY());
 	}
 
 }

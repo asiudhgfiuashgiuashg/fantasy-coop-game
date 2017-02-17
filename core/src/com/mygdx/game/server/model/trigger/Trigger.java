@@ -20,8 +20,8 @@ public abstract class Trigger extends PolygonObject implements Actable {
 	 * @param polygon the hitbox of the trigger
 	 * @param position where to place the hitbox (the position of the trigger)
 	 */
-	protected Trigger(CollideablePolygon polygon, Vector2 position) {
-		super(polygon, false, position);
+	protected Trigger(float[] vertices, Vector2 position) {
+		super(vertices, false, position);
 	}
 
 }

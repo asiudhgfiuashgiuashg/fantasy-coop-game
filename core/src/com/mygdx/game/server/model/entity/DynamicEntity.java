@@ -32,7 +32,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		GameMessage.PosUpdateMessage posMsg = new GameMessage
 				.PosUpdateMessage();
 		posMsg.entityUID = uid;
-		posMsg.position = position;
+		posMsg.position = getPosition();
 		posMsg.visLayer = visLayer;
 		server.sendToAll(posMsg);
 	}
@@ -46,7 +46,6 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		msg.entityUID = getUid();
 		msg.animationName = animationName;
 		server.sendToAll(msg);
-		System.out.println("sent animation " + animationName);
 	}
 
 	/**
@@ -54,12 +53,15 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	 * @param polygon
 	 */
 	@Override
-	public void setPolygon(CollideablePolygon polygon) {
-		super.setPolygon(polygon);
+	public void setVertices(float[] vertices) {
+		super.setVertices(vertices);
+
 		GameMessage.HitboxUpdateMessage hitboxMsg = new GameMessage
 				.HitboxUpdateMessage();
 		hitboxMsg.entityUID = getUid();
-		hitboxMsg.newHitbox = polygon;
+		hitboxMsg.vertices = vertices;
+
+		updateMaxLength();
 
 		server.sendToAll(hitboxMsg);
 		System.out.println("sent hitbox update message");

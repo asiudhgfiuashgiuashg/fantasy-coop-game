@@ -19,8 +19,8 @@ public class Boundary extends PolygonObject {
 	 * @param polygon the hitbox of the boundary
 	 * @param position where to place the hitbox (in world coordinates)
 	 */
-	public Boundary(CollideablePolygon polygon, Vector2 position) {
-		super(polygon, true, position);
+	public Boundary(float[] vertices, Vector2 position) {
+		super(vertices, true, position);
 	}
 
 }

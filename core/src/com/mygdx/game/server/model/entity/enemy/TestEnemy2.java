@@ -20,9 +20,8 @@ public class TestEnemy2 extends Enemy {
 	protected TestEnemy2(String uid, Vector2 position, int visLayer, boolean
 			solid) {
 		super(uid, position, visLayer, solid);
-		CollideablePolygon hitbox = new CollideablePolygon(this.hitbox);
-		hitbox.setPosition(position.x, position.y);
-		setPolygon(hitbox);
+		setPosition(position.x, position.y);
+		setVertices(this.hitbox);
 		setMass(1000f);
 	}
 
@@ -35,7 +34,7 @@ public class TestEnemy2 extends Enemy {
 	public void act(long elapsedTime) {
 		super.act(elapsedTime);
 		if (!movedLeft) {
-			applyForce(new Vector2(-0.0015f, 0f));
+			//applyForce(new Vector2(-0.0015f, 0f));
 			movedLeft = true;
 		}
 

@@ -16,13 +16,17 @@ public abstract class Entity extends PolygonObject {
 
 	static final GameServer server = GameServer.getInstance();
 
-	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
-		super(null, solid, position);
+	public Entity(float[] vertices, String uid, Vector2 position, int visLayer, boolean solid) {
+		super(vertices, solid, position);
 		this.uid = uid;
 		this.visLayer = visLayer;
 
 		// Draw on creation
 		draw();
+	}
+
+	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
+		this(null, uid, position, visLayer, solid);
 	}
 
 	/**
@@ -43,11 +47,10 @@ public abstract class Entity extends PolygonObject {
 	public void draw() {
 		GameMessage.PosUpdateMessage msg = new GameMessage.PosUpdateMessage();
 		msg.entityUID = uid;
-		msg.position = position;
+		msg.position = getPosition();
 		msg.visLayer = visLayer;
 		server.sendToAll(msg);
 	}
-
 
 
 	/**
@@ -55,16 +58,10 @@ public abstract class Entity extends PolygonObject {
 	 *
 	 * @param position
 	 */
+	@Override
 	public void setPosition(Vector2 position) {
 		if (!getPosition().epsilonEquals(position, .00000001f)) {
-			this.position = position;
-
-			// Bind hitbox position to entity position
-			Polygon polygon = getPolygon();
-			if (polygon != null) {
-				getPolygon().setPosition(position.x, position.y);
-			}
-
+			super.setPosition(position);
 			draw();
 		}
 	}
@@ -102,12 +99,12 @@ public abstract class Entity extends PolygonObject {
 
 	@Override
 	public String toString() {
-		return "Entity [uid=" + uid + ", position=" + position + ", visLayer="
-				+ visLayer + "]";
+		return "Entity [uid=" + uid + ", position=" + getPosition() + ", " + "visLayer=" + visLayer + "]";
 	}
 
 	/**
 	 * equal if uids are equal
+	 *
 	 * @param other
 	 * @return
 	 */

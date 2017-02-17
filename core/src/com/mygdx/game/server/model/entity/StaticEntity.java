@@ -24,9 +24,9 @@ public class StaticEntity extends Entity {
 	 * @param solid
 	 * @param polygon
 	 */
-	public StaticEntity(String uid, Vector2 position, int visLayer, boolean solid, CollideablePolygon polygon) {
-		super(uid, position, visLayer, solid);
-		setPolygon(polygon);
+	public StaticEntity(String uid, Vector2 position, int visLayer, boolean
+			solid, float[] vertices) {
+		super(vertices, uid, position, visLayer, solid);
 	}
 
 }

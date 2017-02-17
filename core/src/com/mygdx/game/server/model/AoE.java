@@ -18,7 +18,7 @@ public class AoE extends PolygonObject {
 	 * @param polygon the hitbox of the aoe
 	 * @param position where the place the aoe hitbox
 	 */
-	public AoE(CollideablePolygon polygon, Vector2 position) {
-		super(polygon, false, position);
+	public AoE(float[] vertices, Vector2 position) {
+		super(vertices, false, position);
 	}
 }

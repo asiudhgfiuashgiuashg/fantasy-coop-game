@@ -19,8 +19,7 @@ public class TestEnemy extends Enemy {
 
 	protected TestEnemy(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
-		CollideablePolygon hitbox = new CollideablePolygon(this.hitbox);
-		setPolygon(hitbox);
+		setVertices(hitbox);
 		setMass(1000f);
 		System.out.println("created testenemy at pos " + position);
 

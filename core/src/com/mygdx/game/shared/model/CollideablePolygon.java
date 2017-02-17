@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.server.model.PolygonObject;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
@@ -44,8 +45,20 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	public CollideablePolygon(float[] vertices) {
-		super(vertices);
+		super();
+		if (vertices != null) {
+			setVertices(vertices); //smh
+		}
+
+
 		cutoffY = calcCutoffY();
+		updateMaxLength();
+	}
+
+	/**
+	 * proactively calculate the max length value
+	 */
+	protected void updateMaxLength() {
 		maxLength = calcMaxLength();
 	}
 
@@ -60,6 +73,20 @@ public class CollideablePolygon extends Polygon {
 		setPosition(polygon.getX(), polygon.getY());
 		setRotation(polygon.getRotation());
 		setScale(polygon.getScaleX(), polygon.getScaleY());
+	}
+
+	/**
+	 * Checks for a collision with another polygon object.
+	 *
+	 * @param other the other polygonobject
+	 * @return true if there is a collision
+	 */
+	public boolean collides(CollideablePolygon other) {
+		Vector2 diff = new Vector2(other.getX() - this.getX(), other.getY() - this.getY());
+		if (diff.len() > other.getMaxLength() + this.getMaxLength()) {
+			return false;
+		}
+		return INTERSECTOR.overlapConvexPolygons(this, other);
 	}
 
 
@@ -89,13 +116,8 @@ public class CollideablePolygon extends Polygon {
 		 */
 		for (int i = 0; i < vertices.length; i += 2) {
 
-			Vector2 vectorOne = new Vector2(vertices[wrapIndex(i + 2, vertices
-					.length)] - vertices[i], vertices[wrapIndex(i + 3,
-					vertices.length)] - vertices[i + 1]);
-			Vector2 vectorTwo = new Vector2(vertices[wrapIndex(i + 4, vertices
-					.length)] - vertices[wrapIndex(i + 2, vertices.length)],
-					vertices[wrapIndex(i + 5, vertices.length)] -
-							vertices[wrapIndex(i + 3, vertices.length)]);
+			Vector2 vectorOne = new Vector2(vertices[wrapIndex(i + 2, vertices.length)] - vertices[i], vertices[wrapIndex(i + 3, vertices.length)] - vertices[i + 1]);
+			Vector2 vectorTwo = new Vector2(vertices[wrapIndex(i + 4, vertices.length)] - vertices[wrapIndex(i + 2, vertices.length)], vertices[wrapIndex(i + 5, vertices.length)] - vertices[wrapIndex(i + 3, vertices.length)]);
 			crossProductPositive = vectorOne.crs(vectorTwo) > 0;
 
 			if (!crossProductPositive) { // found nook
@@ -118,20 +140,12 @@ public class CollideablePolygon extends Polygon {
 	 * @return max[ rectangle width, rectangle height ]
 	 */
 	private float calcMaxLength() {
+		if (getVertices().length == 0) {
+			System.out.println("returning zero for max length");
+			return 0;
+		}
 		Rectangle bounds = getBoundingRectangle();
 		return Math.max(bounds.getWidth(), bounds.getHeight());
-	}
-
-	/**
-	 * @param other The other CollideablePolygon - vertices must be in
-	 *              counter-clockwise order
-	 * @param mtv   The minimum magnitude vector required to push {@code
-	 *              this}
-	 *              polygon out of collision with {@code other}
-	 * @return true if there is collision. Also populates mtv.
-	 */
-	public boolean collides(CollideablePolygon other) {
-		return INTERSECTOR.overlapConvexPolygons(this, other);
 	}
 
 	/**

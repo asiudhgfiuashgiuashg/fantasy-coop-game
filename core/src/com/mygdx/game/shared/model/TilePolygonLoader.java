@@ -4,18 +4,18 @@ import com.badlogic.gdx.utils.XmlReader;
 
 /**
  * Polygon loading methods usable by both client and server.
- * 
+ *
  * @author elimonent
  * @author Sawyer Harris
  */
 public class TilePolygonLoader {
 	/**
 	 * load the hitbox with the name "hitbox" from tile xml
+	 *
 	 * @param tileElement
 	 * @return
 	 */
-	public static CollideablePolygon loadTilePolygon(XmlReader.Element
-															 tileElement) {
+	public static CollideablePolygon loadTilePolygon(XmlReader.Element tileElement) {
 		int tileHeight = tileElement.getChildByName("image").getInt("height");
 		// Load polygon hitbox
 		XmlReader.Element objGroup = tileElement.getChildByName("objectgroup");
@@ -23,16 +23,16 @@ public class TilePolygonLoader {
 			for (XmlReader.Element object : objGroup.getChildrenByName("object")) {
 				String objName = object.getAttribute("name", null);
 				if (objName != null && objName.equals("hitbox")) {
-					return loadPolygon(object, tileHeight);
+					return new CollideablePolygon(loadPolygonVertices(object,
+							tileHeight));
 				}
 
 			}
 		}
 		return null;
 	}
-	
-	public static CollideablePolygon loadPolygon(XmlReader.Element object,
-												 int tileHeight) {
+
+	public static float[] loadPolygonVertices(XmlReader.Element object, int tileHeight) {
 		// The first child named "polygon" is the actual polygon hitbox
 		XmlReader.Element polygon = null;
 		if ((polygon = object.getChildByName("polygon")) != null) {
@@ -43,10 +43,9 @@ public class TilePolygonLoader {
 			for (int i = 0; i < points.length; i++) {
 				String[] point = points[i].split(",");
 				vertices[i * 2] = Float.parseFloat(point[0]) + object.getFloatAttribute("x");
-				vertices[i * 2 + 1] = (tileHeight - object.getFloatAttribute
-						("y")) - Float.parseFloat(point[1]);
+				vertices[i * 2 + 1] = (tileHeight - object.getFloatAttribute("y")) - Float.parseFloat(point[1]);
 			}
-			return new CollideablePolygon(vertices);
+			return vertices;
 		}
 		return null;
 	}

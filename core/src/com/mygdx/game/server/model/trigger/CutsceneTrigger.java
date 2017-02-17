@@ -10,9 +10,9 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public class CutsceneTrigger extends Trigger {
 
-	public CutsceneTrigger(CollideablePolygon polygon, String name, Vector2
+	public CutsceneTrigger(float[] vectors, String name, Vector2
 			position) {
-		super(polygon, position);
+		super(vectors, position);
 		// TODO load cutscene of name
 	}
 

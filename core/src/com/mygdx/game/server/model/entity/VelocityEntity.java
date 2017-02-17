@@ -31,7 +31,6 @@ public abstract class VelocityEntity extends DynamicEntity {
 	private Vector2 netForce = new Vector2(0, 0);
 
 
-
 	/**
 	 * Constructs a VelocityEntity with a given mass
 	 *
@@ -41,8 +40,7 @@ public abstract class VelocityEntity extends DynamicEntity {
 	 * @param solid
 	 * @param mass
 	 */
-	public VelocityEntity(String uid, Vector2 position, int visLayer, boolean
-			solid, float mass) {
+	public VelocityEntity(String uid, Vector2 position, int visLayer, boolean solid, float mass) {
 		super(uid, position, visLayer, solid);
 		this.mass = mass;
 	}
@@ -85,8 +83,8 @@ public abstract class VelocityEntity extends DynamicEntity {
 				//float startX = getPolygon().getX();
 				//float startY = getPolygon().getY();]
 
-				float startX = position.x;
-				float startY = position.y;
+				float startX = getX();
+				float startY = getY();
 
 				// Try moving in direction
 				Vector2 pos = new Vector2(startX, startY);
@@ -96,9 +94,9 @@ public abstract class VelocityEntity extends DynamicEntity {
 				//getPolygon().setPosition(pos.x, pos.y);
 				setPosition(new Vector2(pos.x, pos.y));
 				// Check for collisions with other solid objects
-				for (PolygonObject solidObj : GameServer.getInstance().getMap
-						().getSolidObjects()) {
+				for (PolygonObject solidObj : GameServer.getInstance().getMap().getSolidObjects()) {
 					if (!this.equals(solidObj) && this.collides(solidObj)) {
+						//System.out.println("collision occurring");
 						// Revert to starting position of this iteration
 						setPosition(new Vector2(startX, startY));
 
