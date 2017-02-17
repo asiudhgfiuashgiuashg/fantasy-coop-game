@@ -57,11 +57,7 @@ public class ServerTmxLoader {
 	 * @throws IOException if fileName is invalid
 	 * @throws various     reflection-related exceptions
 	 */
-	public GameMap loadMap(String fileName) throws IOException,
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException, MapLoaderException,
-			IllegalArgumentException, InvocationTargetException,
-			NoSuchMethodException, SecurityException {
+	public GameMap loadMap(String fileName) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		FileHandle file = Gdx.files.internal(fileName);
 		if (null == file || !file.exists()) {
@@ -122,12 +118,11 @@ public class ServerTmxLoader {
 		// Tile's local id
 		int id = tile.getIntAttribute("id");
 
-		CollideablePolygon tilePolygon = TilePolygonLoader.loadTilePolygon
-				(tile);
+		float[] tilePolygonVertices = TilePolygonLoader.loadTilePolygon(tile);
 
 		// Store tile in map
 		int tileGid = firstGid + id;
-		tiles.put(tileGid, new ServerTmxLoader.Tile(tilePolygon));
+		tiles.put(tileGid, new ServerTmxLoader.Tile(tilePolygonVertices));
 
 	}
 
@@ -137,18 +132,13 @@ public class ServerTmxLoader {
 	 * @param root XML root of .tmx file
 	 * @throws various reflection-related exceptions
 	 */
-	private void loadLayers(Element root, float mapHeight) throws
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException, MapLoaderException,
-			IllegalArgumentException, InvocationTargetException,
-			NoSuchMethodException, SecurityException {
+	private void loadLayers(Element root, float mapHeight) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		for (Element layer : root.getChildrenByName("objectgroup")) {
 			String name = layer.getAttribute("name");
 			if (name.equals(MapLoaderConstants.STATIC_ENTITIES_LAYER_NAME)) {
 				loadStaticEntities(layer, mapHeight);
-			} else if (name.equals(MapLoaderConstants
-					.DYNAMIC_ENTITIES_LAYER_NAME)) {
+			} else if (name.equals(MapLoaderConstants.DYNAMIC_ENTITIES_LAYER_NAME)) {
 				loadDynamicEntities(layer, mapHeight);
 			} else if (name.equals(MapLoaderConstants.TRIGGERS_LAYER_NAME)) {
 				loadTriggers(layer, mapHeight);
@@ -185,13 +175,11 @@ public class ServerTmxLoader {
 			Element properties = null;
 			if ((properties = entity.getChildByName("properties")) != null) {
 				for (Element prop : properties.getChildrenByName("property")) {
-					if ((prop.getAttribute("name", "")).equalsIgnoreCase
-							("visLayer")) {
+					if ((prop.getAttribute("name", "")).equalsIgnoreCase("visLayer")) {
 						// If visLayer was explicitly set, override default
 						// value
 						visLayer = prop.getIntAttribute("value");
-					} else if ((prop.getAttribute("name", ""))
-							.equalsIgnoreCase("solid")) {
+					} else if ((prop.getAttribute("name", "")).equalsIgnoreCase("solid")) {
 						// if solid property was set
 						solid = prop.getBoolean("value");
 					}
@@ -199,12 +187,10 @@ public class ServerTmxLoader {
 			}
 
 			// create new StaticEntity and add it to GameMap
-			String uid = UniqueIDAssigner.generateStaticEntityUID(name,
-					mapName, id);
+			String uid = UniqueIDAssigner.generateStaticEntityUID(name, mapName, id);
 			Tile tile = tiles.get(tileGid);
 
-			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y),
-					visLayer, solid, tile.hitbox.getVertices()));
+			map.addStaticEntity(new StaticEntity(uid, new Vector2(x, y), visLayer, solid, tile.hitboxVertices));
 		}
 	}
 
@@ -216,11 +202,7 @@ public class ServerTmxLoader {
 	 * @throws MapLoaderException if the entity is not a valid class type
 	 * @throws various            reflection-related exceptions
 	 */
-	private void loadDynamicEntities(Element layer, float mapHeight) throws
-			ClassNotFoundException, InstantiationException,
-			IllegalAccessException, MapLoaderException,
-			IllegalArgumentException, InvocationTargetException,
-			NoSuchMethodException, SecurityException {
+	private void loadDynamicEntities(Element layer, float mapHeight) throws ClassNotFoundException, InstantiationException, IllegalAccessException, MapLoaderException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		for (Element entity : layer.getChildrenByName("object")) {
 			// Entity name and type (used for reflection)
 			String name = entity.get("name");
@@ -228,10 +210,8 @@ public class ServerTmxLoader {
 
 			/* Entity position - the bottom left corner of the entity will be
 			in the center of the Tiled oval */
-			float x = entity.getFloatAttribute("x") + entity.getFloatAttribute
-					("width") / 2;
-			float y = mapHeight - entity.getFloatAttribute("y") - entity
-					.getFloatAttribute("height", 0) / 2;
+			float x = entity.getFloatAttribute("x") + entity.getFloatAttribute("width") / 2;
+			float y = mapHeight - entity.getFloatAttribute("y") - entity.getFloatAttribute("height", 0) / 2;
 
 			// By default visLayer is zero
 			int visLayer = 0;
@@ -240,13 +220,11 @@ public class ServerTmxLoader {
 			boolean solid = false;
 			if ((properties = entity.getChildByName("properties")) != null) {
 				for (Element prop : properties.getChildrenByName("property")) {
-					if ((prop.getAttribute("name", "")).equalsIgnoreCase
-							("visLayer")) {
+					if ((prop.getAttribute("name", "")).equalsIgnoreCase("visLayer")) {
 						// If visLayer was explicitly set, override default
 						// value
 						visLayer = prop.getIntAttribute("value");
-					} else if ((prop.getAttribute("name", ""))
-							.equalsIgnoreCase("solid")) {
+					} else if ((prop.getAttribute("name", "")).equalsIgnoreCase("solid")) {
 						// if solid property was set
 						solid = prop.getBoolean("value");
 					}
@@ -258,23 +236,16 @@ public class ServerTmxLoader {
 
 			// Use reflection to instantiate and add to game map
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "" +
-						"." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
-				Constructor<?> cons = c.getDeclaredConstructor(String.class,
-						Vector2.class, int.class, boolean.class);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "" + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
+				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class, boolean.class);
 				cons.setAccessible(true); // need to call this for non-public
 				// constructor
-				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y),
-						visLayer, solid);
+				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer, solid);
 				map.addEnemy(enemy);
-			} else if (type.equalsIgnoreCase(MapLoaderConstants
-					.FRIENDLY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE +
-						MapLoaderConstants.FRIENDLY_PACKAGE + name);
-				Constructor<?> cons = c.getConstructor(String.class,
-						Vector2.class, int.class);
-				Friendly friendly = (Friendly) cons.newInstance(uid, new
-						Vector2(x, y), visLayer);
+			} else if (type.equalsIgnoreCase(MapLoaderConstants.FRIENDLY_TYPE)) {
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
+				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
+				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
 				map.addFriendly(friendly);
 			} else {
 				throw new MapLoaderException();
@@ -288,15 +259,12 @@ public class ServerTmxLoader {
 	 * @param layer     trigger layer XML element
 	 * @param mapHeight
 	 * @throws various reflection-related exceptions TODO - make it so that
-	 * trigger
+	 *                 trigger
 	 *                 constructors can have arbitrary parameters (which
 	 *                 will be
 	 *                 specified in Tiled)
 	 */
-	private void loadTriggers(Element layer, float mapHeight) throws
-			ClassNotFoundException, NoSuchMethodException, SecurityException,
-			InstantiationException, IllegalAccessException,
-			IllegalArgumentException, InvocationTargetException {
+	private void loadTriggers(Element layer, float mapHeight) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		for (Element trigger : layer.getChildrenByName("object")) {
 			// Trigger name and type (used for reflection, instantiation)
 			String name = trigger.get("name");
@@ -324,21 +292,16 @@ public class ServerTmxLoader {
 			// Use the name as an instantiation parameter for a generic tr
 			if (type != null) {
 				if (type.equals(MapLoaderConstants.CUTSCENE_TRIGGER_TYPE)) {
-					trig = new CutsceneTrigger(vertices, name, new Vector2(x,
-							y));
-				} else if (type.equals(MapLoaderConstants
-						.MAPLOAD_TRIGGER_TYPE)) {
-					trig = new MapLoadTrigger(vertices, name, new Vector2(x,
-							y));
+					trig = new CutsceneTrigger(vertices, name, new Vector2(x, y));
+				} else if (type.equals(MapLoaderConstants.MAPLOAD_TRIGGER_TYPE)) {
+					trig = new MapLoadTrigger(vertices, name, new Vector2(x, y));
 				}
 				// if a trigger's type is not given, then use the name field to
 				// figure out what class to instantiate
 			} else {
 				// Use reflection to create trigger
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "" +
-						"." + MapLoaderConstants.TRIGGER_PACKAGE + "." + name);
-				Constructor<?> cons = c.getConstructor(CollideablePolygon
-						.class);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "" + "." + MapLoaderConstants.TRIGGER_PACKAGE + "." + name);
+				Constructor<?> cons = c.getConstructor(CollideablePolygon.class);
 				Object o;
 				o = cons.newInstance(vertices);
 				trig = (Trigger) o;
@@ -356,8 +319,7 @@ public class ServerTmxLoader {
 	private void loadBoundaries(Element layer, float mapHeight) {
 		for (Element object : layer.getChildrenByName("object")) {
 			// Load polygon			
-			float[] vertices = TilePolygonLoader.loadPolygonVertices(object,
-					tileHeight);
+			float[] vertices = TilePolygonLoader.loadPolygonVertices(object, tileHeight);
 
 			// Boundary position
 			float x = object.getFloatAttribute("x");
@@ -378,16 +340,16 @@ public class ServerTmxLoader {
 		/**
 		 * Tile hitbox, with no position
 		 */
-		public CollideablePolygon hitbox;
+		public float[] hitboxVertices;
 
 		/**
 		 * Constructs a temporary Tile to store the global id and hitbox.
 		 *
-		 * @param gid    global id (gid of tileset + tile id)
-		 * @param hitbox polygonal hitbox
+		 * @param gid            global id (gid of tileset + tile id)
+		 * @param hitboxVertices polygonal hitbox vertices (specify counterclockwwise please)
 		 */
-		public Tile(CollideablePolygon hitbox) {
-			this.hitbox = hitbox;
+		public Tile(float[] vertices) {
+			this.hitboxVertices = vertices;
 		}
 	}
 }

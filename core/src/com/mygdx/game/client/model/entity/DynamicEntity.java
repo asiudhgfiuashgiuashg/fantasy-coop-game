@@ -32,20 +32,16 @@ public class DynamicEntity extends MapEntity {
 	private float timeSinceAnimationBegan = 0;
 
 	// used to load animations from aseprite metadata and associated pngs
-	private static SpritesheetMetadataParser spritesheetParser = new
-			SpritesheetMetadataParser();
+	private static SpritesheetMetadataParser spritesheetParser = new SpritesheetMetadataParser();
 
 	public DynamicEntity(String entUid, String className, Vector2 pos) {
 		super();
 		this.uid = entUid;
-		this.position = pos;
-		currTextureRegion = new TextureRegion(new Texture(Gdx.files.internal
-				("prototype/blank.png")));
+		setPosition(pos);
+		currTextureRegion = new TextureRegion(new Texture(Gdx.files.internal("prototype/blank.png")));
 		String animationsImageFileName = className + "-sheet.png";
-		nameToAnimationMap = spritesheetParser.getAnimations(Gdx.files
-				.internal(animationsImageFileName));
-		this.currAnimation = nameToAnimationMap.get(nameToAnimationMap.keySet
-				().toArray()[0]);
+		nameToAnimationMap = spritesheetParser.getAnimations(Gdx.files.internal(animationsImageFileName));
+		this.currAnimation = nameToAnimationMap.get(nameToAnimationMap.keySet().toArray()[0]);
 	}
 
 	/**

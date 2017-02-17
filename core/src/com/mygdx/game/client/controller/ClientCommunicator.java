@@ -77,8 +77,7 @@ public class ClientCommunicator extends Communicator {
 			if (msg instanceof LobbyPlayerInfoMessage) {
 				LobbyPlayerInfoMessage infoMsg = (LobbyPlayerInfoMessage) msg;
 				console.log("Added player to lobby with uid " + infoMsg.uid);
-				ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg.uid, infoMsg.username,
-						infoMsg.playerClass);
+				ClientLobbyPlayer lobbyPlayer = new ClientLobbyPlayer(infoMsg.uid, infoMsg.username, infoMsg.playerClass);
 				manager.addLobbyPlayer(lobbyPlayer);
 			} else if (msg instanceof ClassAssignmentMessage) {
 				ClassAssignmentMessage classMsg = (ClassAssignmentMessage) msg;
@@ -86,8 +85,7 @@ public class ClientCommunicator extends Communicator {
 				manager.getLocalLobbyPlayer().setPlayerClass(classMsg.playerClass);
 			} else if (msg instanceof OtherClassAssignmentMessage) {
 				OtherClassAssignmentMessage classMsg = (OtherClassAssignmentMessage) msg;
-				console.log("Got a class assignment message for some lobby " + "player besides myself: "
-						+ classMsg.playerClass + "/" + "uid:" + classMsg.uid);
+				console.log("Got a class assignment message for some lobby " + "player besides myself: " + classMsg.playerClass + "/" + "uid:" + classMsg.uid);
 				manager.getByUid(classMsg.uid).setPlayerClass(classMsg.playerClass);
 			} else if (msg instanceof ChooseUsernameMessage) {
 				ChooseUsernameMessage usrMsg = (ChooseUsernameMessage) msg;
@@ -111,8 +109,8 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
 				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
-				newEntity.hitbox = new CollideablePolygon(initMsg.vertices);
-				newEntity.hitbox.setPosition(newEntity.getPos());
+				newEntity.setVertices(initMsg.vertices);
+				newEntity.setPosition(newEntity.getPos());
 				gameClient.addDynamicEntity(newEntity);
 			} else if (msg instanceof GameMessage.PosUpdateMessage) {
 				GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
@@ -129,8 +127,8 @@ public class ClientCommunicator extends Communicator {
 				System.out.println("got a hitbox update");
 				GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
 				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
-				entity.hitbox = new CollideablePolygon(hitboxMsg.vertices);
-				entity.hitbox.setPosition(entity.getPos());
+				entity.setVertices(hitboxMsg.vertices);
+				entity.setPosition(entity.getPos());
 			} else {
 				System.out.println("unhandled network message of type " + msg.getClass());
 			}

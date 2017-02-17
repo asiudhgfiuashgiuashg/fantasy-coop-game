@@ -20,8 +20,8 @@ import java.util.Map;
  * have lights associated with them)
  */
 public class ClientTiledMap extends TiledMap {
-	protected final Map<Integer, CollideablePolygon> gidToPolygonMap = new
-			HashMap<Integer, CollideablePolygon>();
+	protected final Map<Integer, float[]> gidToPolygonVerticesMap = new
+			HashMap<Integer, float[]>();
 	protected final Map<Integer, List<FlickerPointLight>> gidToLightsMap = new
 			HashMap<Integer, List<FlickerPointLight>>();
 	public final List<StaticEntity> staticEntities = new

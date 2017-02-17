@@ -50,8 +50,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 		ImageResolver imageResolver = getImageResolver(mapFile);
 
 		for (Element tilesetElement : root.getChildrenByName("tileset")) {
-			console.log("loading tileset " + tilesetElement.getAttribute
-					("name"));
+			console.log("loading tileset " + tilesetElement.getAttribute("name"));
 			loadTileSet(tiledMap, tilesetElement, mapFile, imageResolver);
 		}
 		// load tile layer
@@ -78,14 +77,12 @@ public class ClientTmxLoader extends TmxMapLoader {
 	 * @param tiledMap
 	 * @param rayHandler needed to instantiate box2dlights
 	 */
-	private void loadStaticEntities(ClientTiledMap tiledMap, RayHandler
-			rayHandler) {
+	private void loadStaticEntities(ClientTiledMap tiledMap, RayHandler rayHandler) {
 		Array<Element> objectGroups = root.getChildrenByName("objectgroup");
 
 		// look for the Static Entities layer
 		boolean foundStaticEntitiesLayer = false;
-		for (int i = 0; i < objectGroups.size && !foundStaticEntitiesLayer;
-			 i++) {
+		for (int i = 0; i < objectGroups.size && !foundStaticEntitiesLayer; i++) {
 			Element objectGroup = objectGroups.get(i);
 			if (objectGroup.getAttribute("name").equals("Static Entities")) {
 				foundStaticEntitiesLayer = true;
@@ -96,26 +93,19 @@ public class ClientTmxLoader extends TmxMapLoader {
 				// since a TiledMapTileMapObject is the visual component of a
 				// static entity.
 				// Get the TiledMapTlieMapObjects layer we just loaded.
-				MapLayer objectsLayer = tiledMap.getLayers().get("Static " +
-						"Entities");
+				MapLayer objectsLayer = tiledMap.getLayers().get("Static " + "Entities");
 				for (MapObject mapObject : objectsLayer.getObjects()) {
-					TiledMapTileMapObject tileMapObject =
-							(TiledMapTileMapObject) mapObject; // I know
+					TiledMapTileMapObject tileMapObject = (TiledMapTileMapObject) mapObject; // I know
 					// casting is gross but we need to do it here if we want
 					// to use libgdx's included objectgroup loading instead
 					// of doing it ourselves.
 					float mapHeight = root.getFloat("height") * tileHeight;
 
-					CollideablePolygon hitboxPolygon = tiledMap
-							.gidToPolygonMap.get(tileMapObject.getTile().getId
-									());
+					float[] hitboxPolygonVertices = tiledMap.gidToPolygonVerticesMap.get(tileMapObject.getTile().getId());
 
-					List<FlickerPointLight> lights = tiledMap.gidToLightsMap
-							.get(tileMapObject.getTile().getId());
+					List<FlickerPointLight> lights = tiledMap.gidToLightsMap.get(tileMapObject.getTile().getId());
 
-					StaticEntity staticEntity = new StaticEntity
-							(hitboxPolygon, lights, tileMapObject, mapHeight,
-									tileHeight, rayHandler);
+					StaticEntity staticEntity = new StaticEntity(hitboxPolygonVertices, lights, tileMapObject, mapHeight, tileHeight, rayHandler);
 					tiledMap.staticEntities.add(staticEntity);
 				}
 			}
@@ -129,19 +119,16 @@ public class ClientTmxLoader extends TmxMapLoader {
 	 *
 	 * @param tiledMap map to load (tile gid) -> (polygon and light) maps into
 	 */
-	private void loadPolygonsAndLights(ClientTiledMap tiledMap, RayHandler
-			rayHandler) {
+	private void loadPolygonsAndLights(ClientTiledMap tiledMap, RayHandler rayHandler) {
 		for (Element tilesetXml : root.getChildrenByName("tileset")) {
 			int firstGid = tilesetXml.getInt("firstgid", 1);
 			for (Element tileXml : tilesetXml.getChildrenByName("tile")) {
 				int localId = tileXml.getInt("id"); // local to the tileset
 				int tileGid = firstGid + localId;
 				// extract the hitbox
-				CollideablePolygon tileHitbox = TilePolygonLoader
-						.loadTilePolygon(tileXml);
-				List<FlickerPointLight> tileLights = loadLights(tileXml,
-						rayHandler);
-				tiledMap.gidToPolygonMap.put(tileGid, tileHitbox);
+				float[] tileHitboxVertices = TilePolygonLoader.loadTilePolygon(tileXml);
+				List<FlickerPointLight> tileLights = loadLights(tileXml, rayHandler);
+				tiledMap.gidToPolygonVerticesMap.put(tileGid, tileHitboxVertices);
 				tiledMap.gidToLightsMap.put(tileGid, tileLights);
 			}
 		}
@@ -154,8 +141,7 @@ public class ClientTmxLoader extends TmxMapLoader {
 	 * @param tileXml
 	 * @return
 	 */
-	private List<FlickerPointLight> loadLights(Element tileXml, RayHandler
-			rayHandler) {
+	private List<FlickerPointLight> loadLights(Element tileXml, RayHandler rayHandler) {
 		List<FlickerPointLight> lights = new ArrayList<FlickerPointLight>();
 		int tileHeight = tileXml.getChildByName("image").getInt("height");
 		for (Element xmlObj : tileXml.getChildrenByNameRecursively("object")) {
@@ -175,40 +161,31 @@ public class ClientTmxLoader extends TmxMapLoader {
 				Element properties = xmlObj.getChildByName("properties");
 				Color color = null;
 				float flickerRate = 0; // no flicker if none is specified
-				float flickerDistMult = FlickerPointLight
-						.DEFAULT_MIN_RADIUS_MULTIPLIER;
-				float flickerAlphaMult = FlickerPointLight
-						.DEFAULT_MIN_ALPHA_MULTIPLIER;
+				float flickerDistMult = FlickerPointLight.DEFAULT_MIN_RADIUS_MULTIPLIER;
+				float flickerAlphaMult = FlickerPointLight.DEFAULT_MIN_ALPHA_MULTIPLIER;
 				if (properties != null) {
-					for (Element property : properties.getChildrenByName
-							("property")) {
+					for (Element property : properties.getChildrenByName("property")) {
 						String propName = property.getAttribute("name");
 						// light distance
 						if (propName.equals("distance")) {
 							distance = property.getFloatAttribute("value");
 						} else if (propName.equals("color")) {
-							String colorHexStr = property.getAttribute
-									("value");
+							String colorHexStr = property.getAttribute("value");
 							Long rgba8888l = Long.parseLong(colorHexStr, 16);
 							int rgba8888 = rgba8888l.intValue();
 							color = new Color(rgba8888);
 						} else if (propName.equals("flickerRate")) {
 							flickerRate = property.getFloatAttribute("value");
 						} else if (propName.equals("minFlickerDistMult")) {
-							flickerDistMult = property.getFloatAttribute
-									("value");
+							flickerDistMult = property.getFloatAttribute("value");
 						} else if (propName.equals("minFlickerAlphaMult")) {
-							flickerAlphaMult = property.getFloatAttribute
-									("value");
+							flickerAlphaMult = property.getFloatAttribute("value");
 						}
 					}
 				}
 
 
-				FlickerPointLight tempLight = new FlickerPointLight
-						(rayHandler, CustomTiledMapRenderer.NUM_RAYS, color,
-								distance, x, y, flickerRate, flickerDistMult,
-								flickerAlphaMult);
+				FlickerPointLight tempLight = new FlickerPointLight(rayHandler, CustomTiledMapRenderer.NUM_RAYS, color, distance, x, y, flickerRate, flickerDistMult, flickerAlphaMult);
 				tempLight.remove(); // don't render this temporary light.
 				// It'll be used to create the actual entity lights that DO
 				// get rendered

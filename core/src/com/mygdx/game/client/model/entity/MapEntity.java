@@ -11,12 +11,9 @@ import java.util.List;
  * represents an entity on the map.
  * An entity has position and some visual component
  */
-public abstract class MapEntity {
+public abstract class MapEntity extends CollideablePolygon {
 	protected String uid;
-	protected Vector2 position; // map position
 	protected int visLayer; // affects whether the entity is drawn above or
-	public CollideablePolygon hitbox; // specified in Tiled for static
-	// entities. Specified in java code for dynamic entities.
 
 	public List<PointLight> box2dLights;
 
@@ -24,6 +21,7 @@ public abstract class MapEntity {
 	 * according to design doc vislayer shouldn't be modifiable, so there is
 	 * a getter for visLayer but no setter. VisLayer can be set once using
 	 * the constructor
+	 *
 	 * @return
 	 */
 	public int getVisLayer() {
@@ -31,30 +29,26 @@ public abstract class MapEntity {
 	}
 
 	public Vector2 getPos() {
-		return this.position;
+		return new Vector2(getX(), getY());
 	}
 
 	/**
 	 * give the renderer something to draw
+	 *
 	 * @return
 	 */
 	public abstract TextureRegion getTextureRegion();
 
 	/**
 	 * a value used for rendering order in layer zero
+	 *
 	 * @return
 	 */
 	public float getCutOffY() {
-		return hitbox == null ? getPos().y : hitbox.getTransformedCutoffY();
+		return getVertices() == null || getVertices().length == 0 ? getPos().y : getTransformedCutoffY();
 	}
 
 	public String getUid() {
 		return uid;
-	}
-
-	public void setPosition(Vector2 position) {
-		this.position = position;
-		//hitbox position should be the same as entity position
-		hitbox.setPosition(position.x, position.y);
 	}
 }

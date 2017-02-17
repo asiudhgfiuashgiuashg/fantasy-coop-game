@@ -15,7 +15,7 @@ public class TilePolygonLoader {
 	 * @param tileElement
 	 * @return
 	 */
-	public static CollideablePolygon loadTilePolygon(XmlReader.Element tileElement) {
+	public static float[] loadTilePolygon(XmlReader.Element tileElement) {
 		int tileHeight = tileElement.getChildByName("image").getInt("height");
 		// Load polygon hitbox
 		XmlReader.Element objGroup = tileElement.getChildByName("objectgroup");
@@ -23,8 +23,7 @@ public class TilePolygonLoader {
 			for (XmlReader.Element object : objGroup.getChildrenByName("object")) {
 				String objName = object.getAttribute("name", null);
 				if (objName != null && objName.equals("hitbox")) {
-					return new CollideablePolygon(loadPolygonVertices(object,
-							tileHeight));
+					return loadPolygonVertices(object, tileHeight);
 				}
 
 			}
@@ -32,6 +31,12 @@ public class TilePolygonLoader {
 		return null;
 	}
 
+	/**
+	 * loads vertices from a tmx polygon
+	 * @param object - xml element with the polygon
+	 * @param tileHeight - height of the tile which affects the vertex values
+	 * @return list of vertices {x0, y0, x1, y1, ...}
+	 */
 	public static float[] loadPolygonVertices(XmlReader.Element object, int tileHeight) {
 		// The first child named "polygon" is the actual polygon hitbox
 		XmlReader.Element polygon = null;

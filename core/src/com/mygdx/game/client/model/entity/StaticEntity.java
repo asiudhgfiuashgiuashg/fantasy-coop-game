@@ -35,16 +35,11 @@ public class StaticEntity extends MapEntity {
 	 * @param tileHeight
 	 * @param rayHandler
 	 */
-	public StaticEntity(CollideablePolygon hitbox, List<FlickerPointLight>
-			tempLights, TiledMapTileMapObject tileMapObject, float mapHeight,
-						float tileHeight, RayHandler rayHandler) {
+	public StaticEntity(float[] vertices, List<FlickerPointLight> tempLights, TiledMapTileMapObject tileMapObject, float mapHeight, float tileHeight, RayHandler rayHandler) {
 		this.tileMapObject = tileMapObject;
-		String visLayerStr = (String) (tileMapObject.getProperties().get
-				("visLayer"));
-		this.visLayer = null == visLayerStr ? DEFAULT_VISLAYER : Integer
-				.valueOf(visLayerStr); // get the vislayer that was loaded for
-		// us by
-		// libgdx
+		String visLayerStr = (String) (tileMapObject.getProperties().get("visLayer"));
+		// get the vislayer that was loaded for us by libgdx
+		this.visLayer = null == visLayerStr ? DEFAULT_VISLAYER : Integer.valueOf(visLayerStr);
 
 		// the libgdx loader loaded the associated TiledMapTileMapObject from
 		// the Static Entities layer for us, and in Tiled we specify the x
@@ -52,11 +47,10 @@ public class StaticEntity extends MapEntity {
 		// extract it into this static entity.
 		float xPos = tileMapObject.getProperties().get("x", Float.class);
 		// flip y axis
-		float yPos = mapHeight + tileMapObject.getProperties().get("y", Float
-				.class);
-		this.position = new Vector2(xPos, yPos);
+		float yPos = mapHeight + tileMapObject.getProperties().get("y", Float.class);
+		setPosition(new Vector2(xPos, yPos));
 
-		setupHitbox(hitbox);
+		setupHitbox(vertices);
 		setupLights(tempLights, rayHandler);
 	}
 
@@ -79,12 +73,10 @@ public class StaticEntity extends MapEntity {
 	 * @param tempLights
 	 * @param rayHandler needed to instantiate box2dlights
 	 */
-	private void setupLights(List<FlickerPointLight> tempLights, RayHandler
-			rayHandler) {
+	private void setupLights(List<FlickerPointLight> tempLights, RayHandler rayHandler) {
 		box2dLights = new ArrayList<PointLight>();
 		for (FlickerPointLight tempLight : tempLights) {
-			FlickerPointLight transTempLight = copyAndTranslateLightPointLight
-					(tempLight, rayHandler);
+			FlickerPointLight transTempLight = copyAndTranslateLightPointLight(tempLight, rayHandler);
 
 			box2dLights.add(transTempLight);
 		}
@@ -97,13 +89,8 @@ public class StaticEntity extends MapEntity {
 	 * @param light
 	 * @param rayHandler needed to instantiate box2dlights
 	 */
-	private FlickerPointLight copyAndTranslateLightPointLight
-	(FlickerPointLight light, RayHandler rayHandler) {
-		FlickerPointLight toReturn = new FlickerPointLight(rayHandler,
-				CustomTiledMapRenderer.NUM_RAYS, light.getColor().cpy(), light
-				.getDistance(), light.getX() + getPos().x, light.getY() +
-				getPos().y, light.getFlickerRate(), light.getFlickerDistMult
-				(), light.getFlickerAlphaMult());
+	private FlickerPointLight copyAndTranslateLightPointLight(FlickerPointLight light, RayHandler rayHandler) {
+		FlickerPointLight toReturn = new FlickerPointLight(rayHandler, CustomTiledMapRenderer.NUM_RAYS, light.getColor().cpy(), light.getDistance(), light.getX() + getPos().x, light.getY() + getPos().y, light.getFlickerRate(), light.getFlickerDistMult(), light.getFlickerAlphaMult());
 		return toReturn;
 	}
 
@@ -113,16 +100,11 @@ public class StaticEntity extends MapEntity {
 	 *
 	 * @param hitbox
 	 */
-	private void setupHitbox(CollideablePolygon hitbox) {
+	private void setupHitbox(float[] vertices) {
 		// sometimes there is no hitbox, so don't worry about assigning it
 		// and moving it to position if it doesn't exist
-		if (hitbox != null) {
-			this.hitbox = new CollideablePolygon(hitbox); // make a  copy of
-			// the
-			// polygon loaded with the tile set so that we can offset it to the
-			// correct position on the map
-			// offset hitbox to be on top of this static entity on the map.
-			this.hitbox.setPosition(this.position.x, this.position.y);//
+		if (vertices != null) {
+			setVertices(vertices); // make a  copy of
 		}
 	}
 }

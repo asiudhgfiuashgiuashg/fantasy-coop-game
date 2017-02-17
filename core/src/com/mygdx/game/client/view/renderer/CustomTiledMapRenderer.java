@@ -23,11 +23,11 @@ import java.util.*;
 
 /**
  * Extends libgdx's renderer to work with MapEntities and respect visLayers
- * 
+ * <p>
  * visLayers: -1 = always render below other entities 0 = render in order
  * according to y-position derived from hitbox and location -- DEFAULT VISLAYER
  * 1 = always render above other entities
- * 
+ * <p>
  * Rendering order: Tile Layer -> visLayer -1 entities -> visLayer 0 entities ->
  * visLayer 1 entities
  */
@@ -40,7 +40,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
 	public boolean debug = true; // should I draw things that developers use to
-									// debug?
+	// debug?
 	private float debugLineWidth = 3;
 
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -171,27 +171,23 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	}
 
 	private void debugRenderEntity(MapEntity entity) {
-		CollideablePolygon hitbox = entity.hitbox;
-		if (hitbox != null) {
-			debugDrawCollideablePolygon(hitbox);
-		}
+		debugDrawCollideablePolygon(entity);
 	}
 
 	/**
 	 * used for debugging -- polygons shouldn't be drawn normally
 	 *
-	 * @param hitbox
+	 * @param entity
 	 */
-	private void debugDrawCollideablePolygon(CollideablePolygon hitbox) {
+	private void debugDrawCollideablePolygon(CollideablePolygon entity) {
 		shapeRenderer.setColor(Color.FIREBRICK);
-		shapeRenderer.polygon(hitbox.getTransformedVertices());
+		shapeRenderer.polygon(entity.getTransformedVertices());
 
 		// draw a line representing the cutoffy
-		Rectangle boundingRect = hitbox.getBoundingRectangle(); // used
+		Rectangle boundingRect = entity.getBoundingRectangle(); // used
 		// to draw ycuttoff line
 		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.line(boundingRect.getX(), hitbox.getTransformedCutoffY(),
-				boundingRect.getX() + boundingRect.getWidth(), hitbox.getTransformedCutoffY());
+		shapeRenderer.line(boundingRect.getX(), entity.getTransformedCutoffY(), boundingRect.getX() + boundingRect.getWidth(), entity.getTransformedCutoffY());
 
 	}
 
@@ -222,8 +218,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private void drawEntityTexture(MapEntity entity) {
 		TextureRegion toDraw = entity.getTextureRegion();
 
-		batch.draw(toDraw, entity.getPos().x, entity.getPos().y,
-				toDraw.getRegionWidth(), toDraw.getRegionHeight());
+		batch.draw(toDraw, entity.getPos().x, entity.getPos().y, toDraw.getRegionWidth(), toDraw.getRegionHeight());
 	}
 
 	@Override
