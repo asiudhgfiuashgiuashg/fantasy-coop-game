@@ -105,8 +105,8 @@
      </properties>
      <ellipse/>
     </object>
-    <object id="6" name="hitbox" x="9.27273" y="34.9091">
-     <polygon points="0,0 -3.27273,2.18182 0.545455,4.90909 3.45455,3.45455 4.72727,2.18182 2.54545,0.181818"/>
+    <object id="14" name="hitbox" x="15.75" y="34.625">
+     <polygon points="0,0 -0.6875,-11 -2.3125,-4.75 -13.6875,-12.4375 -9.4375,-3.8125 -5.1875,-3.625 -9.8125,2 -4.4375,4.3125 1.4375,4.9375 -3.1875,1.5 -0.1875,1.1875 -2.0625,-0.875"/>
     </object>
    </objectgroup>
   </tile>
@@ -126,20 +126,20 @@
 </data>
  </layer>
  <objectgroup name="Static Entities">
-  <object id="52" gid="36" x="97.3333" y="119.666" width="20" height="40">
+  <object id="52" gid="36" x="113.833" y="194.166" width="20" height="40">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
-  <object id="70" name="TestEnemy" type="Enemy" x="88.8407" y="186.284" width="12.5" height="15.25">
+  <object id="70" name="TestEnemy" type="Enemy" x="39.8407" y="187.034" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="83" name="TestEnemy2" type="Enemy" x="146.5" y="183.875" width="12.5" height="15.25">
+  <object id="83" name="TestEnemy2" type="Enemy" x="198.5" y="185.375" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>

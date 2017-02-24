@@ -183,6 +183,11 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		shapeRenderer.setColor(Color.FIREBRICK);
 		shapeRenderer.polygon(entity.getTransformedVertices());
 
+		shapeRenderer.setColor(Color.YELLOW);
+		for (float[] triangle: entity.getTriangles()) {
+			shapeRenderer.polygon(triangle);
+	}
+
 		// draw a line representing the cutoffy
 		Rectangle boundingRect = entity.getBoundingRectangle(); // used
 		// to draw ycuttoff line

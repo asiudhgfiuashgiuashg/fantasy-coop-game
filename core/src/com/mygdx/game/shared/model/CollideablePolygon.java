@@ -1,28 +1,32 @@
 package com.mygdx.game.shared.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.utils.ShortArray;
 import com.mygdx.game.server.model.PolygonObject;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
  * detection to work, a CollideablePolygon must be convex and the vertices must
  * be specified in counter-clockwise order.
+ * <p>
+ * collision check works in these steps:
+ * - see if polygons are close
+ * - triangulate
+ * - pairwise check triangles for collision (necessary for concave polygons)
  *
  * @author elimonent
  * @author Sawyer Harris
  */
 public class CollideablePolygon extends Polygon {
-	/**
-	 * Used to check for intersection between various geometric objects
-	 */
+
+	//Used to check for intersection between various geometric objects
 	private static final Intersector INTERSECTOR = new Intersector();
 
-	/**
+	/*
 	 * The y position above which another entity should be rendered behind
 	 * instead of in front of the entity with this CollideablePolygon
 	 * hitbox.
@@ -31,28 +35,77 @@ public class CollideablePolygon extends Polygon {
 	 */
 	private float cutoffY;
 
-	/**
+	/*
 	 * The maximum distance from the polygon's origin to any of its
 	 * vertices.
 	 */
 	private float maxLength;
 
+	// used for triangulation prior to collision checking
+	private static EarClippingTriangulator triangulator = new EarClippingTriangulator();
+
+	// list of indices of triangles - see computeTriangles documentation for more info
+	ShortArray triangleVertices;
+
+	// list of triangles resulting from triangulation (used for collision checking)
+	private List<float[]> triangles;
+
 	/**
 	 * no-arg constructor for serialization
 	 */
 	public CollideablePolygon() {
-
+		triangles = new ArrayList<float[]>();
+		triangleVertices = new ShortArray();
 	}
 
 	public CollideablePolygon(float[] vertices) {
-		super();
+		this();
 		if (vertices != null) {
-			setVertices(vertices); //smh
+			setVertices(vertices);
 		}
 
 
 		cutoffY = calcCutoffY();
 		updateMaxLength();
+	}
+
+	/**
+	 * etxend setVertices to update the triangles used for collision
+	 * @param vertices
+	 */
+	@Override
+	public void setVertices(float[] vertices) {
+		super.setVertices(vertices);
+		triangleVertices.clear();
+		triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
+	}
+
+	/**
+	 * we know what indices of the original hitbox the triangle vertices are at, so create a list of triangles now
+	 */
+	private void computeTriangles() {
+		triangles.clear();
+		for (int i = 0; i < triangleVertices.size; i += 3) {
+			// from http://stackoverflow.com/a/28393886
+			float[] triangleVerticesArr = new float[] {
+					getTransformedVertices()[triangleVertices.get(i) * 2],
+					getTransformedVertices()[triangleVertices.get(i) * 2 + 1],
+					getTransformedVertices()[triangleVertices.get(i + 1) * 2],
+					getTransformedVertices()[triangleVertices.get(i + 1) * 2 + 1],
+					getTransformedVertices()[triangleVertices.get(i + 2) * 2],
+					getTransformedVertices()[triangleVertices.get(i + 2) * 2 + 1]
+			};
+			triangles.add(triangleVerticesArr);
+		}
+	}
+
+	/**
+	 * used for debugging by the renderer
+	 * @return
+	 */
+	public List<float[]> getTriangles() {
+		computeTriangles();
+		return triangles;
 	}
 
 	/**
@@ -86,7 +139,19 @@ public class CollideablePolygon extends Polygon {
 		if (diff.len() > other.getMaxLength() + this.getMaxLength()) {
 			return false;
 		}
-		return INTERSECTOR.overlapConvexPolygons(this, other);
+
+		// compute triangles in world coordinates
+		other.computeTriangles();
+		this.computeTriangles();
+		// pairwise check for collision of triangles which make up each polygon
+		for (float[] thisTriangle: this.triangles) {
+			for (float[] otherTriangle: other.triangles) {
+				if (INTERSECTOR.overlapConvexPolygons(thisTriangle, otherTriangle, null)) {
+					return true; // collision occurred
+				}
+			}
+		}
+		return false;
 	}
 
 
@@ -201,4 +266,5 @@ public class CollideablePolygon extends Polygon {
 	public void setPosition(Vector2 position) {
 		setPosition(position.x, position.y);
 	}
+
 }
