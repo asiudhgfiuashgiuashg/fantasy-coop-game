@@ -236,16 +236,16 @@ public class ServerTmxLoader {
 
 			// Use reflection to instantiate and add to game map
 			if (type.equals(MapLoaderConstants.ENEMY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "" + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.ENEMY_PACKAGE + "." + name);
 				Constructor<?> cons = c.getDeclaredConstructor(String.class, Vector2.class, int.class, boolean.class);
 				cons.setAccessible(true); // need to call this for non-public
 				// constructor
 				Enemy enemy = (Enemy) cons.newInstance(uid, new Vector2(x, y), visLayer, solid);
 				map.addEnemy(enemy);
 			} else if (type.equalsIgnoreCase(MapLoaderConstants.FRIENDLY_TYPE)) {
-				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + MapLoaderConstants.FRIENDLY_PACKAGE + name);
-				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class);
-				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer);
+				Class<?> c = Class.forName(MapLoaderConstants.BASE_PACKAGE + "." + MapLoaderConstants.FRIENDLY_PACKAGE + "." + name);
+				Constructor<?> cons = c.getConstructor(String.class, Vector2.class, int.class, boolean.class);
+				Friendly friendly = (Friendly) cons.newInstance(uid, new Vector2(x, y), visLayer, solid);
 				map.addFriendly(friendly);
 			} else {
 				throw new MapLoaderException();

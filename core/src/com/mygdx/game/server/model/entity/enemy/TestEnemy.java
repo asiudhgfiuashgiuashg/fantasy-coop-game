@@ -23,12 +23,13 @@ public class TestEnemy extends Enemy {
 		setMass(1000f);
 		System.out.println("created testenemy at pos " + position);
 
-}
+	}
 
 	/**
 	 * act out one game tick (animation changes, velocity changes etc)
+	 *
 	 * @param elapsedTime - how much time has passed since last frame
-	 *                       (unit is milliseconds)
+	 *                    (unit is milliseconds)
 	 */
 	@Override
 	public void act(long elapsedTime) {
@@ -41,8 +42,7 @@ public class TestEnemy extends Enemy {
 
 		if (!sentAnimationName) { // only send this test animation name one
 			// time so that client doesn't restart the animation over and over
-			if (this.animationName == null || this.animationName.equals
-					("blueAnimation")) {
+			if (this.animationName == null || this.animationName.equals("blueAnimation")) {
 				this.animationName = "1234Animation";
 			} else {
 				this.animationName = "blueAnimation";

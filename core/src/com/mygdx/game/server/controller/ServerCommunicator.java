@@ -178,4 +178,8 @@ public class ServerCommunicator extends Communicator {
 			}
 		}
 	}
+
+	public void cleanup() {
+		server.stop();
+	}
 }

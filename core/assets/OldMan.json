@@ -1,0 +1,52 @@
+{ "frames": {
+   "old_man 0.ase": {
+    "frame": { "x": 0, "y": 0, "w": 16, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 24 },
+    "sourceSize": { "w": 16, "h": 24 },
+    "duration": 100
+   },
+   "old_man 1.ase": {
+    "frame": { "x": 16, "y": 0, "w": 16, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 24 },
+    "sourceSize": { "w": 16, "h": 24 },
+    "duration": 100
+   },
+   "old_man 2.ase": {
+    "frame": { "x": 32, "y": 0, "w": 16, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 24 },
+    "sourceSize": { "w": 16, "h": 24 },
+    "duration": 100
+   },
+   "old_man 3.ase": {
+    "frame": { "x": 48, "y": 0, "w": 16, "h": 24 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 16, "h": 24 },
+    "sourceSize": { "w": 16, "h": 24 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.12-dev",
+  "image": "C:\\Users\\mike\\Documents\\GitHub\\fantasy-coop-game\\core\\assets\\OldMan-sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 64, "h": 24 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "down_facing", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "up_facing", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "right_facing", "from": 2, "to": 2, "direction": "forward" },
+   { "name": "left_facing", "from": 3, "to": 3, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

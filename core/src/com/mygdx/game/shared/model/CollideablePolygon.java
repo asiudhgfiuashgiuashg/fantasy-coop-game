@@ -76,6 +76,7 @@ public class CollideablePolygon extends Polygon {
 	@Override
 	public void setVertices(float[] vertices) {
 		super.setVertices(vertices);
+		// must copy the returned triangulator vertices because it reuses the array for future calls
 		triangleVertices.clear();
 		triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
 	}

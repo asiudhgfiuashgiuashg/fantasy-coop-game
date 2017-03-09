@@ -1,0 +1,536 @@
+{ "frames": {
+   "highwayman 0.ase": {
+    "frame": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 100
+   },
+   "highwayman 1.ase": {
+    "frame": { "x": 54, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 100
+   },
+   "highwayman 2.ase": {
+    "frame": { "x": 108, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 100
+   },
+   "highwayman 3.ase": {
+    "frame": { "x": 162, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 100
+   },
+   "highwayman 4.ase": {
+    "frame": { "x": 216, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 100
+   },
+   "highwayman 5.ase": {
+    "frame": { "x": 270, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 30
+   },
+   "highwayman 6.ase": {
+    "frame": { "x": 324, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 30
+   },
+   "highwayman 7.ase": {
+    "frame": { "x": 378, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 30
+   },
+   "highwayman 8.ase": {
+    "frame": { "x": 432, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 300
+   },
+   "highwayman 9.ase": {
+    "frame": { "x": 486, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 10.ase": {
+    "frame": { "x": 540, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 11.ase": {
+    "frame": { "x": 594, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 12.ase": {
+    "frame": { "x": 648, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 13.ase": {
+    "frame": { "x": 702, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 14.ase": {
+    "frame": { "x": 756, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 15.ase": {
+    "frame": { "x": 810, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 300
+   },
+   "highwayman 16.ase": {
+    "frame": { "x": 864, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 17.ase": {
+    "frame": { "x": 918, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 18.ase": {
+    "frame": { "x": 972, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 19.ase": {
+    "frame": { "x": 1026, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 20.ase": {
+    "frame": { "x": 1080, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 21.ase": {
+    "frame": { "x": 1134, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 22.ase": {
+    "frame": { "x": 1188, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 23.ase": {
+    "frame": { "x": 1242, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 24.ase": {
+    "frame": { "x": 1296, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 25.ase": {
+    "frame": { "x": 1350, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 40
+   },
+   "highwayman 26.ase": {
+    "frame": { "x": 1404, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 60
+   },
+   "highwayman 27.ase": {
+    "frame": { "x": 1458, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 60
+   },
+   "highwayman 28.ase": {
+    "frame": { "x": 1512, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 300
+   },
+   "highwayman 29.ase": {
+    "frame": { "x": 1566, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 30.ase": {
+    "frame": { "x": 1620, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 31.ase": {
+    "frame": { "x": 1674, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 32.ase": {
+    "frame": { "x": 1728, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 33.ase": {
+    "frame": { "x": 1782, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 34.ase": {
+    "frame": { "x": 1836, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 200
+   },
+   "highwayman 35.ase": {
+    "frame": { "x": 1890, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 36.ase": {
+    "frame": { "x": 1944, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 37.ase": {
+    "frame": { "x": 1998, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 38.ase": {
+    "frame": { "x": 2052, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 39.ase": {
+    "frame": { "x": 2106, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 40.ase": {
+    "frame": { "x": 2160, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 41.ase": {
+    "frame": { "x": 2214, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 42.ase": {
+    "frame": { "x": 2268, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 43.ase": {
+    "frame": { "x": 2322, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 44.ase": {
+    "frame": { "x": 2376, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 45.ase": {
+    "frame": { "x": 2430, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 46.ase": {
+    "frame": { "x": 2484, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 47.ase": {
+    "frame": { "x": 2538, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 50
+   },
+   "highwayman 48.ase": {
+    "frame": { "x": 2592, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 49.ase": {
+    "frame": { "x": 2646, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 50.ase": {
+    "frame": { "x": 2700, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 51.ase": {
+    "frame": { "x": 2754, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 52.ase": {
+    "frame": { "x": 2808, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 53.ase": {
+    "frame": { "x": 2862, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 54.ase": {
+    "frame": { "x": 2916, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 55.ase": {
+    "frame": { "x": 2970, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 56.ase": {
+    "frame": { "x": 3024, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 57.ase": {
+    "frame": { "x": 3078, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 58.ase": {
+    "frame": { "x": 3132, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 59.ase": {
+    "frame": { "x": 3186, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 60.ase": {
+    "frame": { "x": 3240, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 61.ase": {
+    "frame": { "x": 3294, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 62.ase": {
+    "frame": { "x": 3348, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   },
+   "highwayman 63.ase": {
+    "frame": { "x": 3402, "y": 0, "w": 54, "h": 48 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 54, "h": 48 },
+    "sourceSize": { "w": 54, "h": 48 },
+    "duration": 150
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.12-dev",
+  "image": "C:\\Users\\mike\\Documents\\GitHub\\fantasy-coop-game\\core\\assets\\Highwayman-sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 3456, "h": 48 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "down_facing_swing", "from": 0, "to": 12, "direction": "forward" },
+   { "name": "up_facing_swing", "from": 13, "to": 25, "direction": "forward" },
+   { "name": "right_facing_swing", "from": 26, "to": 36, "direction": "forward" },
+   { "name": "left_facing_swing", "from": 37, "to": 47, "direction": "forward" },
+   { "name": "down_walk", "from": 48, "to": 51, "direction": "forward" },
+   { "name": "up_walk", "from": 52, "to": 55, "direction": "forward" },
+   { "name": "right_walk", "from": 56, "to": 59, "direction": "forward" },
+   { "name": "left_walk", "from": 60, "to": 63, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

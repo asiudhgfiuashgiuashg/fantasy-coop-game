@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="84">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="85">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="18" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
@@ -105,8 +105,8 @@
      </properties>
      <ellipse/>
     </object>
-    <object id="14" name="hitbox" x="15.75" y="34.625">
-     <polygon points="0,0 -0.6875,-11 -2.3125,-4.75 -13.6875,-12.4375 -9.4375,-3.8125 -5.1875,-3.625 -9.8125,2 -4.4375,4.3125 1.4375,4.9375 -3.1875,1.5 -0.1875,1.1875 -2.0625,-0.875"/>
+    <object id="17" name="hitbox" x="10.3636" y="33">
+     <polygon points="0,0 -5.27273,2.90909 -3.18182,7.54545 2.09091,7.36364 3.81818,2.90909"/>
     </object>
    </objectgroup>
   </tile>
@@ -126,20 +126,15 @@
 </data>
  </layer>
  <objectgroup name="Static Entities">
-  <object id="52" gid="36" x="113.833" y="194.166" width="20" height="40">
+  <object id="52" gid="36" x="93.583" y="191.666" width="20" height="40">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="84" gid="8" x="119.25" y="189" width="74" height="31"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
-  <object id="70" name="TestEnemy" type="Enemy" x="39.8407" y="187.034" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="83" name="TestEnemy2" type="Enemy" x="198.5" y="185.375" width="12.5" height="15.25">
+  <object id="70" name="OldMan" type="Friendly" x="107.591" y="182.284" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>

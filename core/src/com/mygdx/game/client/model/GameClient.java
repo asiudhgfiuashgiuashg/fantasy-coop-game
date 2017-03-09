@@ -293,6 +293,7 @@ public class GameClient extends Game {
 	 */
 	public void disconnect() {
 		setScreen(menuScreen);
+		communicator.disconnect();
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 

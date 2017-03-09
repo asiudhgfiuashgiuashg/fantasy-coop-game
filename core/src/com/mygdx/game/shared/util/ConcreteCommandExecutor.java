@@ -30,8 +30,6 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	private GameClient gameClient; //need this reference to order the gameClient to
 									//  do things like connect to the server or change screens based on console commands
 
-	private boolean serverStarted = false; //used to restrict usage of methods applying to the
-
 
 
 	public ConcreteCommandExecutor(GameClient gameClient) {
@@ -75,7 +73,6 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * Host a server on this computer listening on the default port.
 	 */
 	public void startServer(String username) {
-		serverStarted = true; // BAD fix this
 		startServer(ServerCommunicator.DEFAULT_PORT, username);
 	}
 
@@ -85,7 +82,6 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	public void stopServer() {
 		console.log("Stopping server");
 		GameServer.getInstance().stop();
-		serverStarted = false;
 	}
 
 	/**
@@ -100,7 +96,7 @@ public class ConcreteCommandExecutor extends CommandExecutor {
 	 * list the clients connected to server
 	 */
 	public void serverListPlayers() {
-		if (serverStarted) {
+		if (GameServer.getInstance().isRunning()) {
 			console.log("Connected clients: ");
 			for (ServerLobbyPlayer lobbyPlayer: GameServer.getInstance().getLobbyManager().getLobbyPlayers()) {
 				console.log(lobbyPlayer.toString());

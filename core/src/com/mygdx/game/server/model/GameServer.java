@@ -111,7 +111,6 @@ public class GameServer implements Runnable {
 	 */
 	public static synchronized GameServer getInstance() {
 		return instance;
-
 	}
 
 	/**
@@ -188,6 +187,7 @@ public class GameServer implements Runnable {
 						.ERROR);
 			}
 		}
+		communicator.cleanup();
 	}
 
 	/**

@@ -39,8 +39,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private final List<MapEntity> layerZeroEntities = new LinkedList<MapEntity>();
 	private final List<MapEntity> layerOneEntities = new ArrayList<MapEntity>();
 
-	public boolean debug = true; // should I draw things that developers use to
-	// debug?
+	public boolean debug = false; // should I draw things that developers use to debug?
 	private float debugLineWidth = 3;
 
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -184,9 +183,9 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		shapeRenderer.polygon(entity.getTransformedVertices());
 
 		shapeRenderer.setColor(Color.YELLOW);
-		for (float[] triangle: entity.getTriangles()) {
+		for (float[] triangle : entity.getTriangles()) {
 			shapeRenderer.polygon(triangle);
-	}
+		}
 
 		// draw a line representing the cutoffy
 		Rectangle boundingRect = entity.getBoundingRectangle(); // used

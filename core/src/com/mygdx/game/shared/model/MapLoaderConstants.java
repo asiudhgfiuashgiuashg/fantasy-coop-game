@@ -22,5 +22,5 @@ public class MapLoaderConstants {
 	public static final String FRIENDLY_PACKAGE = "entity.friendly";
 	
 	public static final String ENEMY_TYPE = "Enemy";
-	public static final String FRIENDLY_TYPE = "FriendlyCharacter";
+	public static final String FRIENDLY_TYPE = "Friendly";
 }
