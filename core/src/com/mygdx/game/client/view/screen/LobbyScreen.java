@@ -24,8 +24,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -66,7 +68,7 @@ public class LobbyScreen extends DebuggableScreen {
 		updatePlayers();
 		
 		//This sets up the chat system, which is updated using updateChat().
-		log = new Table(skin);
+		//log = new Table(skin);
 		chatField = new TextField("", skin);
 		chatField.addListener(new InputListener() {
 			@Override
@@ -79,6 +81,7 @@ public class LobbyScreen extends DebuggableScreen {
 				}
 			}
 		});
+		log = new Table(skin);
 		chat = new ScrollPane(log, skin);
 
 		updateChat();
@@ -137,14 +140,28 @@ public class LobbyScreen extends DebuggableScreen {
 		lobbyOptions.addActor(serverOptions);
 		
 		
-		SplitPane topSplitPane = new SplitPane(players, lobbyOptions, false, skin);
+		//SplitPane topSplitPane = new SplitPane(players, lobbyOptions, false, skin);
 		
 		
-		SplitPane mainSplitPane = new SplitPane(topSplitPane, chat, true, skin);
+		//SplitPane mainSplitPane = new SplitPane(topSplitPane, chat, true, skin);
 		
+		//lobbyOptions.setFillParent(true);
+		//lobbyOptions.align(Align.center);
+		//topSplitPane.align(Align.center);
+		log.setFillParent(true);
+		chat.setWidth(Gdx.graphics.getWidth());
+		Table lobby = new Table(skin);
+		lobby.add(players);
+		lobby.add(lobbyOptions).height(Gdx.graphics.getHeight() * .4f).fill();
+		lobby.row();
+		lobby.add(chat).height(Value.percentHeight(.40f, lobby)).align(Align.left).colspan(2).expandX();
+		lobby.row().fill();
+		lobby.add(chatField).height(Gdx.graphics.getHeight() * .2f).width(Gdx.graphics.getWidth()).colspan(2);
+		lobby.setFillParent(true);
+		lobby.setWidth(Gdx.graphics.getWidth());
+		lobby.setHeight(Gdx.graphics.getHeight());
 		
-		mainSplitPane.setFillParent(true);
-		stage.addActor(mainSplitPane);
+		stage.addActor(lobby);
 		
 	}
 
@@ -162,7 +179,7 @@ public class LobbyScreen extends DebuggableScreen {
 	@Override
 	public void updateUI() {
 		updatePlayers();
-		updateChat();
+		//updateChat();
 		isLobbyReady();
 	}
 	
@@ -190,10 +207,10 @@ public class LobbyScreen extends DebuggableScreen {
 		log.clearChildren();
 		while (chatIterator.hasNext()) {
 			ChatMessage chatLine = chatIterator.next();
-			log.add(lobby.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message);
+			log.add(lobby.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message).width(Gdx.graphics.getWidth());
 			log.row();
 		}
-		log.add(chatField);
+		//log.add(chatField);
 		log.row();
 		chat.scrollTo(0, 0, 800, 50);
 	}
