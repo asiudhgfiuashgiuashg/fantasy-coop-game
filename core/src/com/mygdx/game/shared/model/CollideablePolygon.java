@@ -1,12 +1,10 @@
 package com.mygdx.game.shared.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ShortArray;
-import com.mygdx.game.server.model.PolygonObject;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
@@ -22,6 +20,23 @@ import com.mygdx.game.server.model.PolygonObject;
  * @author Sawyer Harris
  */
 public class CollideablePolygon extends Polygon {
+
+	/**
+	 * Mass affects acceleration of forces via Newton's Law F = ma
+	 */
+	private float mass;
+	/**
+	 * Velocity of entity in units of pixels/tick
+	 */
+	private Vector2 velocity = new Vector2(0, 0);
+	/**
+	 * Sum of all forces acting on entity
+	 */
+	private Vector2 netForce = new Vector2(0, 0);
+
+
+	/** If object is solid i.e. cannot overlap with another */
+	protected boolean solid;
 
 	//Used to check for intersection between various geometric objects
 	private static final Intersector INTERSECTOR = new Intersector();
@@ -267,5 +282,191 @@ public class CollideablePolygon extends Polygon {
 	public void setPosition(Vector2 position) {
 		setPosition(position.x, position.y);
 	}
+
+	/**
+	 * apply physics (forces and collision) to this polygon
+	 * @param dt
+	 * @param solidObjects
+	 * @return
+	 */
+	public void doPhysics(float dt, List<CollideablePolygon> solidObjects) {
+		// Update velocity based on forces (dv = 1/m F dt)
+		Vector2 dv = netForce.scl(dt).scl(1 / mass);
+		velocity.add(dv);
+
+		netForce.set(0, 0);
+
+		// Compute displacement (dx = v dt)
+		Vector2 dx = getVelocity().scl(dt);
+		// make sure dx isn't zero to avoid log2 issues
+		if (solid && !fuzzyEquals(dx.len(), 0)) {
+			// Number of iterations to achieve sub pixel precision
+			int N = MathUtils.ceil(MathUtils.log2(dx.len()));
+			MathUtils.clamp(N, 1, N); // N >= 1
+
+			// Collision lists
+			ArrayList<CollideablePolygon> currList = new ArrayList<CollideablePolygon>();
+			ArrayList<CollideablePolygon> prevList = new ArrayList<CollideablePolygon>();
+
+			// Iteratively check for collisions
+			for (int i = 0; i < N; i++) {
+				// Update lists
+				ArrayList<CollideablePolygon> temp = prevList;
+				prevList = currList;
+				temp.clear();
+				currList = temp;
+
+				// Starting position
+				float startX = getX();
+				float startY = getY();
+
+
+				// Try moving in direction
+				Vector2 pos = new Vector2(startX, startY);
+				Vector2 addVec = new Vector2(dx);
+				addVec.scl((float) Math.pow(2, -i));
+				pos.add(addVec);
+				//getPolygon().setPosition(pos.x, pos.y);
+
+				setPosition(new Vector2(pos.x, pos.y));
+				// Check for collisions with other solid objects
+				for (CollideablePolygon solidObj : solidObjects) {
+					if (!this.equals(solidObj) && this.collides(solidObj)) {
+						//System.out.println("collision occurring");
+						// Revert to starting position of this iteration
+						setPosition(new Vector2(startX, startY));
+
+						// Add to collision list
+						currList.add(solidObj);
+					}
+				}
+
+				// Last iteration
+				if (i == N - 1) {
+					// If last iteration had no collisions, use previous list
+					if (currList.isEmpty()) {
+						currList = prevList;
+					}
+
+					// Call onBumpInto() for each collision
+					for (CollideablePolygon obj : currList) {
+						// Call on this entity
+						onBumpInto(obj);
+						obj.onBumpInto(this);
+					}
+				}
+			}
+		} else {
+			// Non-solid, no need to check
+			Vector2 pos = getPosition();
+			pos.add(dx);
+			setPosition(pos);
+		}
+
+	}
+
+	/**
+	 * test if two floats are about equal
+	 * http://stackoverflow.com/a/3728560
+	 *
+	 * @param a first float
+	 * @param b second float
+	 * @return true if close enough to equal
+	 */
+	private static boolean fuzzyEquals(float a, float b) {
+		float eps = 0.0000001f; // how close the floats must be
+		return Math.abs(a - b) < eps;
+	}
+
+	/**
+	 * Called when two solid objects collide with each other.
+	 *
+	 * @param other other polygon object
+	 */
+	public void onBumpInto(CollideablePolygon other) {
+
+	}
+
+
+	/**
+	 * Returns a copy of the entity's position. All modifications must be done
+	 * via setPosition()
+	 *
+	 * @return copy of position
+	 */
+	public Vector2 getPosition() {
+		return new Vector2(getX(), getY());
+	}
+
+	/**
+	 * Applies a force to the entity, which will be resolved in the next act().
+	 * The force is added to the netForce vector, so multiple forces may act on
+	 * an entity.
+	 *
+	 * @param force
+	 */
+	public void applyForce(Vector2 force) {
+		System.out.println("applying force : " + force);
+		netForce.add(force);
+	}
+
+
+
+	/**
+	 * Returns the entity's mass
+	 *
+	 * @return mass
+	 */
+	public float getMass() {
+		return mass;
+	}
+
+	/**
+	 * Sets the entity's mass
+	 *
+	 * @param mass
+	 */
+	public void setMass(float mass) {
+		this.mass = mass;
+	}
+
+	/**
+	 * Returns a copy of the entity's velocity vector
+	 *
+	 * @return copy of velocity
+	 */
+	public Vector2 getVelocity() {
+		return new Vector2(velocity);
+	}
+
+	/**
+	 * Sets the entity's velocity vector. Should only be used when applying a
+	 * force is not appropriate.
+	 *
+	 * @param velocity
+	 */
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+	/**
+	 * Returns the net force vector acting on the entity.
+	 *
+	 * @return netForce
+	 */
+	public Vector2 getNetForce() {
+		return netForce;
+	}
+
+	/**
+	 * Sets the net force vector. Should only be used when previous forces
+	 * applied to entity should be ignored!
+	 *
+	 * @param netForce
+	 */
+	public void setNetForce(Vector2 netForce) {
+		this.netForce = netForce;
+	}
+
 
 }

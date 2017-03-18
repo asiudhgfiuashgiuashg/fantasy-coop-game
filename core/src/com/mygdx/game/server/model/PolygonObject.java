@@ -6,41 +6,35 @@ import com.mygdx.game.shared.model.CollideablePolygon;
 import java.util.Arrays;
 
 /**
- * An object which has a CollideablePolygon as one of its fields. A
+ * A
  * PolygonObject is the base class for many server entities and objects. Solid
  * PolygonObjects are not allowed to have their hitboxes overlap and have
  * special collision checking ( see VelocityEntity ).
- * 
+ *
  * @author elimonent
  * @author Sawyer Harris
- *
  */
 public abstract class PolygonObject extends CollideablePolygon {
-
-
-	/** If object is solid i.e. cannot overlap with another */
-	private boolean solid;
 
 
 	/**
 	 * Constructs a PolygonObject and adds it to GameMap's list of solidObjects
 	 * if it is solid.
-	 *  @param polygon
+	 *
+	 * @param polygon
 	 * @param solid
 	 * @param position
 	 */
-	public PolygonObject(float[] vertices, boolean solid, Vector2
-			position) {
+	public PolygonObject(float[] vertices, boolean solid, Vector2 position) {
 		super(vertices);
 		this.solid = solid;
 		setPosition(position);
 	}
 
 
-
 	/**
 	 * Returns if the polygon is solid i.e. cannot overlap with others
-	 * 
+	 *
 	 * @return true if solid
 	 */
 	public boolean isSolid() {
@@ -49,7 +43,7 @@ public abstract class PolygonObject extends CollideablePolygon {
 
 	/**
 	 * Sets if the polygon is solid i.e. cannot overlap with others
-	 * 
+	 *
 	 * @param solid
 	 */
 	public void setSolid(boolean solid) {
@@ -59,9 +53,9 @@ public abstract class PolygonObject extends CollideablePolygon {
 	/**
 	 * Destructor for PolygonObject. Removes from GameMap's solidObjects list if
 	 * it is solid.
-	 * 
+	 *
 	 * @return true if successfully destroyed, false if solid and couldn't be
-	 *         removed from solidObjects list
+	 * removed from solidObjects list
 	 */
 	public boolean destroy() {
 		if (solid) {
@@ -70,14 +64,5 @@ public abstract class PolygonObject extends CollideablePolygon {
 		return true;
 	}
 
-	/**
-	 * Returns a copy of the entity's position. All modifications must be done
-	 * via setPosition()
-	 *
-	 * @return copy of position
-	 */
-	public Vector2 getPosition() {
-		return new Vector2(getX(), getY());
-	}
 
 }

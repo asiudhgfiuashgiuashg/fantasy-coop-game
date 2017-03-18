@@ -60,7 +60,7 @@ public class TestEnemy extends Enemy {
 	}
 
 	@Override
-	public void onBumpInto(PolygonObject other) {
+	public void onBumpInto(CollideablePolygon other) {
 		// NOTHIN!
 	}
 

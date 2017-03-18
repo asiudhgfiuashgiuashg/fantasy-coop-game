@@ -2,7 +2,7 @@ package com.mygdx.game.server.model.entity;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
-import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.shared.network.GameMessage;
 
 /**
@@ -65,5 +65,12 @@ public abstract class DynamicEntity extends Entity implements Actable {
 
 		server.sendToAll(hitboxMsg);
 		System.out.println("sent hitbox update message");
+	}
+
+	@Override
+	public void act(long elapsedTime) {
+		// Time elapsed in units of ticks
+		float dt = elapsedTime / GameServer.TICKRATE;
+		doPhysics(dt, GameServer.getInstance().getMap().getSolidObjects());
 	}
 }

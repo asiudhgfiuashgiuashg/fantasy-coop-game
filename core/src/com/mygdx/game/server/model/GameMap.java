@@ -5,10 +5,10 @@ import java.util.List;
 
 import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.entity.StaticEntity;
-import com.mygdx.game.server.model.entity.VelocityEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.trigger.Trigger;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 /**
  * Represents a game map (one contiguous area) on the server.
@@ -23,11 +23,11 @@ public class GameMap {
 	private ArrayList<Enemy> enemies;
 	private ArrayList<Friendly> friendlies;
 	private ArrayList<ActiveSpell> activeSpells;
-	private ArrayList<VelocityEntity> projectiles;
+	private ArrayList<CollideablePolygon> projectiles;
 	private ArrayList<Trigger> triggers;
 	private ArrayList<StaticEntity> staticEntities;
 	private ArrayList<Boundary> boundaries;
-	private ArrayList<PolygonObject> solidObjects;
+	private ArrayList<CollideablePolygon> solidObjects;
 
 	/**
 	 * Constructor used by MapLoader.
@@ -40,10 +40,10 @@ public class GameMap {
 		enemies = new ArrayList<Enemy>();
 		friendlies = new ArrayList<Friendly>();
 		activeSpells = new ArrayList<ActiveSpell>();
-		projectiles = new ArrayList<VelocityEntity>();
+		projectiles = new ArrayList<CollideablePolygon>();
 		triggers = new ArrayList<Trigger>();
 		staticEntities = new ArrayList<StaticEntity>();
-		solidObjects = new ArrayList<PolygonObject>();
+		solidObjects = new ArrayList<CollideablePolygon>();
 		dynamicEntities = new ArrayList<DynamicEntity>();
 	}
 
@@ -63,7 +63,7 @@ public class GameMap {
 		return activeSpells;
 	}
 
-	public ArrayList<VelocityEntity> getProjectiles() {
+	public ArrayList<CollideablePolygon> getProjectiles() {
 		return projectiles;
 	}
 
@@ -79,7 +79,7 @@ public class GameMap {
 		return boundaries;
 	}
 	
-	public ArrayList<PolygonObject> getSolidObjects() {
+	public ArrayList<CollideablePolygon> getSolidObjects() {
 		return solidObjects;
 	}
 

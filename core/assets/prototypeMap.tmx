@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="85">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="97">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="18" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
@@ -131,10 +131,26 @@
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="84" gid="8" x="119.25" y="189" width="74" height="31"/>
+  <object id="84" gid="8" x="119.25" y="189" width="74" height="31">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
   <object id="70" name="OldMan" type="Friendly" x="107.591" y="182.284" width="12.5" height="15.25">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="95" name="TestEnemy2" type="Enemy" x="230.75" y="174.625" width="12.5" height="15.25">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="96" name="TestEnemy" type="Enemy" x="23.5" y="178.125" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>

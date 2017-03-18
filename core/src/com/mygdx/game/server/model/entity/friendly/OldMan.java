@@ -3,6 +3,7 @@ package com.mygdx.game.server.model.entity.friendly;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.Random;
 
@@ -84,7 +85,7 @@ public class OldMan extends Friendly {
 	}
 
 	@Override
-	public void onBumpInto(PolygonObject other) {
+	public void onBumpInto(CollideablePolygon other) {
 
 	}
 }
