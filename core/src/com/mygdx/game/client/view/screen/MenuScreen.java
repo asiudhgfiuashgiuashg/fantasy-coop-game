@@ -3,7 +3,6 @@ package com.mygdx.game.client.view.screen;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -154,6 +153,16 @@ public class MenuScreen extends DebuggableScreen {
 		});
 		botPane.addActor(hostButton);
 		botPane.addActor(joinButton);
+		
+		TextButton resetKeybinds = new TextButton("Reset keybinds", skin);
+		resetKeybinds.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.getKeybinds().reset();
+			}
+		});
+		botPane.addActor(resetKeybinds);
+		
 		final SplitPane pane = new SplitPane(topPane, botPane, true, skin);
 		pane.setFillParent(true);
 		

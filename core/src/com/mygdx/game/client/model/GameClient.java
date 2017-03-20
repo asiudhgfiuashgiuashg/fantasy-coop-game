@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
@@ -31,7 +32,10 @@ import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
 import com.strongjoshua.console.LogLevel;
 import com.mygdx.game.client.controller.ClientCommunicator;
+import com.mygdx.game.client.controller.KeyboardProcessor;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
+import com.mygdx.game.client.model.keybinds.Keybinds;
+import com.mygdx.game.client.model.keybinds.Keybinds.Input;
 
 /**
  * The main game loop for the client application. Delegates rendering to one of
@@ -79,7 +83,13 @@ public class GameClient extends Game {
 
 	/** Multiplexer for input processors */
 	private InputMultiplexer inputMultiplexer;
-
+	
+	/** Keyboard input processor */
+	private KeyboardProcessor keyboardProcessor;
+	
+	/** User keybinds */
+	private Keybinds keybinds;
+	
 	/** Renders the game map and everything in it */
 	private CustomTiledMapRenderer renderer;
 	/** Box2d lights handler */
@@ -109,7 +119,9 @@ public class GameClient extends Game {
 		// Set up input processors
 		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(console.getInputProcessor());
-		// TODO: inputMultiplexer.addProcessor(keyboardProcessor);
+		keybinds = new Keybinds();
+		keyboardProcessor = new KeyboardProcessor(keybinds);
+		inputMultiplexer.addProcessor(keyboardProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		// box2d lights handler
@@ -130,7 +142,7 @@ public class GameClient extends Game {
 		gameScreen = new GameScreen(gameViewport, uiViewport, batch, renderer);
 		
 		// Start out in menu
-		setScreen(menuScreen);
+		setScreen(menuScreen);		
 	}
 
 	/**
@@ -341,5 +353,9 @@ public class GameClient extends Game {
 
 	public ClientTiledMap getMap() {
 		return clientMap;
+	}
+	
+	public Keybinds getKeybinds() {
+		return keybinds;
 	}
 }

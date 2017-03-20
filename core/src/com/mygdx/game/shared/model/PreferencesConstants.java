@@ -8,4 +8,6 @@ public class PreferencesConstants {
 	public static final boolean FULLSCREEN_DEFAULT = false;
 	public static final int SCREEN_WIDTH_DEFAULT = 800;
 	public static final int SCREEN_HEIGHT_DEFAULT = 600;
+	
+	public static final String KEYBINDINGS_PREFS = "com.mygdx.game.keybinds";
 }
