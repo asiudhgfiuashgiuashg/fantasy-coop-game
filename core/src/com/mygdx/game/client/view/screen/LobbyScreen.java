@@ -3,6 +3,7 @@ package com.mygdx.game.client.view.screen;
 import java.util.ListIterator;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
@@ -11,35 +12,24 @@ import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ReadyStatusMessage;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.Value;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Handles rendering for the lobby.
+ * Handles rendering for the lobbyManager.
  *
  * Created by elimonent on 8/18/16.
  */
 public class LobbyScreen extends DebuggableScreen {
 	private final GameClient game;
-	ClientLobbyManager lobby;
+	ClientLobbyManager lobbyManager;
 	Skin skin;		//Default skin.
-	Table players; //should rename this. Might get confusing due to the number of variables with player in their name.
+	Table playersTable;
 	Label [] labels;	//holds the player name and status
 	ScrollPane chat;	//This holds the log and the chatField for the chat system
 	Table log;		//This holds the chat log
@@ -49,22 +39,18 @@ public class LobbyScreen extends DebuggableScreen {
 	public LobbyScreen(Viewport viewport, Batch batch) {
 		super(viewport, batch);
 		game = GameClient.getInstance();
-		lobby = game.getLobbyManager();
+		lobbyManager = game.getLobbyManager();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		stage.setDebugAll(true);
 		
-		//The following is the setup for the list of players and their status, which is updated using the updatePlayers() function.
+		//The following is the setup for the list of playersTable and their status, which is updated using the updatePlayers() function.
 		//TODO: Consider changing labels to use hash? instead, where the uid of the lobbyplayer is the key, and the lobbyplayer is the value.
 		//		By doing this, we can send the updatePlayers function a uid so it only updates that specific class
-		players = new Table();
+		playersTable = new Table();
 		labels = new Label[5];
-		for (int x = 0; x < 5; x++) {
-			labels[x] = new Label("", skin);
-			players.add(labels[x]);
-			players.row();
-		}
+		addTableRows();
 		updatePlayers();
 		
 		//This sets up the chat system, which is updated using updateChat().
@@ -140,7 +126,7 @@ public class LobbyScreen extends DebuggableScreen {
 		lobbyOptions.addActor(serverOptions);
 		
 		
-		//SplitPane topSplitPane = new SplitPane(players, lobbyOptions, false, skin);
+		//SplitPane topSplitPane = new SplitPane(playersTable, lobbyOptions, false, skin);
 		
 		
 		//SplitPane mainSplitPane = new SplitPane(topSplitPane, chat, true, skin);
@@ -151,7 +137,7 @@ public class LobbyScreen extends DebuggableScreen {
 		log.setFillParent(true);
 		chat.setWidth(Gdx.graphics.getWidth());
 		Table lobby = new Table(skin);
-		lobby.add(players);
+		lobby.add(playersTable);
 		lobby.add(lobbyOptions).height(Gdx.graphics.getHeight() * .4f).fill();
 		lobby.row();
 		lobby.add(chat).height(Value.percentHeight(.40f, lobby)).align(Align.left).colspan(2).expandX();
@@ -163,6 +149,14 @@ public class LobbyScreen extends DebuggableScreen {
 		
 		stage.addActor(lobby);
 		
+	}
+
+	private void addTableRows() {
+		for (int x = 0; x < 5; x++) {
+			labels[x] = new Label("", skin);
+			playersTable.add(labels[x]);
+			playersTable.row();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -184,7 +178,7 @@ public class LobbyScreen extends DebuggableScreen {
 	}
 	
 	public void updatePlayers() {
-		ListIterator<ClientLobbyPlayer> playerIterator = lobby.getLobbyPlayers().listIterator();
+		ListIterator<ClientLobbyPlayer> playerIterator = lobbyManager.getLobbyPlayers().listIterator();
 		
 		ClientLobbyPlayer currentPlayer;
 		int counter = 0;
@@ -203,11 +197,11 @@ public class LobbyScreen extends DebuggableScreen {
 	}
 	
 	public void updateChat() {
-		ListIterator<ChatMessage> chatIterator = lobby.getChatMessages().listIterator();
+		ListIterator<ChatMessage> chatIterator = lobbyManager.getChatMessages().listIterator();
 		log.clearChildren();
 		while (chatIterator.hasNext()) {
 			ChatMessage chatLine = chatIterator.next();
-			log.add(lobby.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message).width(Gdx.graphics.getWidth());
+			log.add(lobbyManager.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message).width(Gdx.graphics.getWidth());
 			log.row();
 		}
 		//log.add(chatField);
@@ -220,14 +214,14 @@ public class LobbyScreen extends DebuggableScreen {
 		message.message = chatField.getText();
 		message.uid = -1;
         game.sendToServer(message);
-        lobby.addChatMessage(message);
+        lobbyManager.addChatMessage(message);
 		updateChat();
 		chatField.setText("");
 		stage.setKeyboardFocus(chatField);
 	}
 	
 	public void readyButtonPressed() {
-		ClientLobbyPlayer player = lobby.getLocalLobbyPlayer();
+		ClientLobbyPlayer player = lobbyManager.getLocalLobbyPlayer();
 		if (player.isReady()) {
 			player.setReady(false);
 		} else {
@@ -241,19 +235,19 @@ public class LobbyScreen extends DebuggableScreen {
 		message.ready = ready;
 		message.uid = -1;
 		game.sendToServer(message);
-		lobby.getLocalLobbyPlayer().setReady(ready);
+		lobbyManager.getLocalLobbyPlayer().setReady(ready);
 		updatePlayers();
 		isLobbyReady();
 	}
 	
 	/**
 	 * 
-	 * This method checks to see if everyone in the lobby is ready 
+	 * This method checks to see if everyone in the lobbyManager is ready
 	 *
 	 * @return returns a true or false result
 	 */
 	public void isLobbyReady() {
-		ListIterator<ClientLobbyPlayer> playerIterator = lobby.getLobbyPlayers().listIterator();
+		ListIterator<ClientLobbyPlayer> playerIterator = lobbyManager.getLobbyPlayers().listIterator();
 		boolean result = true;
 		while (playerIterator.hasNext()) {
 			ClientLobbyPlayer player = playerIterator.next();
@@ -269,7 +263,7 @@ public class LobbyScreen extends DebuggableScreen {
 	}
 	
 	public void changePlayerClass(PlayerClass classType) {
-		lobby.getLocalLobbyPlayer().setPlayerClass(classType);
+		lobbyManager.getLocalLobbyPlayer().setPlayerClass(classType);
 		ClassAssignmentMessage message = new ClassAssignmentMessage();
 		message.playerClass = classType;
 		game.sendToServer(message);
@@ -279,5 +273,16 @@ public class LobbyScreen extends DebuggableScreen {
 	@Override
 	public void toggleDebug() {
 
+	}
+
+	/**
+	 * Get rid of entries in the class selection/ready table
+	 * Get rid of chat messages.
+	 */
+	public void clearScreen() {
+		playersTable.clearChildren();
+		lobbyManager.clearPlayers();
+		addTableRows();
+		log.clearChildren();
 	}
 }

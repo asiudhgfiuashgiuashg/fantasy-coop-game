@@ -60,4 +60,15 @@ public abstract class LobbyManager<T extends LobbyPlayer> {
         System.out.println("Searching for: " + uid);
         return null;
     }
+
+    /**
+     * remove lobby players
+     */
+    public void clearPlayers() {
+        lobbyPlayers.clear();
+    }
+
+    public void clearChatMsgs() {
+		chatMsgs.clear();
+	}
 }
