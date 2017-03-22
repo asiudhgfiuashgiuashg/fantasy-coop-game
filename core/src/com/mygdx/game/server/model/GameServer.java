@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.mygdx.game.client.model.GameClient.console;
-
 /**
  * The GameServer singleton acts as a hub for the model that manages the in-game
  * server data and updates the model. First, it processes client messages from
@@ -188,6 +186,7 @@ public class GameServer implements Runnable {
 			}
 		}
 		communicator.cleanup();
+		SingletonGUIConsole.getInstance().log("Stopped Server", LogLevel.SUCCESS);
 	}
 
 	/**

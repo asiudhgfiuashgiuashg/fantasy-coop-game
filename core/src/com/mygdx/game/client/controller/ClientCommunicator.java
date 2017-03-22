@@ -106,33 +106,35 @@ public class ClientCommunicator extends Communicator {
 				console.log("CHAT: " + chatBoxStr);
 				manager.addChatMessage(chatMsg); // save
 				// the chat message
-			} else if (msg instanceof GameMessage.InitDynamicEntityMsg) {
-				GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
-				DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
-				newEntity.setVertices(initMsg.vertices);
-				newEntity.setPosition(newEntity.getPos());
-				gameClient.addDynamicEntity(newEntity);
-			} else if (msg instanceof GameMessage.PosUpdateMessage) {
-				GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
-				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(posMsg.entityUID);
-				if (posMsg.position != null) {
-					entity.setPosition(posMsg.position);
-				}
-			} else if (msg instanceof GameMessage.AnimationUpdateMessage) {
-				GameMessage.AnimationUpdateMessage animationUpdateMessage = (GameMessage.AnimationUpdateMessage) msg;
+			} else if (msg instanceof GameMessage) {
+				if (msg instanceof GameMessage.InitDynamicEntityMsg) {
+					GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
+					DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
+					newEntity.setVertices(initMsg.vertices);
+					newEntity.setPosition(newEntity.getPos());
+					gameClient.addDynamicEntity(newEntity);
+				} else if (msg instanceof GameMessage.PosUpdateMessage) {
+					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
+					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(posMsg.entityUID);
+					if (posMsg.position != null) {
+						entity.setPosition(posMsg.position);
+					}
+				} else if (msg instanceof GameMessage.AnimationUpdateMessage) {
+					GameMessage.AnimationUpdateMessage animationUpdateMessage = (GameMessage.AnimationUpdateMessage) msg;
 
-				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(animationUpdateMessage.entityUID);
-				entity.setAnimation(animationUpdateMessage.animationName);
-			} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
-				System.out.println("got a hitbox update");
-				GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
-				DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
-				entity.setVertices(hitboxMsg.vertices);
-				entity.setPosition(entity.getPos());
-			} else {
-				System.out.println("unhandled network message of type " + msg.getClass());
+					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(animationUpdateMessage.entityUID);
+					entity.setAnimation(animationUpdateMessage.animationName);
+				} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
+					System.out.println("got a hitbox update");
+					GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
+					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
+					entity.setVertices(hitboxMsg.vertices);
+					entity.setPosition(entity.getPos());
+				} else {
+					System.out.println("unhandled network message of type " + msg.getClass());
+				}
+				gameClient.getScreen().updateUI();
 			}
-			gameClient.getScreen().updateUI();
 		}
 	}
 

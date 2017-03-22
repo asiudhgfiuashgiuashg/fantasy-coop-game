@@ -3,11 +3,11 @@ package com.mygdx.game.client.model;
 import box2dLight.RayHandler;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
@@ -25,6 +25,7 @@ import com.mygdx.game.client.view.screen.DebuggableScreen;
 import com.mygdx.game.client.view.screen.GameScreen;
 import com.mygdx.game.client.view.screen.LobbyScreen;
 import com.mygdx.game.client.view.screen.MenuScreen;
+import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.model.PreferencesConstants;
 import com.mygdx.game.shared.network.Message;
@@ -35,14 +36,13 @@ import com.mygdx.game.client.controller.ClientCommunicator;
 import com.mygdx.game.client.controller.KeyboardProcessor;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.client.model.keybinds.Keybinds;
-import com.mygdx.game.client.model.keybinds.Keybinds.Input;
+import com.sun.deploy.util.SessionState;
 
 /**
  * The main game loop for the client application. Delegates rendering to one of
  * three screens.
- *
+ * <p>
  * Singleton.
- *
  */
 public class GameClient extends Game {
 	/**
@@ -51,49 +51,81 @@ public class GameClient extends Game {
 	 */
 	public static final int WORLD_HEIGHT = 180;
 
-	/** Console for logging and commands */
+	/**
+	 * Console for logging and commands
+	 */
 	public static SingletonGUIConsole console;
-	/** Singleton instance */
+	/**
+	 * Singleton instance
+	 */
 	private static GameClient instance;
 
-	/** Communicator handles network messages */
+	/**
+	 * Communicator handles network messages
+	 */
 	private ClientCommunicator communicator;
-	/** Manages lobby functionality */
+	/**
+	 * Manages lobby functionality
+	 */
 	private ClientLobbyManager lobbyManager;
-	/** Game map, loaded from .tmx file */
+	/**
+	 * Game map, loaded from .tmx file
+	 */
 	private ClientTiledMap clientMap;
-	/** The one and only spritebatch for rendering */
+	/**
+	 * The one and only spritebatch for rendering
+	 */
 	private SpriteBatch batch;
 
-	/** Viewport for game world. Maps game coords to screen coords */
+	/**
+	 * Viewport for game world. Maps game coords to screen coords
+	 */
 	private StretchViewport gameViewport;
-	/** Viewport for all UI */
+	/**
+	 * Viewport for all UI
+	 */
 	private StretchViewport uiViewport;
 
-	/** Resolution and fullscreen setting chosen by user */
+	/**
+	 * Resolution and fullscreen setting chosen by user
+	 */
 	private int screenWidth;
 	private int screenHeight;
 	private float aspectRatio;
 	private boolean fullscreen;
 
-	/** Screens */
+	/**
+	 * Screens
+	 */
 	private MenuScreen menuScreen;
 	private LobbyScreen lobbyScreen;
 	private GameScreen gameScreen;
 
-	/** Multiplexer for input processors */
+	/**
+	 * Multiplexer for input processors
+	 */
 	private InputMultiplexer inputMultiplexer;
-	
-	/** Keyboard input processor */
+
+	/**
+	 * Keyboard input processor
+	 */
 	private KeyboardProcessor keyboardProcessor;
-	
-	/** User keybinds */
+
+	/**
+	 * User keybinds
+	 */
 	private Keybinds keybinds;
-	
-	/** Renders the game map and everything in it */
+
+	/**
+	 * Renders the game map and everything in it
+	 */
 	private CustomTiledMapRenderer renderer;
-	/** Box2d lights handler */
+	/**
+	 * Box2d lights handler
+	 */
 	private RayHandler rayHandler;
+
+	private AtomicReference<ClientGameState> gameState = new AtomicReference<ClientGameState>();
 
 	@Override
 	public void create() {
@@ -103,7 +135,7 @@ public class GameClient extends Game {
 		screenWidth = prefs.getInteger(PreferencesConstants.SCREEN_WIDTH, PreferencesConstants.SCREEN_WIDTH_DEFAULT);
 		screenHeight = prefs.getInteger(PreferencesConstants.SCREEN_HEIGHT, PreferencesConstants.SCREEN_HEIGHT_DEFAULT);
 		aspectRatio = screenWidth / (float) screenHeight;
-		
+
 		// Apply screen resolution, fullscreen/windowed mode
 		setFullscreen(fullscreen);
 
@@ -124,13 +156,7 @@ public class GameClient extends Game {
 		inputMultiplexer.addProcessor(keyboardProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
-		// box2d lights handler
-		rayHandler = new RayHandler(new World(new Vector2(0, 0), false));
 
-		// box2d lights need a rayhandler to be instantiated, so that's why
-		// we pass rayHandler to the loader.
-		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler);
-		renderer = new CustomTiledMapRenderer(clientMap, batch, rayHandler);
 
 		// Initialize viewports
 		gameViewport = new StretchViewport(WORLD_HEIGHT * aspectRatio, WORLD_HEIGHT);
@@ -139,15 +165,19 @@ public class GameClient extends Game {
 		// ... and screens
 		menuScreen = new MenuScreen(uiViewport, batch);
 		lobbyScreen = new LobbyScreen(uiViewport, batch);
-		gameScreen = new GameScreen(gameViewport, uiViewport, batch, renderer);
-		
+		gameScreen = new GameScreen(gameViewport, uiViewport, batch);
+
+
+		setClientMap("prototypeMap.tmx");
+
 		// Start out in menu
-		setScreen(menuScreen);		
+		gameState.set(ClientGameState.MAIN_MENU);
+		setScreen(menuScreen);
 	}
 
 	/**
 	 * Gets the singleton instance
-	 * 
+	 *
 	 * @return instance
 	 */
 	public static GameClient getInstance() {
@@ -156,7 +186,7 @@ public class GameClient extends Game {
 
 	/**
 	 * Gets the aspect ratio of user chosen resolution
-	 * 
+	 *
 	 * @return aspect ratio
 	 */
 	public float getAspectRatio() {
@@ -166,7 +196,7 @@ public class GameClient extends Game {
 	/**
 	 * Gets the screen width of user chosen resolution. If in full screen mode,
 	 * not necessarily equal to Gdx.graphics.getWidth()
-	 * 
+	 *
 	 * @return width in pixels
 	 */
 	public int getScreenWidth() {
@@ -176,7 +206,7 @@ public class GameClient extends Game {
 	/**
 	 * Gets the screen height of user chosen resolution. If in full screen mode,
 	 * not necessarily equal to Gdx.graphics.getHeight()
-	 * 
+	 *
 	 * @return height in pixels
 	 */
 	public int getScreenHeight() {
@@ -187,11 +217,9 @@ public class GameClient extends Game {
 	 * Sets the user's resolution. In windowed mode, this will become the
 	 * resolution of the window. In fullscreen mode, this resolution will be
 	 * stretched to fit the actual screen.
-	 * 
-	 * @param width
-	 *            in pixels
-	 * @param height
-	 *            in pixels
+	 *
+	 * @param width  in pixels
+	 * @param height in pixels
 	 */
 	public void setResolution(int width, int height) {
 		screenWidth = width;
@@ -209,9 +237,8 @@ public class GameClient extends Game {
 	/**
 	 * Sets the fullscreen / windowed mode of the application and applies the
 	 * current screen width and height. Gdx methods call GameClient.resize()
-	 * 
-	 * @param full
-	 *            true for full screen, false for windowed
+	 *
+	 * @param full true for full screen, false for windowed
 	 */
 	public void setFullscreen(boolean full) {
 		fullscreen = full;
@@ -225,7 +252,7 @@ public class GameClient extends Game {
 
 	/**
 	 * Switches input processor to the new screen's stage.
-	 * 
+	 *
 	 * @param screen
 	 */
 	@Override
@@ -246,7 +273,7 @@ public class GameClient extends Game {
 		// Sets background fill color
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		
+
 		// Calls screen.render()
 		super.render();
 		console.draw();
@@ -261,11 +288,9 @@ public class GameClient extends Game {
 	 * "world" coords are simply the width and height provided. The boolean
 	 * argument to the UI viewport's update tells the camera to center after
 	 * applying the new dimensions.
-	 * 
-	 * @param width
-	 *            resolution width in pixels
-	 * @param height
-	 *            resolution height in pixels
+	 *
+	 * @param width  resolution width in pixels
+	 * @param height resolution height in pixels
 	 */
 	@Override
 	public void resize(int width, int height) {
@@ -283,11 +308,10 @@ public class GameClient extends Game {
 
 	/**
 	 * connect to the server and enter the lobby screen
-	 * 
+	 *
 	 * @throws ServerAlreadyInitializedException
 	 */
-	public void hostServer(int tcpPort, String username)
-			throws AlreadyConnectedException, ServerAlreadyInitializedException, IOException {
+	public void hostServer(int tcpPort, String username) throws AlreadyConnectedException, ServerAlreadyInitializedException, IOException {
 		communicator.host(tcpPort);
 		connect(ClientCommunicator.LOCAL_HOST, tcpPort, username);
 
@@ -296,8 +320,9 @@ public class GameClient extends Game {
 
 	public void connect(String ip, int tcpPort, String username) throws AlreadyConnectedException, IOException {
 		communicator.connect(ip, tcpPort, username);
-		
+
 		setScreen(lobbyScreen);
+		gameState.set(ClientGameState.LOBBY);
 	}
 
 	/**
@@ -307,6 +332,12 @@ public class GameClient extends Game {
 		setScreen(menuScreen);
 		lobbyScreen.clearScreen();
 		communicator.disconnect();
+		if (GameServer.getInstance().isRunning()) {
+			GameServer.getInstance().stop();
+		}
+		communicator.disconnect();
+		gameState.set(ClientGameState.MAIN_MENU);
+		setClientMap("prototypeMap.tmx");
 		SingletonGUIConsole.getInstance().log("Intentionally disconnected from server", LogLevel.SUCCESS);
 	}
 
@@ -324,10 +355,11 @@ public class GameClient extends Game {
 
 	public void showLobbyScreen() {
 		setScreen(lobbyScreen);
-	} 
-	
+	}
+
 	public void transitionToInGame() {
 		setScreen(gameScreen);
+		gameState.set(ClientGameState.GAME);
 		console.log("Transitioned to in-game from lobby");
 	}
 
@@ -344,7 +376,7 @@ public class GameClient extends Game {
 	/**
 	 * add a dynamic entity to the map and register it with the renderer so it
 	 * will be rendered
-	 * 
+	 *
 	 * @param newEntity
 	 */
 	public void addDynamicEntity(DynamicEntity newEntity) {
@@ -355,8 +387,25 @@ public class GameClient extends Game {
 	public ClientTiledMap getMap() {
 		return clientMap;
 	}
-	
+
 	public Keybinds getKeybinds() {
 		return keybinds;
+	}
+
+
+	/**
+	 * Load a new map, which entails using the tmx loader to load the map and then making a new renderer with the new map.
+	 * TODO if you want, you can modify the renderer so it doesn't have to be reinstantiated (clear out all the lists of entities and stuff)
+	 * @param map
+	 */
+	private void setClientMap(String map) {
+		// box2d lights handler
+		rayHandler = new RayHandler(new World(new Vector2(0, 0), false));
+
+		// box2d lights need a rayhandler to be instantiated, so that's why
+		// we pass rayHandler to the loader.
+		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler); //TODO let server tell you what to load
+		renderer = new CustomTiledMapRenderer(clientMap, batch, rayHandler);
+		gameScreen.setRenderer(renderer);
 	}
 }

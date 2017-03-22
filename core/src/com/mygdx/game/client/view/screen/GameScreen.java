@@ -17,10 +17,9 @@ public class GameScreen extends DebuggableScreen {
 	/** Game camera. Controls the part of the game map being shown via position and zoom */
 	private OrthographicCamera camera;
 	
-	public GameScreen(Viewport gameViewport, Viewport uiViewport, Batch batch, CustomTiledMapRenderer renderer) {
+	public GameScreen(Viewport gameViewport, Viewport uiViewport, Batch batch) {
 		super(uiViewport, batch);
 		this.camera = (OrthographicCamera) gameViewport.getCamera();
-		this.renderer = renderer;
 		game = GameClient.getInstance();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
@@ -62,5 +61,11 @@ public class GameScreen extends DebuggableScreen {
 	public void updateUI() {
 		// TODO Auto-generated method stub
 	}
-	
+
+	/**
+	 * @param renderer used to draw the world
+	 */
+	public void setRenderer(CustomTiledMapRenderer renderer) {
+		this.renderer = renderer;
+	}
 }
