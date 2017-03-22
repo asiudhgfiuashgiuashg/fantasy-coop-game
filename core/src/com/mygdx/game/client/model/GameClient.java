@@ -396,6 +396,7 @@ public class GameClient extends Game {
 	/**
 	 * Load a new map, which entails using the tmx loader to load the map and then making a new renderer with the new map.
 	 * TODO if you want, you can modify the renderer so it doesn't have to be reinstantiated (clear out all the lists of entities and stuff)
+	 *
 	 * @param map
 	 */
 	private void setClientMap(String map) {
@@ -407,5 +408,9 @@ public class GameClient extends Game {
 		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler); //TODO let server tell you what to load
 		renderer = new CustomTiledMapRenderer(clientMap, batch, rayHandler);
 		gameScreen.setRenderer(renderer);
+	}
+
+	public AtomicReference<ClientGameState> getGameState() {
+		return gameState;
 	}
 }

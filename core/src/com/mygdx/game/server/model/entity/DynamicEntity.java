@@ -64,7 +64,6 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		updateMaxLength();
 
 		server.sendToAll(hitboxMsg);
-		System.out.println("sent hitbox update message");
 	}
 
 	@Override

@@ -222,7 +222,6 @@ public class CollideablePolygon extends Polygon {
 	 */
 	private float calcMaxLength() {
 		if (getVertices().length == 0) {
-			System.out.println("returning zero for max length");
 			return 0;
 		}
 		Rectangle bounds = getBoundingRectangle();
@@ -406,7 +405,6 @@ public class CollideablePolygon extends Polygon {
 	 * @param force
 	 */
 	public void applyForce(Vector2 force) {
-		System.out.println("applying force : " + force);
 		netForce.add(force);
 	}
 

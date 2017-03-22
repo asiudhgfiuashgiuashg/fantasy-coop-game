@@ -6,6 +6,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.mygdx.game.client.model.ClientGameState;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
@@ -106,7 +107,7 @@ public class ClientCommunicator extends Communicator {
 				console.log("CHAT: " + chatBoxStr);
 				manager.addChatMessage(chatMsg); // save
 				// the chat message
-			} else if (msg instanceof GameMessage) {
+			} else if (msg instanceof GameMessage && GameClient.getInstance().getGameState().get() == ClientGameState.GAME) {
 				if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 					GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
 					DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);

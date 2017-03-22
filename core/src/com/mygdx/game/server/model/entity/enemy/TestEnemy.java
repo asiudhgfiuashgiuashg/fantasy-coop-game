@@ -21,8 +21,6 @@ public class TestEnemy extends Enemy {
 		super(uid, position, visLayer, solid);
 		setVertices(hitbox);
 		setMass(1000f);
-		System.out.println("created testenemy at pos " + position);
-
 	}
 
 	/**
