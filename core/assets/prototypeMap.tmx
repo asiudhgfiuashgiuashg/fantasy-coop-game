@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="97">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="43" tilecount="18" columns="0">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="172">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="71" tilecount="19" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
    <objectgroup draworder="index">
@@ -110,6 +110,9 @@
     </object>
    </objectgroup>
   </tile>
+  <tile id="38">
+   <image width="54" height="71" source="prototype/tree0.png"/>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10" offsetx="0.25" offsety="0.25">
   <data encoding="csv">
@@ -131,26 +134,32 @@
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="84" gid="8" x="119.25" y="189" width="74" height="31">
+  <object id="84" gid="8" x="159.5" y="191.75" width="74" height="31">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
+  <object id="145" gid="39" x="170" y="239.25" width="54" height="71"/>
+  <object id="146" gid="39" x="120.5" y="240.5" width="54" height="71"/>
+  <object id="147" gid="39" x="37.75" y="236.5" width="54" height="71"/>
+  <object id="148" gid="39" x="-7.25" y="233.5" width="54" height="71"/>
+  <object id="149" gid="39" x="-6" y="192" width="54" height="71"/>
+  <object id="150" gid="39" x="24.75" y="181" width="54" height="71"/>
+  <object id="151" gid="39" x="-1" y="149.25" width="54" height="71"/>
+  <object id="156" gid="39" x="12" y="143" width="54" height="71"/>
+  <object id="157" gid="39" x="95.75" y="174.5" width="54" height="71"/>
+  <object id="158" gid="39" x="145.75" y="179.5" width="54" height="71"/>
+  <object id="159" gid="39" x="183.25" y="153.5" width="54" height="71"/>
+  <object id="165" gid="39" x="116" y="146" width="54" height="71"/>
+  <object id="166" gid="39" x="87.25" y="117.5" width="54" height="71"/>
+  <object id="167" gid="39" x="142.25" y="131.75" width="54" height="71"/>
+  <object id="168" gid="39" x="128.25" y="91" width="54" height="71"/>
+  <object id="169" gid="39" x="168" y="101" width="54" height="71"/>
+  <object id="170" gid="39" x="28.25" y="110.25" width="54" height="71"/>
+  <object id="171" gid="39" x="-7.5" y="94.75" width="54" height="71"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
   <object id="70" name="OldMan" type="Friendly" x="107.591" y="182.284" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="95" name="TestEnemy2" type="Enemy" x="230.75" y="174.625" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="96" name="TestEnemy" type="Enemy" x="23.5" y="178.125" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
