@@ -71,7 +71,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		populateEntitiesLists();
 		// rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
 		ambientColor = Color.CLEAR;
-		setAmbientAlpha(.15f);
+		setAmbientAlpha(1f);
 		fpsLogger = new FPSLogger();
 		dynamicEntities = new ArrayList<DynamicEntity>();
 		font.getData().setScale(DEBUG_FONT_SCALE);
@@ -179,19 +179,21 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 * @param entity
 	 */
 	private void debugDrawCollideablePolygon(CollideablePolygon entity) {
-		shapeRenderer.setColor(Color.FIREBRICK);
-		shapeRenderer.polygon(entity.getTransformedVertices());
+		if (entity.getTransformedVertices().length > 6) { // don't try to draw if there aren't enough points to draw
+			shapeRenderer.setColor(Color.FIREBRICK);
+			shapeRenderer.polygon(entity.getTransformedVertices());
 
-		shapeRenderer.setColor(Color.YELLOW);
-		for (float[] triangle : entity.getTriangles()) {
-			shapeRenderer.polygon(triangle);
+			shapeRenderer.setColor(Color.YELLOW);
+			for (float[] triangle : entity.getTriangles()) {
+				shapeRenderer.polygon(triangle);
+			}
+
+			// draw a line representing the cutoffy
+			Rectangle boundingRect = entity.getBoundingRectangle(); // used
+			// to draw ycuttoff line
+			shapeRenderer.setColor(Color.GREEN);
+			shapeRenderer.line(boundingRect.getX(), entity.getTransformedCutoffY(), boundingRect.getX() + boundingRect.getWidth(), entity.getTransformedCutoffY());
 		}
-
-		// draw a line representing the cutoffy
-		Rectangle boundingRect = entity.getBoundingRectangle(); // used
-		// to draw ycuttoff line
-		shapeRenderer.setColor(Color.GREEN);
-		shapeRenderer.line(boundingRect.getX(), entity.getTransformedCutoffY(), boundingRect.getX() + boundingRect.getWidth(), entity.getTransformedCutoffY());
 
 	}
 
