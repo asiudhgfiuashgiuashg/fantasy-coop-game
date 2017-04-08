@@ -38,6 +38,7 @@ public class GameMessage extends Message {
 		public String entUid;
 		public boolean solid;
 		public float[] vertices;
+		public int visLayer;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

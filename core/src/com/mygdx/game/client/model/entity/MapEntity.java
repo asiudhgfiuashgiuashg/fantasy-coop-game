@@ -13,9 +13,21 @@ import java.util.List;
  */
 public abstract class MapEntity extends CollideablePolygon {
 	protected String uid;
-	protected int visLayer; // affects whether the entity is drawn above or
-
+	private int visLayer; // affects whether the entity is drawn above or
 	public List<PointLight> box2dLights;
+
+	public MapEntity(int visLayer) {
+		this.visLayer = visLayer;
+	}
+
+	public MapEntity() {
+
+	}
+
+
+	protected void setVisLayer(int visLayer) {
+		this.visLayer = visLayer;
+	}
 
 	/**
 	 * according to design doc vislayer shouldn't be modifiable, so there is

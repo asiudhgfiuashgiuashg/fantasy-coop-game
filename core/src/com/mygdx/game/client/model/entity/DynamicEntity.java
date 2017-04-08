@@ -34,8 +34,8 @@ public class DynamicEntity extends MapEntity {
 	// used to load animations from aseprite metadata and associated pngs
 	private static SpritesheetMetadataParser spritesheetParser = new SpritesheetMetadataParser();
 
-	public DynamicEntity(String entUid, String className, Vector2 pos) {
-		super();
+	public DynamicEntity(String entUid, String className, Vector2 pos, int visLayer) {
+		super(visLayer);
 		this.uid = entUid;
 		setPosition(pos);
 		currTextureRegion = new TextureRegion(new Texture(Gdx.files.internal("prototype/blank.png")));

@@ -215,6 +215,7 @@ public class GameServer implements Runnable {
 			entInitMsg.pos = entity.getPosition();
 			entInitMsg.entUid = entity.getUid();
 			entInitMsg.vertices = entity.getVertices();
+			entInitMsg.visLayer = entity.getVisLayer();
 			communicator.sendToAll(entInitMsg);
 		}
 	}

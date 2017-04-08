@@ -39,7 +39,7 @@ public class StaticEntity extends MapEntity {
 		this.tileMapObject = tileMapObject;
 		String visLayerStr = (String) (tileMapObject.getProperties().get("visLayer"));
 		// get the vislayer that was loaded for us by libgdx
-		this.visLayer = null == visLayerStr ? DEFAULT_VISLAYER : Integer.valueOf(visLayerStr);
+		setVisLayer(null == visLayerStr ? DEFAULT_VISLAYER : Integer.valueOf(visLayerStr));
 
 		// the libgdx loader loaded the associated TiledMapTileMapObject from
 		// the Static Entities layer for us, and in Tiled we specify the x

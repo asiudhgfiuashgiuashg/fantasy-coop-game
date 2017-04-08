@@ -1,0 +1,43 @@
+{ "frames": {
+   "ForestBird 0.ase": {
+    "frame": { "x": 0, "y": 0, "w": 4, "h": 6 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 4, "h": 6 },
+    "sourceSize": { "w": 4, "h": 6 },
+    "duration": 100
+   },
+   "ForestBird 1.ase": {
+    "frame": { "x": 4, "y": 0, "w": 4, "h": 6 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 4, "h": 6 },
+    "sourceSize": { "w": 4, "h": 6 },
+    "duration": 100
+   },
+   "ForestBird 2.ase": {
+    "frame": { "x": 8, "y": 0, "w": 4, "h": 6 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 4, "h": 6 },
+    "sourceSize": { "w": 4, "h": 6 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.12-dev",
+  "image": "C:\\Users\\mike\\Documents\\GitHub\\fantasy-coop-game\\core\\assets\\ForestBird-sheet.png",
+  "format": "RGBA8888",
+  "size": { "w": 12, "h": 6 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "left_facing", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "invisible", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "right_facing", "from": 2, "to": 2, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}

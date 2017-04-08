@@ -85,15 +85,17 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	/**
-	 * etxend setVertices to update the triangles used for collision
+	 * Extends setVertices to update the triangles used for collision
 	 * @param vertices
 	 */
 	@Override
 	public void setVertices(float[] vertices) {
-		super.setVertices(vertices);
-		// must copy the returned triangulator vertices because it reuses the array for future calls
-		triangleVertices.clear();
-		triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
+		if (vertices.length > 6 && vertices != null) {
+			super.setVertices(vertices);
+			// must copy the returned triangulator vertices because it reuses the array for future calls
+			triangleVertices.clear();
+			triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
+		}
 	}
 
 	/**

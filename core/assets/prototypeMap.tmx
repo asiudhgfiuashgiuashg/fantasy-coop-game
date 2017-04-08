@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="195">
- <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="73" tilecount="22" columns="0">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="316">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="73" tilecount="23" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
    <objectgroup draworder="index">
@@ -122,6 +122,9 @@
   <tile id="42">
    <image width="13" height="8" source="prototype/rock1.png"/>
   </tile>
+  <tile id="45">
+   <image width="10" height="6" source="prototype/rock2.png"/>
+  </tile>
  </tileset>
  <layer name="Tile Layer 1" width="10" height="10" offsetx="0.25" offsety="0.25">
   <data encoding="csv">
@@ -143,27 +146,25 @@
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="174" gid="39" x="145.25" y="241" width="54" height="71"/>
-  <object id="175" gid="39" x="103.25" y="242" width="54" height="71"/>
-  <object id="176" gid="41" x="128.5" y="204.25" width="52" height="70"/>
-  <object id="177" gid="41" x="21.25" y="199" width="52" height="70"/>
-  <object id="178" gid="39" x="34.5" y="178" width="54" height="71"/>
-  <object id="179" gid="39" x="-11.25" y="175.75" width="54" height="71"/>
-  <object id="180" gid="41" x="19" y="145" width="52" height="70"/>
-  <object id="181" gid="39" x="87.75" y="180.75" width="54" height="71"/>
-  <object id="182" gid="41" x="121.75" y="165" width="52" height="70"/>
-  <object id="183" gid="41" x="86.75" y="219.5" width="52" height="70"/>
   <object id="184" gid="36" x="55.75" y="230" width="20" height="40"/>
-  <object id="186" gid="42" x="8.25" y="188.25" width="16" height="12"/>
-  <object id="189" gid="42" x="90" y="231.75" width="16" height="12"/>
-  <object id="190" gid="43" x="8" y="225.5" width="13" height="8"/>
-  <object id="193" gid="43" x="171.5" y="244" width="13" height="8"/>
-  <object id="194" gid="43" x="188.5" y="154.75" width="13" height="8"/>
+  <object id="307" gid="42" x="111" y="163.25" width="16" height="12"/>
+  <object id="308" gid="43" x="131.75" y="163.75" width="13" height="8"/>
+  <object id="309" gid="46" x="123.75" y="183.75" width="10" height="6"/>
+  <object id="310" gid="6" x="38.5" y="192.5" width="49" height="43"/>
+  <object id="311" gid="39" x="112" y="147" width="56" height="73"/>
+  <object id="312" gid="41" x="78.5" y="185.75" width="52" height="70"/>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
   <object id="70" name="OldMan" type="Friendly" x="71.841" y="179.534" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="315" name="ForestBird" type="Friendly" x="87" y="125.375" width="12.5" height="15.25">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+    <property name="visLayer" type="int" value="1"/>
    </properties>
    <ellipse/>
   </object>

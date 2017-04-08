@@ -110,7 +110,7 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage && GameClient.getInstance().getGameState().get() == ClientGameState.GAME) {
 				if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 					GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
-					DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos);
+					DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
 					newEntity.setVertices(initMsg.vertices);
 					newEntity.setPosition(newEntity.getPos());
 					gameClient.addDynamicEntity(newEntity);
