@@ -152,8 +152,8 @@ public class ClientCommunicator extends Communicator {
 				} else {
 					System.out.println("unhandled network message of type " + msg.getClass());
 				}
-				gameClient.getScreen().updateUI();
 			}
+			gameClient.getScreen().updateUI();
 		}
 	}
 
