@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
+import com.mygdx.game.server.model.entity.friendly.OldMan;
 import com.mygdx.game.server.model.trigger.CutsceneTrigger;
 import com.mygdx.game.server.model.trigger.MapLoadTrigger;
 import com.mygdx.game.server.model.trigger.Trigger;
@@ -144,6 +146,30 @@ public class ServerTmxLoader {
 				loadTriggers(layer, mapHeight);
 			} else if (name.equals(MapLoaderConstants.BOUNDARIES_LAYER_NAME)) {
 				loadBoundaries(layer, mapHeight);
+			} else if (name.equals(MapLoaderConstants.SPAWN_LAYER_NAME)) {
+				loadPlayerSpawns(layer, mapHeight);
+			}
+		}
+	}
+
+	/**
+	 * Load player spawn
+	 * A spawn is a rectangle with width and height
+	 *
+	 * In the future there will be multiple possible spawns (for moving between maps)
+	 * @param layer
+	 * @param mapHeight
+	 */
+	private void loadPlayerSpawns(Element layer, float mapHeight) {
+		for (Element entity : layer.getChildrenByName("object")) {
+			String name = entity.get("name");
+			if ("Spawn".equals(name)) {
+				float x = entity.getFloat("x");
+				float y = mapHeight - entity.getFloat("y");
+				float width  = entity.getFloat("width");
+				float height = entity.getFloat("height");
+				Rectangle spawn = new Rectangle(x, y, width, height);
+				map.playerSpawn = spawn;
 			}
 		}
 	}

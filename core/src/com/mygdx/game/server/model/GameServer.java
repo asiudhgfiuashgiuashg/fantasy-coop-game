@@ -1,13 +1,20 @@
 package com.mygdx.game.server.model;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.game.server.controller.ServerCommunicator;
 import com.mygdx.game.server.model.entity.DynamicEntity;
+import com.mygdx.game.server.model.entity.player.MagePlayer;
+import com.mygdx.game.server.model.entity.player.Player;
+import com.mygdx.game.server.model.entity.player.RangerPlayer;
+import com.mygdx.game.server.model.entity.player.ShieldPlayer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
-import com.mygdx.game.server.model.player.Player;
+import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
+import com.mygdx.game.shared.model.UniqueIDAssigner;
 import com.mygdx.game.shared.model.exceptions.MapLoaderException;
+import com.mygdx.game.shared.model.lobby.PlayerClass;
 import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage;
 import com.mygdx.game.shared.network.Message;
@@ -67,10 +74,6 @@ public class GameServer implements Runnable {
 	 */
 	private Cutscene cutscene;
 
-	/**
-	 * Player models
-	 */
-	private final List<Player> players = new ArrayList<Player>();
 
 	/**
 	 * Whether the server has been initialized
@@ -92,6 +95,8 @@ public class GameServer implements Runnable {
 	 */
 	private ServerLobbyManager lobbyManager;
 
+
+	private boolean flase = false;
 
 	/**
 	 * Private constructor enforces singleton pattern. Actual server
@@ -195,8 +200,34 @@ public class GameServer implements Runnable {
 	 */
 	public void startGame() {
 		setState(GameState.GAME);
+		createPlayerInstances();
 		communicator.sendToAll(new LobbyMessage.GameStartMessage());
 		initDynamicEntitiesOnClients();
+	}
+
+	private void createPlayerInstances() {
+		ServerLobbyManager manager = getLobbyManager();
+		List<ServerLobbyPlayer> lobbyPlayers = manager.getLobbyPlayers();
+		for (ServerLobbyPlayer lobbyPlayer: lobbyPlayers) {
+			PlayerClass clazz = lobbyPlayer.getPlayerClass();
+			String uid;
+			Vector2 position = new Vector2();
+			getMap().playerSpawn.getPosition(position);
+			Player player;
+			if (PlayerClass.MAGE == clazz) {
+				// Generate uid
+				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
+				player = new MagePlayer(uid, position, 0, flase);
+			} else if (PlayerClass.RANGER == clazz) {
+				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
+				player = new RangerPlayer(uid, position, 0, flase);
+			} else { // SHIELD
+				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
+				player = new ShieldPlayer(uid, position, 0, flase);
+			}
+			player.connectionUid = lobbyPlayer.getUid();
+			getMap().addPlayer(player);
+		}
 	}
 
 	/**
@@ -216,7 +247,17 @@ public class GameServer implements Runnable {
 			entInitMsg.entUid = entity.getUid();
 			entInitMsg.vertices = entity.getVertices();
 			entInitMsg.visLayer = entity.getVisLayer();
-			communicator.sendToAll(entInitMsg);
+
+			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
+				entInitMsg.isLocalPlayer = true;
+				Player player = (Player) entity;
+				sendTo(entInitMsg, player.connectionUid);
+				entInitMsg.isLocalPlayer = false;
+				sendToAllExcept(entInitMsg, player.connectionUid);
+			} else {
+				communicator.sendToAll(entInitMsg);
+			}
+
 		}
 	}
 
@@ -306,15 +347,6 @@ public class GameServer implements Runnable {
 	public void loadCutscene(Cutscene cutscene) {
 		this.cutscene = cutscene;
 		// TODO: start cutscene
-	}
-
-	/**
-	 * Gets the list of player models.
-	 *
-	 * @return list of Player instances
-	 */
-	public List<Player> getPlayers() {
-		return players;
 	}
 	
 	/**

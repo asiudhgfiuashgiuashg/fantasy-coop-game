@@ -23,4 +23,5 @@ public class MapLoaderConstants {
 	
 	public static final String ENEMY_TYPE = "Enemy";
 	public static final String FRIENDLY_TYPE = "Friendly";
+	public static final String SPAWN_LAYER_NAME = "Spawns";
 }

@@ -39,6 +39,7 @@ public class GameMessage extends Message {
 		public boolean solid;
 		public float[] vertices;
 		public int visLayer;
+		public boolean isLocalPlayer = false; // whether the client should treat this as local player
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

@@ -36,7 +36,7 @@ public class ForestBird extends Friendly {
 
 	public ForestBird(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
-		oldPos = getPosition();
+		oldPos = new Vector2(getPosition());
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class ForestBird extends Friendly {
 			} else if (BirdState.RIGHT_FACING_ON_LEFT == state) {
 				animationName = "invisible";
 				state = BirdState.DISAPPEARED_FROM_LEFT;
-				setPosition(new Vector2(oldPos.add(20, 0)));
+				setPosition(new Vector2(getPosition()).add(5, 5));
 			} else if (BirdState.DISAPPEARED_FROM_LEFT == state) {
 				animationName = "right_facing";
 				state = BirdState.RIGHT_FACING_ON_RIGHT;
@@ -91,8 +91,8 @@ public class ForestBird extends Friendly {
 	 * @return
 	 */
 	private long pickDirectionDuration() {
-		long minTime = 3000;
-		long maxTime = 10000;
+		long minTime = 1000;
+		long maxTime = 3000;
 
 		return (long) (rand.nextDouble() * (maxTime - minTime) + minTime);
 	}

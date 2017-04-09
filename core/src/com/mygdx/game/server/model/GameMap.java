@@ -3,10 +3,15 @@ package com.mygdx.game.server.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.entity.StaticEntity;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
+import com.mygdx.game.server.model.entity.player.MagePlayer;
+import com.mygdx.game.server.model.entity.player.Player;
+import com.mygdx.game.server.model.entity.player.RangerPlayer;
+import com.mygdx.game.server.model.entity.player.ShieldPlayer;
 import com.mygdx.game.server.model.trigger.Trigger;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
@@ -28,6 +33,12 @@ public class GameMap {
 	private ArrayList<StaticEntity> staticEntities;
 	private ArrayList<Boundary> boundaries;
 	private ArrayList<CollideablePolygon> solidObjects;
+	protected Rectangle playerSpawn; // where the players spawn
+
+	public MagePlayer magePlayer;
+	public RangerPlayer rangerPlayer;
+	public ShieldPlayer shieldPlayer;
+
 
 	/**
 	 * Constructor used by MapLoader.
@@ -96,6 +107,17 @@ public class GameMap {
 	public void addFriendly(Friendly friendly) {
 		friendlies.add(friendly);
 		addDynamicEntity(friendly);
+	}
+
+	public void addPlayer(Player player) {
+		addDynamicEntity(player);
+		if (player instanceof MagePlayer) {
+			magePlayer = (MagePlayer) player;
+		} else if (player instanceof RangerPlayer) {
+			rangerPlayer = (RangerPlayer) player;
+		} else if (player instanceof ShieldPlayer) {
+			shieldPlayer = (ShieldPlayer) player;
+		}
 	}
 
 	/**
