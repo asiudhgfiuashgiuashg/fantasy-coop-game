@@ -418,4 +418,5 @@ public class GameClient extends Game {
 		getMap().addLocalPlayer(player);
 		renderer.registerDynamicEntity(player);
 	}
+
 }

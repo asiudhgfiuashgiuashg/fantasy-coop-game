@@ -140,42 +140,8 @@
 15,16,15,24,14,16,15,16,15,16
 </data>
  </layer>
- <objectgroup name="Static Entities">
-  <object id="84" gid="8" x="159.5" y="191.75" width="74" height="31">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="184" gid="36" x="55.75" y="230" width="20" height="40"/>
-  <object id="307" gid="42" x="111" y="163.25" width="16" height="12"/>
-  <object id="308" gid="43" x="131.75" y="163.75" width="13" height="8"/>
-  <object id="309" gid="46" x="123.75" y="183.75" width="10" height="6"/>
-  <object id="310" gid="6" x="38.5" y="192.5" width="49" height="43"/>
-  <object id="311" gid="39" x="112" y="147" width="56" height="73"/>
-  <object id="312" gid="41" x="78.5" y="185.75" width="52" height="70"/>
- </objectgroup>
- <objectgroup name="Dynamic Entities">
-  <object id="70" name="OldMan" type="Friendly" x="71.841" y="179.534" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="315" name="ForestBird" type="Friendly" x="87" y="125.375" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-    <property name="visLayer" type="int" value="1"/>
-   </properties>
-   <ellipse/>
-  </object>
-  <object id="316" name="ForestBird" type="Friendly" x="124.5" y="77.875" width="12.5" height="15.25">
-   <properties>
-    <property name="solid" type="bool" value="true"/>
-    <property name="visLayer" type="int" value="1"/>
-   </properties>
-   <ellipse/>
-  </object>
- </objectgroup>
+ <objectgroup name="Static Entities"/>
+ <objectgroup name="Dynamic Entities"/>
  <objectgroup name="Triggers"/>
  <objectgroup name="Boundaries"/>
  <objectgroup name="Spawns">

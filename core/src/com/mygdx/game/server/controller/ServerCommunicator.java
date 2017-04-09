@@ -2,16 +2,21 @@ package com.mygdx.game.server.controller;
 
 import java.io.IOException;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.mygdx.game.server.model.GameMap;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.server.model.entity.player.Player;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
 import com.mygdx.game.shared.controller.Communicator;
 import com.mygdx.game.shared.model.lobby.LobbyPlayer;
 import com.mygdx.game.shared.model.lobby.PlayerClass;
+import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChooseUsernameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
@@ -176,7 +181,38 @@ public class ServerCommunicator extends Communicator {
 				System.out.println("got ready message");
 				manager.checkForGameStart();
 			}
+
+			if (msg instanceof GameMessage.PosUpdateMessage) {
+				GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
+				Vector2 position = posMsg.position;
+				GameMap map = GameServer.getInstance().getMap();
+
+				int cUid = msg.uid;
+				//System.out.println("cuid: " + cUid);
+				Player toUpdate = getPlayerMatchingConnectionUid(cUid, map);
+				toUpdate.setPosition(position);
+				posMsg.entityUID = toUpdate.getUid();
+				posMsg.visLayer = 0;
+				sendToAllExcept(posMsg, cUid);
+			}
 		}
+	}
+
+	/**
+	 *
+	 * @param cUid connection uid
+	 * @param map
+	 * @return
+	 */
+	private Player getPlayerMatchingConnectionUid(int cUid, GameMap map) {
+		if (map.rangerPlayer != null && map.rangerPlayer.connectionUid == cUid) {
+			return map.rangerPlayer;
+		}
+		if (map.magePlayer != null && map.magePlayer.connectionUid == cUid) {
+			return map.magePlayer;
+		}
+
+		return map.shieldPlayer;
 	}
 
 	public void cleanup() {

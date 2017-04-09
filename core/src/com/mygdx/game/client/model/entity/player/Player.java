@@ -1,7 +1,9 @@
 package com.mygdx.game.client.model.entity.player;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
+import com.mygdx.game.shared.network.GameMessage;
 
 /**
  * Represents a local player
@@ -26,17 +28,29 @@ public abstract class Player extends DynamicEntity {
 		super.tick(deltaT);
 		if (up && !down) {
 			setVelocity(new Vector2(getVelocity().x, speed));
+			sendPositionUpdate();
 		} else if (!up && down) {
 			setVelocity(new Vector2(getVelocity().x, -speed));
+			sendPositionUpdate();
 		} else {
 			setVelocity(new Vector2(getVelocity().x, 0));
 		}
 		if (right && !left) {
 			setVelocity(new Vector2(speed, getVelocity().y));
+			sendPositionUpdate();
 		} else if (!right && left) {
 			setVelocity(new Vector2(-speed, getVelocity().y));
+			sendPositionUpdate();
 		} else {
 			setVelocity(new Vector2(0, getVelocity().y));
 		}
+
+
+	}
+
+	private void sendPositionUpdate() {
+		GameMessage.PosUpdateMessage posMsg = new GameMessage.PosUpdateMessage();
+		posMsg.position = getPosition();
+		GameClient.getInstance().sendToServer(posMsg);
 	}
 }

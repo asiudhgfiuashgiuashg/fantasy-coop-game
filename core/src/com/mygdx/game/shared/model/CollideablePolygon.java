@@ -3,6 +3,7 @@ package com.mygdx.game.shared.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ShortArray;
 
@@ -281,6 +282,8 @@ public class CollideablePolygon extends Polygon {
 	}
 
 	public void setPosition(Vector2 position) {
+		//System.out.println("setposition: " + position);
+		//new Exception().printStackTrace();
 		setPosition(position.x, position.y);
 	}
 
@@ -294,7 +297,6 @@ public class CollideablePolygon extends Polygon {
 		// Update velocity based on forces (dv = 1/m F dt)
 		Vector2 dv = netForce.scl(dt).scl(1 / mass);
 		velocity.add(dv);
-
 		netForce.set(0, 0);
 
 		// Compute displacement (dx = v dt)

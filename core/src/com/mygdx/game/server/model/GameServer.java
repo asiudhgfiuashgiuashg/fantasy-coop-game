@@ -219,10 +219,10 @@ public class GameServer implements Runnable {
 				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
 				player = new MagePlayer(uid, position, 0, flase);
 			} else if (PlayerClass.RANGER == clazz) {
-				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
+				uid = UniqueIDAssigner.generateDynamicEntityUID(RangerPlayer.class.getSimpleName());
 				player = new RangerPlayer(uid, position, 0, flase);
 			} else { // SHIELD
-				uid = UniqueIDAssigner.generateDynamicEntityUID(MagePlayer.class.getSimpleName());
+				uid = UniqueIDAssigner.generateDynamicEntityUID(ShieldPlayer.class.getSimpleName());
 				player = new ShieldPlayer(uid, position, 0, flase);
 			}
 			player.connectionUid = lobbyPlayer.getUid();

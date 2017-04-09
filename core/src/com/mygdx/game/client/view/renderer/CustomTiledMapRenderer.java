@@ -123,6 +123,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 
 		// update dynamic entity animation frame
 		for (DynamicEntity entity : dynamicEntities) {
+			//System.out.println(Gdx.graphics.getDeltaTime());
 			entity.tick(Gdx.graphics.getDeltaTime());
 		}
 	}
