@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.mygdx.game.client.model.FlickerPointLight;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
+import com.mygdx.game.client.model.entity.player.Player;
 import com.mygdx.game.shared.model.CollideablePolygon;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ClientTiledMap extends TiledMap {
 			ArrayList<StaticEntity>();
 	public final List<DynamicEntity> dynamicEntities = new ArrayList
 			<DynamicEntity>();
+	public Player localPlayer;
 
 	public DynamicEntity getDynamicEntityByUid(String entityUID) {
 		for (DynamicEntity entity: dynamicEntities) {
@@ -36,5 +38,10 @@ public class ClientTiledMap extends TiledMap {
 			}
 		}
 		return null;
+	}
+
+	public void addLocalPlayer(Player player) {
+		localPlayer = player;
+		dynamicEntities.add(player);
 	}
 }

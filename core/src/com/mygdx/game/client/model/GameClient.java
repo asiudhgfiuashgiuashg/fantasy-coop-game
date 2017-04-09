@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.mygdx.game.client.model.entity.DynamicEntity;
+import com.mygdx.game.client.model.entity.player.Player;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.map.ClientTiledMap;
 import com.mygdx.game.client.model.map.ClientTmxLoader;
@@ -412,5 +413,10 @@ public class GameClient extends Game {
 
 	public AtomicReference<ClientGameState> getGameState() {
 		return gameState;
+	}
+
+	public void addLocalPlayer(Player player) {
+		getMap().addLocalPlayer(player);
+		renderer.registerDynamicEntity(player);
 	}
 }

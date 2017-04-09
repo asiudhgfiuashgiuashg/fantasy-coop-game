@@ -9,6 +9,10 @@ import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.model.ClientGameState;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
+import com.mygdx.game.client.model.entity.player.MagePlayer;
+import com.mygdx.game.client.model.entity.player.Player;
+import com.mygdx.game.client.model.entity.player.RangerPlayer;
+import com.mygdx.game.client.model.entity.player.ShieldPlayer;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
@@ -110,10 +114,23 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage && GameClient.getInstance().getGameState().get() == ClientGameState.GAME) {
 				if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 					GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
-					DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
-					newEntity.setVertices(initMsg.vertices);
-					newEntity.setPosition(newEntity.getPos());
-					gameClient.addDynamicEntity(newEntity);
+					if (initMsg.isLocalPlayer) {
+						String className = initMsg.className;
+						Player player;
+						if (className.equals("RangerPlayer")) {
+							player = new RangerPlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+						} else if (className.equals("MagePlayer")) {
+							player = new MagePlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+						} else { // "SHIELDPLAYER"
+							player = new ShieldPlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+						}
+						gameClient.addLocalPlayer(player);
+						System.out.println("added local player");
+					} else {
+						DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
+						newEntity.setVertices(initMsg.vertices);
+						gameClient.addDynamicEntity(newEntity);
+					}
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
 					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
 					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(posMsg.entityUID);

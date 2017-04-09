@@ -21,9 +21,6 @@ public class DynamicEntity extends MapEntity {
 	// sequence of frames drawn in aseprite)
 	// TODO load animation map (a class exists in util package for this)
 	private Map<String, Animation> nameToAnimationMap;
-	// position of this entity in the previous 2 position updates (to be used
-	// for interpolation)
-	private Vector2[] prevPos;
 	private TextureRegion currTextureRegion;
 	private Animation currAnimation;
 	/**
