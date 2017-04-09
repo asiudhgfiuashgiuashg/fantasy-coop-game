@@ -37,7 +37,6 @@ import com.mygdx.game.client.controller.ClientCommunicator;
 import com.mygdx.game.client.controller.KeyboardProcessor;
 import com.mygdx.game.client.model.exceptions.AlreadyConnectedException;
 import com.mygdx.game.client.model.keybinds.Keybinds;
-import com.sun.deploy.util.SessionState;
 
 /**
  * The main game loop for the client application. Delegates rendering to one of

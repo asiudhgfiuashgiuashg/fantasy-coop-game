@@ -5,8 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.view.spritesheet.SpritesheetMetadataParser;
+import com.mygdx.game.shared.model.CollideablePolygon;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +35,8 @@ public class DynamicEntity extends MapEntity {
 	// used to load animations from aseprite metadata and associated pngs
 	private static SpritesheetMetadataParser spritesheetParser = new SpritesheetMetadataParser();
 
+	private List<CollideablePolygon> solidEntities = new ArrayList<CollideablePolygon>();
+
 	public DynamicEntity(String entUid, String className, Vector2 pos, int visLayer) {
 		super(visLayer);
 		this.uid = entUid;
@@ -49,6 +55,7 @@ public class DynamicEntity extends MapEntity {
 	 */
 	public void tick(float deltaT) {
 		timeSinceAnimationBegan += deltaT;
+		doPhysics(deltaT, solidEntities);
 	}
 
 	// TODO - separate out dynamic entities in the map and uupdate them all
