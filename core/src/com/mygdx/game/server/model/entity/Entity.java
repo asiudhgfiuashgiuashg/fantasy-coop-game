@@ -62,8 +62,8 @@ public abstract class Entity extends PolygonObject {
 	public void setPosition(Vector2 position) {
 		if (!getPosition().epsilonEquals(position, .00000001f)) {
 			super.setPosition(position);
-			draw();
 		}
+		draw();
 	}
 
 
