@@ -8,9 +8,7 @@ import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.lobby.ClientLobbyManager;
 import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.shared.model.lobby.PlayerClass;
-import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
-import com.mygdx.game.shared.network.LobbyMessage.ClassAssignmentMessage;
-import com.mygdx.game.shared.network.LobbyMessage.ReadyStatusMessage;
+import com.mygdx.game.shared.network.LobbyMessage.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -54,7 +52,6 @@ public class LobbyScreen extends DebuggableScreen {
 		updatePlayers();
 		
 		//This sets up the chat system, which is updated using updateChat().
-		//log = new Table(skin);
 		chatField = new TextField("", skin);
 		chatField.addListener(new InputListener() {
 			@Override
@@ -82,16 +79,7 @@ public class LobbyScreen extends DebuggableScreen {
 				readyButtonPressed();
 			}
 		});		
-		startButton = new TextButton("Start Game", skin);
-		startButton.setTouchable(Touchable.disabled);
-		startButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				game.transitionToInGame();
-			}
-		});
 		serverOptions.addActor(readyButton);
-		serverOptions.addActor(startButton);
 		
 		//Sets up the class selection buttons
 		HorizontalGroup classOptions = new HorizontalGroup();
@@ -126,14 +114,6 @@ public class LobbyScreen extends DebuggableScreen {
 		lobbyOptions.addActor(serverOptions);
 		
 		
-		//SplitPane topSplitPane = new SplitPane(playersTable, lobbyOptions, false, skin);
-		
-		
-		//SplitPane mainSplitPane = new SplitPane(topSplitPane, chat, true, skin);
-		
-		//lobbyOptions.setFillParent(true);
-		//lobbyOptions.align(Align.center);
-		//topSplitPane.align(Align.center);
 		log.setFillParent(true);
 		chat.setWidth(Gdx.graphics.getWidth());
 		Table lobby = new Table(skin);
@@ -204,7 +184,6 @@ public class LobbyScreen extends DebuggableScreen {
 			log.add(lobbyManager.getByUid(chatLine.uid).getUsername() + ": " + chatLine.message).width(Gdx.graphics.getWidth());
 			log.row();
 		}
-		//log.add(chatField);
 		log.row();
 		chat.scrollTo(0, 0, 800, 50);
 	}
@@ -222,10 +201,10 @@ public class LobbyScreen extends DebuggableScreen {
 	
 	public void readyButtonPressed() {
 		ClientLobbyPlayer player = lobbyManager.getLocalLobbyPlayer();
-		if (player.isReady()) {
-			player.setReady(false);
-		} else {
+		if (!player.isReady() && player.getClass() != null) {
 			player.setReady(true);
+		} else {
+			player.setReady(false);
 		}
 		sendReadyMessage(player.isReady());
 	}
@@ -256,18 +235,14 @@ public class LobbyScreen extends DebuggableScreen {
 			}
 		}
 		if (result) {
-			startButton.setTouchable(Touchable.enabled);
-		} else {
-			startButton.setTouchable(Touchable.disabled);
+			game.sendToServer(new GameStartMessage());
 		}
 	}
 	
 	public void changePlayerClass(PlayerClass classType) {
-		lobbyManager.getLocalLobbyPlayer().setPlayerClass(classType);
 		ClassAssignmentMessage message = new ClassAssignmentMessage();
 		message.playerClass = classType;
 		game.sendToServer(message);
-		updatePlayers();
 	}
 	
 	@Override
