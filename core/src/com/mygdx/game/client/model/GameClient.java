@@ -153,7 +153,6 @@ public class GameClient extends Game {
 		inputMultiplexer.addProcessor(console.getInputProcessor());
 		keybinds = new Keybinds();
 		keyboardProcessor = new KeyboardProcessor(keybinds);
-		inputMultiplexer.addProcessor(keyboardProcessor);
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 
@@ -360,6 +359,7 @@ public class GameClient extends Game {
 	public void transitionToInGame() {
 		setScreen(gameScreen);
 		gameState.set(ClientGameState.GAME);
+		inputMultiplexer.addProcessor(keyboardProcessor);
 		console.log("Transitioned to in-game from lobby");
 	}
 
