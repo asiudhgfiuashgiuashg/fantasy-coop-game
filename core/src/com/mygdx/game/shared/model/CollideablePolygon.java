@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ShortArray;
+import com.mygdx.game.server.model.entity.DynamicEntity;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
@@ -36,7 +37,9 @@ public class CollideablePolygon extends Polygon {
 	private Vector2 netForce = new Vector2(0, 0);
 
 
-	/** If object is solid i.e. cannot overlap with another */
+	/**
+	 * If object is solid i.e. cannot overlap with another
+	 */
 	protected boolean solid;
 
 	//Used to check for intersection between various geometric objects
@@ -87,6 +90,7 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * Extends setVertices to update the triangles used for collision
+	 *
 	 * @param vertices
 	 */
 	@Override
@@ -106,20 +110,14 @@ public class CollideablePolygon extends Polygon {
 		triangles.clear();
 		for (int i = 0; i < triangleVertices.size; i += 3) {
 			// from http://stackoverflow.com/a/28393886
-			float[] triangleVerticesArr = new float[] {
-					getTransformedVertices()[triangleVertices.get(i) * 2],
-					getTransformedVertices()[triangleVertices.get(i) * 2 + 1],
-					getTransformedVertices()[triangleVertices.get(i + 1) * 2],
-					getTransformedVertices()[triangleVertices.get(i + 1) * 2 + 1],
-					getTransformedVertices()[triangleVertices.get(i + 2) * 2],
-					getTransformedVertices()[triangleVertices.get(i + 2) * 2 + 1]
-			};
+			float[] triangleVerticesArr = new float[]{getTransformedVertices()[triangleVertices.get(i) * 2], getTransformedVertices()[triangleVertices.get(i) * 2 + 1], getTransformedVertices()[triangleVertices.get(i + 1) * 2], getTransformedVertices()[triangleVertices.get(i + 1) * 2 + 1], getTransformedVertices()[triangleVertices.get(i + 2) * 2], getTransformedVertices()[triangleVertices.get(i + 2) * 2 + 1]};
 			triangles.add(triangleVerticesArr);
 		}
 	}
 
 	/**
 	 * used for debugging by the renderer
+	 *
 	 * @return
 	 */
 	public List<float[]> getTriangles() {
@@ -163,8 +161,8 @@ public class CollideablePolygon extends Polygon {
 		other.computeTriangles();
 		this.computeTriangles();
 		// pairwise check for collision of triangles which make up each polygon
-		for (float[] thisTriangle: this.triangles) {
-			for (float[] otherTriangle: other.triangles) {
+		for (float[] thisTriangle : this.triangles) {
+			for (float[] otherTriangle : other.triangles) {
 				if (INTERSECTOR.overlapConvexPolygons(thisTriangle, otherTriangle, null)) {
 					return true; // collision occurred
 				}
@@ -289,6 +287,7 @@ public class CollideablePolygon extends Polygon {
 
 	/**
 	 * apply physics (forces and collision) to this polygon
+	 *
 	 * @param dt
 	 * @param solidObjects
 	 * @return
@@ -302,60 +301,61 @@ public class CollideablePolygon extends Polygon {
 		// Compute displacement (dx = v dt)
 		Vector2 dx = getVelocity().scl(dt);
 		// make sure dx isn't zero to avoid log2 issues
-		if (solid && !fuzzyEquals(dx.len(), 0)) {
-			// Number of iterations to achieve sub pixel precision
-			int N = MathUtils.ceil(MathUtils.log2(dx.len()));
-			MathUtils.clamp(N, 1, N); // N >= 1
+		if (solid) {
+			if (!fuzzyEquals(dx.len(), 0)) {
+				// Number of iterations to achieve sub pixel precision
+				int N = MathUtils.ceil(MathUtils.log2(dx.len()));
+				MathUtils.clamp(N, 1, N); // N >= 1
 
-			// Collision lists
-			ArrayList<CollideablePolygon> currList = new ArrayList<CollideablePolygon>();
-			ArrayList<CollideablePolygon> prevList = new ArrayList<CollideablePolygon>();
+				// Collision lists
+				ArrayList<CollideablePolygon> currList = new ArrayList<CollideablePolygon>();
+				ArrayList<CollideablePolygon> prevList = new ArrayList<CollideablePolygon>();
 
-			// Iteratively check for collisions
-			for (int i = 0; i < N; i++) {
-				// Update lists
-				ArrayList<CollideablePolygon> temp = prevList;
-				prevList = currList;
-				temp.clear();
-				currList = temp;
+				// Iteratively check for collisions
+				for (int i = 0; i < N; i++) {
+					// Update lists
+					ArrayList<CollideablePolygon> temp = prevList;
+					prevList = currList;
+					temp.clear();
+					currList = temp;
 
-				// Starting position
-				float startX = getX();
-				float startY = getY();
+					// Starting position
+					float startX = getX();
+					float startY = getY();
 
 
-				// Try moving in direction
-				Vector2 pos = new Vector2(startX, startY);
-				Vector2 addVec = new Vector2(dx);
-				addVec.scl((float) Math.pow(2, -i));
-				pos.add(addVec);
-				//getPolygon().setPosition(pos.x, pos.y);
+					// Try moving in direction
+					Vector2 pos = new Vector2(startX, startY);
+					Vector2 addVec = new Vector2(dx);
+					addVec.scl((float) Math.pow(2, -i));
+					pos.add(addVec);
 
-				setPosition(new Vector2(pos.x, pos.y));
-				// Check for collisions with other solid objects
-				for (CollideablePolygon solidObj : solidObjects) {
-					if (!this.equals(solidObj) && this.collides(solidObj)) {
-						//System.out.println("collision occurring");
-						// Revert to starting position of this iteration
-						setPosition(new Vector2(startX, startY));
+					setPosition(new Vector2(pos.x, pos.y));
+					// Check for collisions with other solid objects
+					for (CollideablePolygon solidObj : solidObjects) {
+						if (!this.equals(solidObj) && this.collides(solidObj)) {
+							//System.out.println("collision occurring");
+							// Revert to starting position of this iteration
+							setPosition(new Vector2(startX, startY));
 
-						// Add to collision list
-						currList.add(solidObj);
-					}
-				}
-
-				// Last iteration
-				if (i == N - 1) {
-					// If last iteration had no collisions, use previous list
-					if (currList.isEmpty()) {
-						currList = prevList;
+							// Add to collision list
+							currList.add(solidObj);
+						}
 					}
 
-					// Call onBumpInto() for each collision
-					for (CollideablePolygon obj : currList) {
-						// Call on this entity
-						onBumpInto(obj);
-						obj.onBumpInto(this);
+					// Last iteration
+					if (i == N - 1) {
+						// If last iteration had no collisions, use previous list
+						if (currList.isEmpty()) {
+							currList = prevList;
+						}
+
+						// Call onBumpInto() for each collision
+						for (CollideablePolygon obj : currList) {
+							// Call on this entity
+							onBumpInto(obj);
+							obj.onBumpInto(this);
+						}
 					}
 				}
 			}
@@ -365,7 +365,6 @@ public class CollideablePolygon extends Polygon {
 			pos.add(dx);
 			setPosition(pos);
 		}
-
 	}
 
 	/**
@@ -376,6 +375,7 @@ public class CollideablePolygon extends Polygon {
 	 * @param b second float
 	 * @return true if close enough to equal
 	 */
+
 	private static boolean fuzzyEquals(float a, float b) {
 		float eps = 0.0000001f; // how close the floats must be
 		return Math.abs(a - b) < eps;
@@ -411,7 +411,6 @@ public class CollideablePolygon extends Polygon {
 	public void applyForce(Vector2 force) {
 		netForce.add(force);
 	}
-
 
 
 	/**

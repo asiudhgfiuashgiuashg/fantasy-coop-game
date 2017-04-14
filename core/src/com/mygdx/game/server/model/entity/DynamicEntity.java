@@ -34,6 +34,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		posMsg.entityUID = uid;
 		posMsg.position = getPosition();
 		posMsg.visLayer = visLayer;
+		posMsg.velocity = getVelocity();
 		server.sendToAll(posMsg);
 	}
 
@@ -68,8 +69,8 @@ public abstract class DynamicEntity extends Entity implements Actable {
 
 	@Override
 	public void act(long elapsedTime) {
-		// Time elapsed in units of ticks
-		float dt = elapsedTime / GameServer.TICKRATE;
+		// dt needs to be in seconds (just like on client)
+		float dt = elapsedTime / 1000f;
 		doPhysics(dt, GameServer.getInstance().getMap().getSolidObjects());
 	}
 }

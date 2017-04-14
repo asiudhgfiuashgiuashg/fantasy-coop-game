@@ -129,6 +129,7 @@ public class ClientCommunicator extends Communicator {
 					} else {
 						DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
 						newEntity.setVertices(initMsg.vertices);
+						newEntity.setMass(initMsg.mass);
 						gameClient.addDynamicEntity(newEntity);
 					}
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
@@ -138,6 +139,13 @@ public class ClientCommunicator extends Communicator {
 					if (posMsg.position != null) {
 						entity.setPosition(posMsg.position);
 					}
+					if (posMsg.velocity != null) {
+						entity.setVelocity(posMsg.velocity);
+						//System.out.println("set velocity of " + entity.getUid() + " to " + posMsg.velocity);
+					}
+
+
+
 				} else if (msg instanceof GameMessage.AnimationUpdateMessage) {
 					GameMessage.AnimationUpdateMessage animationUpdateMessage = (GameMessage.AnimationUpdateMessage) msg;
 

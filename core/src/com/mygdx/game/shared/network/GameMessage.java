@@ -9,6 +9,7 @@ public class GameMessage extends Message {
 		public String entityUID;
 		public Vector2 position;
 		public int visLayer;
+		public Vector2 velocity;
 	}
 
 	public static class AnimationUpdateMessage extends GameMessage {
@@ -40,6 +41,7 @@ public class GameMessage extends Message {
 		public float[] vertices;
 		public int visLayer;
 		public boolean isLocalPlayer = false; // whether the client should treat this as local player
+		public float mass;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

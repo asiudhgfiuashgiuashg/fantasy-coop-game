@@ -49,6 +49,7 @@ public abstract class Entity extends PolygonObject {
 		msg.entityUID = uid;
 		msg.position = getPosition();
 		msg.visLayer = visLayer;
+		msg.velocity = getVelocity();
 		server.sendToAll(msg);
 	}
 

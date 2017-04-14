@@ -190,10 +190,11 @@ public class ServerCommunicator extends Communicator {
 				int cUid = msg.uid;
 				//System.out.println("cuid: " + cUid);
 				Player toUpdate = getPlayerMatchingConnectionUid(cUid, map);
-				toUpdate.setPosition(position);
+				toUpdate.setVelocity(posMsg.velocity);
+				toUpdate.setPositionNoDraw(position);
 				posMsg.entityUID = toUpdate.getUid();
 				posMsg.visLayer = 0;
-				sendToAllExcept(posMsg, cUid);
+				//endToAllExcept(posMsg, cUid);
 			}
 		}
 	}

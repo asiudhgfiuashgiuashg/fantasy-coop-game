@@ -44,7 +44,7 @@ public class GameServer implements Runnable {
 	/**
 	 * Tickrate of game server i.e. how often the model is updated
 	 */
-	public static final float TICKRATE = .05f;
+	public static final float TICKRATE = .02f;
 
 	/**
 	 * Time conversions
@@ -247,6 +247,7 @@ public class GameServer implements Runnable {
 			entInitMsg.entUid = entity.getUid();
 			entInitMsg.vertices = entity.getVertices();
 			entInitMsg.visLayer = entity.getVisLayer();
+			entInitMsg.mass = entity.getMass();
 
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
 				entInitMsg.isLocalPlayer = true;

@@ -17,18 +17,20 @@ public class KeyboardProcessor extends InputAdapter {
 	@Override
 	public boolean keyDown(int keycode) {
 		Keybinds.Input input = binds.get(keycode);
-		System.out.println(input);
 		localPlayer = GameClient.getInstance().getMap().localPlayer;
 
-		if (input == Input.UP) {
-			localPlayer.up = true;
-		} else if (input == Input.DOWN) {
-			localPlayer.down = true;
-		} else if (input == Input.LEFT) {
-			localPlayer.left = true;
-		} else if (input == Input.RIGHT) {
-			localPlayer.right = true;
+		if (localPlayer != null) {
+			if (input == Input.UP) {
+				localPlayer.up = true;
+			} else if (input == Input.DOWN) {
+				localPlayer.down = true;
+			} else if (input == Input.LEFT) {
+				localPlayer.left = true;
+			} else if (input == Input.RIGHT) {
+				localPlayer.right = true;
+			}
 		}
+
 		/* 
 		 * EXAMPLE of what happens next
 		 * 
@@ -43,17 +45,19 @@ public class KeyboardProcessor extends InputAdapter {
 	
 	@Override
 	public boolean keyUp(int keycode) {
-		 localPlayer = GameClient.getInstance().getMap().localPlayer;
-		 
-		Keybinds.Input input = binds.get(keycode);
-		if (input == Input.UP) {
-			localPlayer.up = false;
-		} else if (input == Input.DOWN) {
-			localPlayer.down = false;
-		} else if (input == Input.LEFT) {
-			localPlayer.left = false;
-		} else if (input == Input.RIGHT) {
-			localPlayer.right = false;
+		localPlayer = GameClient.getInstance().getMap().localPlayer;
+
+		if (localPlayer != null) {
+			Keybinds.Input input = binds.get(keycode);
+			if (input == Input.UP) {
+				localPlayer.up = false;
+			} else if (input == Input.DOWN) {
+				localPlayer.down = false;
+			} else if (input == Input.LEFT) {
+				localPlayer.left = false;
+			} else if (input == Input.RIGHT) {
+				localPlayer.right = false;
+			}
 		}
 		
 		return false;

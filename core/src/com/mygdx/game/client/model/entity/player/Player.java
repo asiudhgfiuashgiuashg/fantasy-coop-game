@@ -28,29 +28,36 @@ public abstract class Player extends DynamicEntity {
 		super.tick(deltaT);
 		if (up && !down) {
 			setVelocity(new Vector2(getVelocity().x, speed));
-			sendPositionUpdate();
+			sendUpdates();
 		} else if (!up && down) {
 			setVelocity(new Vector2(getVelocity().x, -speed));
-			sendPositionUpdate();
+			sendUpdates();
 		} else {
 			setVelocity(new Vector2(getVelocity().x, 0));
+			sendUpdates();
 		}
 		if (right && !left) {
 			setVelocity(new Vector2(speed, getVelocity().y));
-			sendPositionUpdate();
+			sendUpdates();
 		} else if (!right && left) {
 			setVelocity(new Vector2(-speed, getVelocity().y));
-			sendPositionUpdate();
+			sendUpdates();
 		} else {
 			setVelocity(new Vector2(0, getVelocity().y));
+			sendUpdates();
 		}
 
 
 	}
 
+	private void sendUpdates() {
+		sendPositionUpdate();
+	}
+
 	private void sendPositionUpdate() {
 		GameMessage.PosUpdateMessage posMsg = new GameMessage.PosUpdateMessage();
 		posMsg.position = getPosition();
+		posMsg.velocity = getVelocity();
 		GameClient.getInstance().sendToServer(posMsg);
 	}
 }
