@@ -150,7 +150,9 @@ public class ClientCommunicator extends Communicator {
 					GameMessage.AnimationUpdateMessage animationUpdateMessage = (GameMessage.AnimationUpdateMessage) msg;
 
 					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(animationUpdateMessage.entityUID);
-					entity.setAnimation(animationUpdateMessage.animationName);
+					if (animationUpdateMessage.animationName != null) {
+						entity.setAnimation(animationUpdateMessage.animationName);
+					}
 				} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
 					System.out.println("got a hitbox update");
 					GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;

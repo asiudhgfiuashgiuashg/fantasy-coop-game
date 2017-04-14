@@ -194,7 +194,15 @@ public class ServerCommunicator extends Communicator {
 				toUpdate.setPositionNoDraw(position);
 				posMsg.entityUID = toUpdate.getUid();
 				posMsg.visLayer = 0;
-				//endToAllExcept(posMsg, cUid);
+				//sendToAllExcept(posMsg, cUid);
+			}
+
+			if (msg instanceof GameMessage.AnimationUpdateMessage) {
+				GameMessage.AnimationUpdateMessage animMsg = (GameMessage.AnimationUpdateMessage) msg;
+				int cUid = msg.uid;
+				GameMap map = GameServer.getInstance().getMap();
+				animMsg.entityUID = getPlayerMatchingConnectionUid(cUid, map).getUid();
+				sendToAllExcept(animMsg, cUid);
 			}
 		}
 	}

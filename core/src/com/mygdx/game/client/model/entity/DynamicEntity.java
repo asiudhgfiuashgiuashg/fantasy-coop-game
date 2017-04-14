@@ -36,6 +36,7 @@ public class DynamicEntity extends MapEntity {
 	private static SpritesheetMetadataParser spritesheetParser = new SpritesheetMetadataParser();
 
 	private List<CollideablePolygon> solidEntities = new ArrayList<CollideablePolygon>();
+	private String animationName; // name of current animation (sent to server to be distributed to other clients)
 
 	public DynamicEntity(String entUid, String className, Vector2 pos, int visLayer) {
 		super(visLayer);
@@ -70,7 +71,12 @@ public class DynamicEntity extends MapEntity {
 
 	public void setAnimation(String animationName) {
 		currAnimation = nameToAnimationMap.get(animationName);
+		this.animationName = animationName;
 		currAnimation.setPlayMode(Animation.PlayMode.LOOP);
 		timeSinceAnimationBegan = 0;
+	}
+
+	public String getAnimationName() {
+		return animationName;
 	}
 }
