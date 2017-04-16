@@ -49,7 +49,7 @@ public class TestEnemy2 extends Enemy {
 			}
 			timeSinceAnimationChange += elapsedTime;
 
-			sendAnimation();
+			sendAnimation(1f);
 			sentAnimationName = true;
 		}
 		if (timeSinceAnimationChange > 4 * 1000) {

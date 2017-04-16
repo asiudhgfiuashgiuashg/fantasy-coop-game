@@ -42,7 +42,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	 * Call this if you want to change animations or restart the current one
 	 * (on the client side)
 	 */
-	public void sendAnimation() {
+	public void sendAnimation(float frameDuration) {
 		GameMessage.AnimationUpdateMessage msg = new GameMessage.AnimationUpdateMessage();
 		msg.entityUID = getUid();
 		msg.animationName = animationName;

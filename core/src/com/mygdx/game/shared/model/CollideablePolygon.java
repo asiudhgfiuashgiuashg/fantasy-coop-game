@@ -75,6 +75,7 @@ public class CollideablePolygon extends Polygon {
 	public CollideablePolygon() {
 		triangles = new ArrayList<float[]>();
 		triangleVertices = new ShortArray();
+		setMass(1); // mass of zero messes up physics
 	}
 
 	public CollideablePolygon(float[] vertices) {

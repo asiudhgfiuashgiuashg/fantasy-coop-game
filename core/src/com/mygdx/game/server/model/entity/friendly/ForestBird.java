@@ -51,7 +51,7 @@ public class ForestBird extends Friendly {
 		super.act(elapsedTime);
 		if (!setInitialAnimation) { // send the initial animation of the old man
 			this.animationName = "left_facing";
-			sendAnimation();
+			sendAnimation(1f);
 			setInitialAnimation = true;
 			directionDuration = pickDirectionDuration();
 		}
@@ -79,7 +79,8 @@ public class ForestBird extends Friendly {
 				state = BirdState.LEFT_FACING_ON_LEFT;
 			}
 
-			sendAnimation();
+			sendAnimation(1f);
+
 			timeSinceAnimationChange = 0;
 			directionDuration = pickDirectionDuration();
 		}

@@ -46,7 +46,7 @@ public class TestEnemy extends Enemy {
 				this.animationName = "blueAnimation";
 			}
 
-			sendAnimation();
+			sendAnimation(1f);
 			sentAnimationName = true;
 		}
 		if (timeSinceAnimationChange > 4 * 1000) {

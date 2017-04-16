@@ -39,14 +39,14 @@ public class OldMan extends Friendly {
 		super.act(elapsedTime);
 		if (!setInitialAnimation) { // send the initial animation of the old man
 			this.animationName = "down_facing";
-			sendAnimation();
+			sendAnimation(1f);
 			setInitialAnimation = true;
 			directionDuration = pickDirectionDuration();
 		}
 		timeSinceAnimationChange += elapsedTime;
 		if (timeSinceAnimationChange >= directionDuration) {
 			this.animationName = chooseRandomDirectionAnimation();
-			sendAnimation();
+			sendAnimation(1f);
 			timeSinceAnimationChange = 0;
 			directionDuration = pickDirectionDuration();
 		}
