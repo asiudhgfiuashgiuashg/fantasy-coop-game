@@ -15,6 +15,7 @@ public class GameMessage extends Message {
 	public static class AnimationUpdateMessage extends GameMessage {
 		public String animationName;
 		public String entityUID;
+		public float frameDuration;
 	}
 	
 	public static class MoveMessage extends GameMessage {

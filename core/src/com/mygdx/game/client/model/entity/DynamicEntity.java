@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.view.spritesheet.SpritesheetMetadataParser;
 import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.shared.network.GameMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,14 +70,28 @@ public class DynamicEntity extends MapEntity {
 		return currTextureRegion;
 	}
 
-	public void setAnimation(String animationName) {
+	public void setAnimation(String animationName, float frameDuration) {
 		currAnimation = nameToAnimationMap.get(animationName);
 		this.animationName = animationName;
 		currAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		currAnimation.setFrameDuration(frameDuration);
 		timeSinceAnimationBegan = 0;
+	}
+
+
+	protected void setVelocityIfNotSet(Vector2 vel) {
+		if (!getVelocity().epsilonEquals(vel, 0.00001f)) {
+			setVelocity(vel);
+		}
 	}
 
 	public String getAnimationName() {
 		return animationName;
 	}
+
+	public Animation getAnimation() {
+		return currAnimation;
+	}
+
+
 }

@@ -233,9 +233,13 @@
   "scale": "1",
   "frameTags": [
    { "name": "down_walk", "from": 0, "to": 3, "direction": "forward" },
+   { "name": "down", "from": 0, "to": 0, "direction": "forward" },
    { "name": "up_walk", "from": 4, "to": 7, "direction": "forward" },
+   { "name": "up", "from": 4, "to": 4, "direction": "forward" },
    { "name": "right_walk", "from": 8, "to": 11, "direction": "forward" },
+   { "name": "right", "from": 8, "to": 8, "direction": "forward" },
    { "name": "left_walk", "from": 12, "to": 15, "direction": "forward" },
+   { "name": "left", "from": 12, "to": 12, "direction": "forward" },
    { "name": "down_firing", "from": 16, "to": 18, "direction": "forward" },
    { "name": "up_firing", "from": 19, "to": 21, "direction": "forward" },
    { "name": "right_firing", "from": 22, "to": 24, "direction": "forward" },

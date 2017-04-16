@@ -265,12 +265,16 @@
   "scale": "1",
   "frameTags": [
    { "name": "down_walk_dark", "from": 0, "to": 3, "direction": "forward" },
+   { "name": "down", "from": 0, "to": 0, "direction": "forward" },
    { "name": "down_walk_light", "from": 4, "to": 7, "direction": "forward" },
    { "name": "up_walk_light", "from": 8, "to": 11, "direction": "forward" },
    { "name": "up_walk_dark", "from": 12, "to": 15, "direction": "forward" },
+   { "name": "up", "from": 12, "to": 12, "direction": "forward" },
    { "name": "right_walk_dark", "from": 16, "to": 19, "direction": "forward" },
+   { "name": "right", "from": 16, "to": 16, "direction": "forward" },
    { "name": "right_walk_light", "from": 20, "to": 23, "direction": "forward" },
    { "name": "left_walk_dark", "from": 24, "to": 27, "direction": "forward" },
+   { "name": "left", "from": 24, "to": 24, "direction": "forward" },
    { "name": "left_walk_light", "from": 28, "to": 31, "direction": "forward" }
   ],
   "layers": [
