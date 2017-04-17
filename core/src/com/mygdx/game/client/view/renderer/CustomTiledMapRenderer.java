@@ -126,6 +126,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 			//System.out.println(Gdx.graphics.getDeltaTime());
 			entity.tick(Gdx.graphics.getDeltaTime());
 		}
+		Collections.sort(layerZeroEntities, new EntityComparator());
 	}
 
 	/**
@@ -152,6 +153,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 
 		font.draw(batch, entity.getPos().toString(), posDrawX, posDrawY);
 		font.draw(batch, "vislayer: " + entity.getVisLayer(), visLayerDrawX, visLayerDrawY);
+		font.draw(batch, "cutoffY: " + entity.getCutOffY(), posDrawX, visLayerDrawY - 5);
 	}
 
 	/**

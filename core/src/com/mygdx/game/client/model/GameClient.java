@@ -419,4 +419,7 @@ public class GameClient extends Game {
 		renderer.registerDynamicEntity(player);
 	}
 
+	public CustomTiledMapRenderer getRenderer() {
+		return renderer;
+	}
 }

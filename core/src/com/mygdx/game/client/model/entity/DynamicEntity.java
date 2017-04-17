@@ -93,5 +93,8 @@ public class DynamicEntity extends MapEntity {
 		return currAnimation;
 	}
 
-
+	@Override
+	public void setPosition(Vector2 position) {
+		super.setPosition(position);
+	}
 }
