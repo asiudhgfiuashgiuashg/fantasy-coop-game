@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
@@ -57,6 +58,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 
 	/* used for debugging */
 	private final BitmapFont font = new BitmapFont();
+	private OrthographicCamera camera;
 
 	public CustomTiledMapRenderer(TiledMap map, Batch batch, RayHandler rayHandler) {
 		super(map, batch);
@@ -127,6 +129,11 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 			entity.tick(Gdx.graphics.getDeltaTime());
 		}
 		Collections.sort(layerZeroEntities, new EntityComparator());
+
+		camera.position.x = GameClient.getInstance().getMap().localPlayer.getX();
+		camera.position.y = GameClient.getInstance().getMap().localPlayer.getY();
+		setView(camera);
+
 	}
 
 	/**
@@ -233,6 +240,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	@Override
 	public void setView(OrthographicCamera camera) {
 		super.setView(camera);
+		this.camera = camera;
 		rayHandler.setCombinedMatrix(camera);
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		Gdx.gl20.glLineWidth(debugLineWidth / camera.zoom);
