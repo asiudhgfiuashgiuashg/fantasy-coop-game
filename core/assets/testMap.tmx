@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="24" tileheight="24" nextobjectid="389">
+ <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="80" tilecount="24" columns="0">
+  <tile id="4">
+   <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
+   <objectgroup draworder="index">
+    <object id="13" name="hitbox" x="9.36364" y="17.3636">
+     <polygon points="0,0 -8,0.727273 -8.72727,3.90909 -0.727273,5.09091 3.81818,4.27273 5.27273,1.18182"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="5">
+   <image width="25" height="38" source="prototype/sign.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="20.0625" y="30.25">
+     <polygon points="0,0 -6.3125,6.4375 2.6875,12.6875 12.0625,9.125 12.5,1.0625 5.6875,-1.0625"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="7">
+   <image width="74" height="31" source="prototype/cart_missing_pull_handle.png"/>
+   <objectgroup draworder="index">
+    <object id="7" name="hitbox" x="2.36364" y="12.7273">
+     <polygon points="0,0 -2.09091,4.45455 0.454545,10.3636 8.45455,16.1818 17.2727,14.5455 20.8182,9.81818 44,15.3636 69.9091,17.9091 70.2727,15.4545 46.5455,9.90909 38.1818,7.54545 37.6364,2.72727 4.27273,-0.909091"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="10">
+   <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
+   <objectgroup draworder="index">
+    <object id="2" name="hitbox" x="-0.363636" y="10.5455">
+     <polygon points="0,0 0.545455,3.27273 36.7273,-8.18182 37.8182,-9.81818 35.0909,-11.0909"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="12">
+   <image width="24" height="24" source="prototype/grass0.png"/>
+  </tile>
+  <tile id="13">
+   <image width="24" height="24" source="prototype/grass1.png"/>
+  </tile>
+  <tile id="14">
+   <image width="24" height="24" source="prototype/grass2.png"/>
+  </tile>
+  <tile id="15">
+   <image width="24" height="24" source="prototype/grass3.png"/>
+  </tile>
+  <tile id="17">
+   <image width="24" height="24" source="prototype/grass3flowers.png"/>
+  </tile>
+  <tile id="18">
+   <image width="24" height="24" source="prototype/grass3flowers1.png"/>
+  </tile>
+  <tile id="20">
+   <image width="24" height="24" source="prototype/grass1flowers0.png"/>
+  </tile>
+  <tile id="23">
+   <image width="24" height="24" source="prototype/dirt_path_vertical0.png"/>
+  </tile>
+  <tile id="24">
+   <image width="24" height="24" source="prototype/dirt_path_vertical1.png"/>
+  </tile>
+  <tile id="27">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal0.png"/>
+   <objectgroup draworder="index">
+    <object id="1" x="0.09375" y="23.8438">
+     <polygon points="0,0 2.9375,0 2.59375,-3.78125 -0.09375,-3.90625"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="28">
+   <image width="24" height="24" source="prototype/dirt_path_horizontal1.png"/>
+  </tile>
+  <tile id="29">
+   <image width="24" height="24" source="prototype/dirt_path_plus_xroads.png"/>
+  </tile>
+  <tile id="34">
+   <image width="20" height="40" source="prototype/street_lamp.png"/>
+   <objectgroup draworder="index">
+    <object id="1" name="hitbox" x="9" y="35.5455">
+     <polygon points="0,0 -2.27273,1.63636 -0.272727,3.90909 2,4.27273 4.36364,2.18182 3.54545,1 2.18182,0"/>
+    </object>
+    <object id="2" name="light" x="8.81818" y="8.63636" width="2.54545" height="2.63636">
+     <properties>
+      <property name="color" value="42cbf4FF"/>
+      <property name="distance" type="float" value="50"/>
+      <property name="flickerRate" type="float" value="1.1000000000000001"/>
+      <property name="minFlickerAlphaMult" type="float" value="0.94999999999999996"/>
+      <property name="minFlickerDistMult" type="float" value="0.95999999999999996"/>
+     </properties>
+     <ellipse/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="35">
+   <image width="20" height="40" source="prototype/street_lamp.png"/>
+   <objectgroup draworder="index">
+    <object id="1" name="light" x="8.81818" y="8.45455" width="2.36364" height="2.90909">
+     <properties>
+      <property name="color" value="99ccffFF"/>
+      <property name="distance" type="float" value="50"/>
+      <property name="flickerRate" type="float" value="1.1000000000000001"/>
+      <property name="minFlickerAlphaMult" type="float" value="0.94999999999999996"/>
+      <property name="minFlickerDistMult" type="float" value="0.95999999999999996"/>
+     </properties>
+     <ellipse/>
+    </object>
+    <object id="17" name="hitbox" x="10.3636" y="33">
+     <polygon points="0,0 -5.27273,2.90909 -3.18182,7.54545 2.09091,7.36364 3.81818,2.90909"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="38">
+   <image width="56" height="72" source="prototype/tree0.png"/>
+   <objectgroup draworder="index">
+    <object id="2" name="hitbox" x="27.2727" y="71.8182">
+     <polygon points="0,0 -8,-3.81818 -3.27273,-8.36364 5.63636,-7.09091 9.45455,-3.09091"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="40">
+   <image width="43" height="66" source="prototype/tree1.png"/>
+   <objectgroup draworder="index">
+    <object id="1" name="hitbox" x="27.6364" y="63.2727">
+     <polygon points="0,0 -5.63636,2 -4.72727,4.18182 0.727273,4.72727 4.36364,5.09091 6.54545,2.90909 7.09091,1.09091 4.36364,-0.181818"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="41">
+   <image width="14" height="10" source="prototype/rock0.png"/>
+  </tile>
+  <tile id="42">
+   <image width="13" height="8" source="prototype/rock1.png"/>
+  </tile>
+  <tile id="45">
+   <image width="10" height="6" source="prototype/rock2.png"/>
+  </tile>
+  <tile id="46">
+   <image width="20" height="80" source="prototype/testSquare.png"/>
+   <objectgroup draworder="index">
+    <object id="7" name="hitbox" x="19.9091" y="0.181818">
+     <polygon points="0,0 -8,-3.81818 -3.27273,-8.36364 5.63636,-7.09091 9.45455,-3.09091"/>
+    </object>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="1" height="1" offsetx="0.25" offsety="0.25">
+  <data encoding="csv">
+13
+</data>
+ </layer>
+ <objectgroup name="Static Entities">
+  <object id="385" gid="39" x="-7.75" y="-13.5" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Dynamic Entities"/>
+ <objectgroup name="Triggers"/>
+ <objectgroup name="Boundaries"/>
+ <objectgroup name="Spawns">
+  <object id="379" name="Spawn" x="-54" y="-24" width="42" height="36"/>
+ </objectgroup>
+</map>
