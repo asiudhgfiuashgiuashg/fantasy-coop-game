@@ -1,13 +1,10 @@
 package com.mygdx.game.shared.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ShortArray;
-import com.mygdx.game.server.model.entity.DynamicEntity;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
@@ -70,6 +67,7 @@ public class CollideablePolygon extends Polygon {
 	// list of triangles resulting from triangulation (used for collision checking)
 	private List<float[]> triangles;
 
+
 	/**
 	 * no-arg constructor for serialization
 	 */
@@ -86,8 +84,7 @@ public class CollideablePolygon extends Polygon {
 		}
 
 
-		cutoffY = calcCutoffY();
-		updateMaxLength();
+		calcCutoffY();
 	}
 
 	/**
@@ -102,7 +99,6 @@ public class CollideablePolygon extends Polygon {
 			// must copy the returned triangulator vertices because it reuses the array for future calls
 			triangleVertices.clear();
 			triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
-			maxLength = calcMaxLength();
 		}
 	}
 
@@ -128,12 +124,6 @@ public class CollideablePolygon extends Polygon {
 		return triangles;
 	}
 
-	/**
-	 * proactively calculate the max length value
-	 */
-	protected void updateMaxLength() {
-		maxLength = calcMaxLength();
-	}
 
 	/**
 	 * Constructs a copy of a given polygon.
@@ -155,10 +145,6 @@ public class CollideablePolygon extends Polygon {
 	 * @return true if there is a collision
 	 */
 	public boolean collides(CollideablePolygon other) {
-		Vector2 diff = new Vector2(other.getX() - this.getX(), other.getY() - this.getY());
-		if (diff.len() > other.getMaxLength() + this.getMaxLength()) {
-			return false;
-		}
 
 		// compute triangles in world coordinates
 		other.computeTriangles();
@@ -185,9 +171,9 @@ public class CollideablePolygon extends Polygon {
 	 *
 	 * @return
 	 */
-	private float calcCutoffY() {
+	private void calcCutoffY() {
 		float[] vertices = getVertices();
-		boolean crossProductPositive = true;
+		boolean crossProductPositive;
 		float highestNookY = 0; // aka the cutoffY
 		/*
 		 * Check cross product of consecutive edges. i is the index of the x
@@ -212,25 +198,9 @@ public class CollideablePolygon extends Polygon {
 				}
 			}
 		}
-		return highestNookY;
-
+		cutoffY = highestNookY;
 	}
 
-	/**
-	 * Uses the largest dimension of the bounding rectangle as the
-	 * maxLength
-	 * for
-	 * collisions.
-	 *
-	 * @return max[ rectangle width, rectangle height ]
-	 */
-	private float calcMaxLength() {
-		if (getVertices().length == 0) {
-			return 0;
-		}
-		Rectangle bounds = getBoundingRectangle();
-		return Math.max(bounds.getWidth(), bounds.getHeight());
-	}
 
 	/**
 	 * A helper method to allow graceful iteration through all consecutive
@@ -313,6 +283,7 @@ public class CollideablePolygon extends Polygon {
 				// Collision lists
 				ArrayList<CollideablePolygon> currList = new ArrayList<CollideablePolygon>();
 				ArrayList<CollideablePolygon> prevList = new ArrayList<CollideablePolygon>();
+
 
 
 				for (int i = 0; i < N; i++) {
@@ -470,6 +441,5 @@ public class CollideablePolygon extends Polygon {
 	public void setNetForce(Vector2 netForce) {
 		this.netForce = netForce;
 	}
-
 
 }

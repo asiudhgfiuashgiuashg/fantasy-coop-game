@@ -13,7 +13,7 @@ public class Player extends DynamicEntity {
 
 	public int connectionUid;
 	private static final GameServer server = GameServer.getInstance();
-	private float[] hitbox = {12, 1, 2, 1, 2, 6, 12, 6}; // TODO will want to change this per class
+	private float[] hitbox = {12, 1, 2, 1, 2, 6, 12, 6}; // TODO will want to change this per class and perhaps also per direction character is facing
 
 	protected Player(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);

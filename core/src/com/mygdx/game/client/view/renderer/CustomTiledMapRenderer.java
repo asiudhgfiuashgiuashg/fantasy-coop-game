@@ -203,6 +203,10 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 			// to draw ycuttoff line
 			shapeRenderer.setColor(Color.GREEN);
 			shapeRenderer.line(boundingRect.getX(), entity.getTransformedCutoffY(), boundingRect.getX() + boundingRect.getWidth(), entity.getTransformedCutoffY());
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height);
+			shapeRenderer.setColor(Color.CORAL);
+			shapeRenderer.circle(entity.getX(), entity.getY(), 1);
 		}
 
 	}

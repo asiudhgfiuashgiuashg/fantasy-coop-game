@@ -62,7 +62,6 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		hitboxMsg.entityUID = getUid();
 		hitboxMsg.vertices = vertices;
 
-		updateMaxLength();
 
 		server.sendToAll(hitboxMsg);
 	}
