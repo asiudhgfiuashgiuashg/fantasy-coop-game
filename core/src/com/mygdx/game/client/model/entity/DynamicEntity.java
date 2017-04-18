@@ -58,7 +58,7 @@ public class DynamicEntity extends MapEntity {
 	 */
 	public void tick(float deltaT) {
 		timeSinceAnimationBegan += deltaT;
-		doPhysics(deltaT, solidEntities);
+		doPhysics(deltaT, GameClient.getInstance().getMap().solidEntities);
 	}
 
 	// TODO - separate out dynamic entities in the map and uupdate them all

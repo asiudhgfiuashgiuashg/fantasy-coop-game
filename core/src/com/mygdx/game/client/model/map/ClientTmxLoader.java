@@ -105,8 +105,9 @@ public class ClientTmxLoader extends TmxMapLoader {
 
 					List<FlickerPointLight> lights = tiledMap.gidToLightsMap.get(tileMapObject.getTile().getId());
 
-					StaticEntity staticEntity = new StaticEntity(hitboxPolygonVertices, lights, tileMapObject, mapHeight, tileHeight, rayHandler);
-					tiledMap.staticEntities.add(staticEntity);
+					boolean solid = Boolean.valueOf(mapObject.getProperties().get("solid", "false", String.class)); // for some reason the libgdx loader loads booleans from Tiled as Strings
+					StaticEntity staticEntity = new StaticEntity(hitboxPolygonVertices, lights, tileMapObject, mapHeight, tileHeight, rayHandler, solid);
+					tiledMap.addStaticEntity(staticEntity);
 				}
 			}
 		}

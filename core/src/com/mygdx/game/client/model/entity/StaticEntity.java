@@ -35,7 +35,7 @@ public class StaticEntity extends MapEntity {
 	 * @param tileHeight
 	 * @param rayHandler
 	 */
-	public StaticEntity(float[] vertices, List<FlickerPointLight> tempLights, TiledMapTileMapObject tileMapObject, float mapHeight, float tileHeight, RayHandler rayHandler) {
+	public StaticEntity(float[] vertices, List<FlickerPointLight> tempLights, TiledMapTileMapObject tileMapObject, float mapHeight, float tileHeight, RayHandler rayHandler, boolean solid) {
 		this.tileMapObject = tileMapObject;
 		String visLayerStr = (String) (tileMapObject.getProperties().get("visLayer"));
 		// get the vislayer that was loaded for us by libgdx
@@ -52,6 +52,7 @@ public class StaticEntity extends MapEntity {
 
 		setupHitbox(vertices);
 		setupLights(tempLights, rayHandler);
+		this.solid = solid;
 	}
 
 

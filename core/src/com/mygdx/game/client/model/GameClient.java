@@ -156,7 +156,6 @@ public class GameClient extends Game {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 
-
 		// Initialize viewports
 		gameViewport = new StretchViewport(WORLD_HEIGHT * aspectRatio, WORLD_HEIGHT);
 		uiViewport = new StretchViewport(screenWidth, screenHeight);
@@ -380,7 +379,7 @@ public class GameClient extends Game {
 	 * @param newEntity
 	 */
 	public void addDynamicEntity(DynamicEntity newEntity) {
-		clientMap.dynamicEntities.add(newEntity);
+		clientMap.addDynamicEntity(newEntity);
 		renderer.registerDynamicEntity(newEntity);
 	}
 
@@ -405,7 +404,7 @@ public class GameClient extends Game {
 
 		// box2d lights need a rayhandler to be instantiated, so that's why
 		// we pass rayHandler to the loader.
-		clientMap = new ClientTmxLoader().load("prototypeMap.tmx", rayHandler); //TODO let server tell you what to load
+		clientMap = new ClientTmxLoader().load(map, rayHandler); //TODO let server tell you what to load
 		renderer = new CustomTiledMapRenderer(clientMap, batch, rayHandler);
 		gameScreen.setRenderer(renderer);
 	}

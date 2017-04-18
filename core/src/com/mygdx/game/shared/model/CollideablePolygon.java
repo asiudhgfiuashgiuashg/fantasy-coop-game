@@ -1,6 +1,7 @@
 package com.mygdx.game.shared.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -40,7 +41,7 @@ public class CollideablePolygon extends Polygon {
 	/**
 	 * If object is solid i.e. cannot overlap with another
 	 */
-	protected boolean solid;
+	public boolean solid;
 
 	//Used to check for intersection between various geometric objects
 	private static final Intersector INTERSECTOR = new Intersector();
@@ -75,7 +76,7 @@ public class CollideablePolygon extends Polygon {
 	public CollideablePolygon() {
 		triangles = new ArrayList<float[]>();
 		triangleVertices = new ShortArray();
-		setMass(1); // mass of zero messes up physics
+		setMass(1); // mass of zero messes up
 	}
 
 	public CollideablePolygon(float[] vertices) {
@@ -101,6 +102,7 @@ public class CollideablePolygon extends Polygon {
 			// must copy the returned triangulator vertices because it reuses the array for future calls
 			triangleVertices.clear();
 			triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
+			maxLength = calcMaxLength();
 		}
 	}
 
@@ -306,13 +308,13 @@ public class CollideablePolygon extends Polygon {
 			if (!fuzzyEquals(dx.len(), 0)) {
 				// Number of iterations to achieve sub pixel precision
 				int N = MathUtils.ceil(MathUtils.log2(dx.len()));
-				MathUtils.clamp(N, 1, N); // N >= 1
+				N = MathUtils.clamp(N, 1, N); // N >= 1
 
 				// Collision lists
 				ArrayList<CollideablePolygon> currList = new ArrayList<CollideablePolygon>();
 				ArrayList<CollideablePolygon> prevList = new ArrayList<CollideablePolygon>();
 
-				// Iteratively check for collisions
+
 				for (int i = 0; i < N; i++) {
 					// Update lists
 					ArrayList<CollideablePolygon> temp = prevList;
@@ -335,7 +337,6 @@ public class CollideablePolygon extends Polygon {
 					// Check for collisions with other solid objects
 					for (CollideablePolygon solidObj : solidObjects) {
 						if (!this.equals(solidObj) && this.collides(solidObj)) {
-							//System.out.println("collision occurring");
 							// Revert to starting position of this iteration
 							setPosition(new Vector2(startX, startY));
 

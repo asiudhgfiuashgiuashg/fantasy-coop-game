@@ -13,11 +13,12 @@ public class Player extends DynamicEntity {
 
 	public int connectionUid;
 	private static final GameServer server = GameServer.getInstance();
-
+	private float[] hitbox = {12, 1, 2, 1, 2, 6, 12, 6}; // TODO will want to change this per class
 
 	protected Player(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
 		setMass(1);
+		setVertices(this.hitbox);
 	}
 
 	/**

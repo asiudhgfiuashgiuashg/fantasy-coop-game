@@ -124,6 +124,7 @@ public class ClientCommunicator extends Communicator {
 						} else { // "SHIELDPLAYER"
 							player = new ShieldPlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
 						}
+						player.setVertices(initMsg.vertices);
 						gameClient.addLocalPlayer(player);
 						System.out.println("added local player");
 					} else {

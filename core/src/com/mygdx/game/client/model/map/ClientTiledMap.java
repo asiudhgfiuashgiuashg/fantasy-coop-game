@@ -3,6 +3,7 @@ package com.mygdx.game.client.model.map;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.mygdx.game.client.model.FlickerPointLight;
 import com.mygdx.game.client.model.entity.DynamicEntity;
+import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
 import com.mygdx.game.client.model.entity.player.Player;
 import com.mygdx.game.shared.model.CollideablePolygon;
@@ -29,6 +30,9 @@ public class ClientTiledMap extends TiledMap {
 			ArrayList<StaticEntity>();
 	public final List<DynamicEntity> dynamicEntities = new ArrayList
 			<DynamicEntity>();
+
+	public final List<CollideablePolygon> solidEntities = new ArrayList<CollideablePolygon>();
+
 	public Player localPlayer;
 
 	public DynamicEntity getDynamicEntityByUid(String entityUID) {
@@ -40,8 +44,28 @@ public class ClientTiledMap extends TiledMap {
 		return null;
 	}
 
+	public void addDynamicEntity(DynamicEntity entity) {
+		dynamicEntities.add(entity);
+		addEntity(entity);
+	}
+
+	public void addStaticEntity(StaticEntity entity) {
+		staticEntities.add(entity);
+		addEntity(entity);
+	}
+
+	/**
+	 * Put entity in solid entities list if it is solid
+	 * @param entity
+	 */
+	private void addEntity(MapEntity entity) {
+		if (entity.solid) {
+			solidEntities.add(entity);
+		}
+	}
+
 	public void addLocalPlayer(Player player) {
 		localPlayer = player;
-		dynamicEntities.add(player);
+		addDynamicEntity(player);
 	}
 }

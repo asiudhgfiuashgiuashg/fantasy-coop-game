@@ -73,7 +73,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		populateEntitiesLists();
 		// rayHandler.setCombinedMatrix(batch.getProjectionMatrix());
 		ambientColor = Color.CLEAR;
-		setAmbientAlpha(1f);
+		setAmbientAlpha(.3f);
 		fpsLogger = new FPSLogger();
 		dynamicEntities = new ArrayList<DynamicEntity>();
 		font.getData().setScale(DEBUG_FONT_SCALE);

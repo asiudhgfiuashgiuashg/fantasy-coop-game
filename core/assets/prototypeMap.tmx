@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="24" tileheight="24" nextobjectid="323">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="24" tileheight="24" nextobjectid="378">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="73" tilecount="23" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
@@ -10,7 +10,7 @@
    </objectgroup>
   </tile>
   <tile id="5">
-   <image width="49" height="43" source="prototype/sign.png"/>
+   <image width="25" height="38" source="prototype/sign.png"/>
    <objectgroup draworder="index">
     <object id="1" x="20.0625" y="30.25">
      <polygon points="0,0 -6.3125,6.4375 2.6875,12.6875 12.0625,9.125 12.5,1.0625 5.6875,-1.0625"/>
@@ -28,8 +28,8 @@
   <tile id="10">
    <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
    <objectgroup draworder="index">
-    <object id="1" x="22.3333" y="3.66667">
-     <polygon points="0,0 -21.3333,7 -20.3333,10 12.6667,-1 13.3333,-3.66667"/>
+    <object id="2" name="hitbox" x="-0.363636" y="10.5455">
+     <polygon points="0,0 0.545455,3.27273 36.7273,-8.18182 37.8182,-9.81818 35.0909,-11.0909"/>
     </object>
    </objectgroup>
   </tile>
@@ -111,13 +111,23 @@
    </objectgroup>
   </tile>
   <tile id="38">
-   <image width="56" height="73" source="prototype/tree0.png"/>
+   <image width="56" height="72" source="prototype/tree0.png"/>
+   <objectgroup draworder="index">
+    <object id="2" name="hitbox" x="27.2727" y="71.8182">
+     <polygon points="0,0 -8,-3.81818 -3.27273,-8.36364 5.63636,-7.09091 9.45455,-3.09091"/>
+    </object>
+   </objectgroup>
   </tile>
   <tile id="40">
-   <image width="52" height="70" source="prototype/tree1.png"/>
+   <image width="43" height="66" source="prototype/tree1.png"/>
+   <objectgroup draworder="index">
+    <object id="1" name="hitbox" x="27.6364" y="63.2727">
+     <polygon points="0,0 -5.63636,2 -4.72727,4.18182 0.727273,4.72727 4.36364,5.09091 6.54545,2.90909 7.09091,1.09091 4.36364,-0.181818"/>
+    </object>
+   </objectgroup>
   </tile>
   <tile id="41">
-   <image width="16" height="12" source="prototype/rock0.png"/>
+   <image width="14" height="10" source="prototype/rock0.png"/>
   </tile>
   <tile id="42">
    <image width="13" height="8" source="prototype/rock1.png"/>
@@ -126,50 +136,287 @@
    <image width="10" height="6" source="prototype/rock2.png"/>
   </tile>
  </tileset>
- <layer name="Tile Layer 1" width="10" height="10" offsetx="0.25" offsety="0.25">
+ <layer name="Tile Layer 1" width="50" height="50" offsetx="0.25" offsety="0.25">
   <data encoding="csv">
-13,14,13,14,13,14,13,14,13,14,
-15,19,15,16,15,16,15,16,15,16,
-13,14,13,25,13,14,13,14,13,21,
-15,16,15,24,14,16,15,16,15,16,
-13,14,13,25,14,21,13,14,13,14,
-15,16,15,24,14,18,15,16,15,16,
-13,14,13,25,14,14,13,14,13,14,
-15,18,15,24,14,16,15,16,15,16,
-28,29,28,30,28,29,28,29,28,29,
-15,16,15,24,14,16,15,16,15,16
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,21,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,24,14,16,15,16,15,16,13,14,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,14,21,13,14,13,14,15,16,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,24,14,18,15,16,15,16,13,14,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,14,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,18,15,24,14,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,29,28,29,28,29,28,28,29,29,28,29,28,29,28,28,29,28,30,28,29,28,29,28,29,28,28,29,29,28,29,28,29,28,29,28,28,29,29,28,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,24,14,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,21,18,25,13,14,13,14,13,14,14,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,16,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,25,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,24,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,13,14,
+15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,19,15,25,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,15,16,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Static Entities">
-  <object id="84" gid="8" x="159.5" y="191.75" width="74" height="31">
+ <objectgroup name="Static Entities" opacity="0.97">
+  <object id="84" gid="8" x="591.5" y="671.75" width="74" height="31">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="184" gid="36" x="14.4167" y="180" width="20" height="40"/>
-  <object id="307" gid="42" x="111" y="163.25" width="16" height="12"/>
-  <object id="308" gid="43" x="131.75" y="163.75" width="13" height="8"/>
-  <object id="309" gid="46" x="123.75" y="183.75" width="10" height="6"/>
-  <object id="310" gid="6" x="38.5" y="192.5" width="49" height="43"/>
-  <object id="311" gid="39" x="112" y="147" width="56" height="73"/>
-  <object id="312" gid="41" x="78.5" y="185.75" width="52" height="70"/>
-  <object id="322" gid="11" x="112.667" y="190.667" width="37" height="14"/>
+  <object id="184" gid="36" x="446.417" y="660" width="20" height="40">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="307" gid="42" x="543" y="643.25" width="16" height="12">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="308" gid="43" x="563.75" y="643.75" width="13" height="8">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="309" gid="46" x="555.75" y="663.75" width="10" height="6">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="311" gid="39" x="544" y="627" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="312" gid="41" x="510.5" y="665.75" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="322" gid="11" x="546.667" y="670.333" width="37" height="14">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="323" gid="39" x="565.667" y="757" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="324" gid="39" x="625.667" y="786.667" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="325" gid="39" x="541" y="801" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="326" gid="39" x="585.333" y="824" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="327" gid="39" x="646" y="828" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="328" gid="39" x="430.667" y="757" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="329" gid="39" x="397.667" y="787.333" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="330" gid="39" x="440.333" y="819.333" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="331" gid="39" x="387.667" y="847" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="332" gid="39" x="422" y="878.667" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="333" gid="41" x="564.333" y="796.333" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="334" gid="41" x="607.333" y="851.333" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="335" gid="41" x="457.333" y="856.667" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="336" gid="41" x="360.333" y="766" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="337" gid="39" x="390" y="661.333" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="338" gid="41" x="412.333" y="641" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="339" gid="39" x="356.333" y="627.667" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="340" gid="42" x="651.667" y="818" width="16" height="12">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="341" gid="42" x="571.333" y="838.333" width="16" height="12">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="347" gid="43" x="568.667" y="793.667" width="13" height="8">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="349" gid="43" x="475" y="850.667" width="13" height="8">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="351" gid="42" x="386" y="759.667" width="16" height="12">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="352" gid="42" x="401" y="853.333" width="16" height="12">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="354" gid="39" x="689.333" y="743" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="355" gid="39" x="639.667" y="642" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="356" gid="41" x="677" y="662" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="357" gid="41" x="336.333" y="671.667" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="358" gid="39" x="318" y="732.333" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="359" gid="41" x="594.333" y="632.333" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="360" gid="39" x="621.333" y="657.333" width="56" height="73">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="361" gid="41" x="552.667" y="654.333" width="52" height="70">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="362" gid="43" x="559.25" y="825" width="13" height="8">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="364" gid="35" x="530.333" y="720.667" width="20" height="40">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="376" gid="6" x="475.5" y="669.5" width="25" height="38">
+   <properties>
+    <property name="solid" type="bool" value="true"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Dynamic Entities">
-  <object id="70" name="OldMan" type="Friendly" x="71.841" y="179.534" width="12.5" height="15.25">
+  <object id="70" name="OldMan" type="Friendly" x="503.841" y="659.534" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="315" name="ForestBird" type="Friendly" x="87" y="125.375" width="12.5" height="15.25">
+  <object id="315" name="ForestBird" type="Friendly" x="519" y="605.375" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
     <property name="visLayer" type="int" value="1"/>
    </properties>
    <ellipse/>
   </object>
-  <object id="316" name="ForestBird" type="Friendly" x="124.5" y="77.875" width="12.5" height="15.25">
+  <object id="316" name="ForestBird" type="Friendly" x="556.5" y="557.875" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
     <property name="visLayer" type="int" value="1"/>
@@ -180,6 +427,6 @@
  <objectgroup name="Triggers"/>
  <objectgroup name="Boundaries"/>
  <objectgroup name="Spawns">
-  <object id="317" name="Spawn" x="26.3333" y="84.3333" width="44.3333" height="34"/>
+  <object id="317" name="Spawn" x="458.333" y="564.333" width="44.3333" height="34"/>
  </objectgroup>
 </map>
