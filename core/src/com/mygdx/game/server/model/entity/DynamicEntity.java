@@ -5,6 +5,9 @@ import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.shared.network.GameMessage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author elimonent
  *         <p>
@@ -17,10 +20,13 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	 */
 	protected String animationName;
 
+	public List<EntityLight> lights;
+
 
 	protected DynamicEntity(String uid, Vector2 position, int visLayer,
 							boolean solid) {
 		super(uid, position, visLayer, solid);
+		this.lights = new ArrayList<EntityLight>();
 	}
 
 	/**

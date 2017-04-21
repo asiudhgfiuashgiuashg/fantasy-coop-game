@@ -11,8 +11,8 @@ import com.mygdx.game.shared.network.GameMessage;
  */
 public abstract class Player extends DynamicEntity {
 
-	private static final float PLAYER_WALK_ANIM_SPEED = .08f;
-	private float nonDiagSpeed = 50;
+	protected static final float PLAYER_WALK_ANIM_SPEED = .08f;
+	protected float nonDiagSpeed = 50;
 	private float diagSpeed = (float) Math.sqrt(Math.pow(nonDiagSpeed / 2, 2)); // diag speed ^ 2 = xSpeed ^ 2 + ySpeed ^2
 	// whether the player is pressing any of these movement directional keys - used for movement and animation
 	public boolean up = false;
@@ -38,7 +38,6 @@ public abstract class Player extends DynamicEntity {
 	public Player(String entUid, String className, Vector2 pos, int visLayer) {
 		super(entUid, className, pos, visLayer);
 		setMass(1);
-		setAnimation("right", 1f);
 		this.solid = true;
 	}
 
@@ -48,61 +47,12 @@ public abstract class Player extends DynamicEntity {
 	public void tick(float deltaT) {
 		super.tick(deltaT);
 
-		if (!up && !down && !right && !left) {
-			setAnimationWithUpdate(getAnimationName().replace("_walk", ""), PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, 0));
-		} else if (!up && !down && !right && left) {
-			setAnimationIfNotSet("left_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(-nonDiagSpeed, 0));
-		} else if (!up && !down && right && !left) {
-			setAnimationIfNotSet("right_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(nonDiagSpeed, 0));
-		} else if (!up && !down && right && left) {
-			setAnimationWithUpdate(getAnimationName().replace("_walk", ""), PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, 0));
-		} else if (!up && down && !right && !left) {
-			setAnimationIfNotSet("down_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, -nonDiagSpeed));
-		} else if (!up && down && !right && left) {
-			setAnimationIfNotSet("left_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(-nonDiagSpeed, -nonDiagSpeed));
-		} else if (!up && down && right && !left) {
-			setAnimationIfNotSet("right_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(nonDiagSpeed, -nonDiagSpeed));
-		} else if (!up && down && right && left) {
-			setAnimationIfNotSet("down_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, -nonDiagSpeed));
-		} else if (up && !down && !right && !left) {
-			setAnimationIfNotSet("up_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, nonDiagSpeed));
-		} else if (up && !down && !right && left) {
-			setAnimationIfNotSet("left_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(-nonDiagSpeed, nonDiagSpeed));
-		} else if (up && !down && right && !left) {
-			setAnimationIfNotSet("right_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(nonDiagSpeed, nonDiagSpeed));
-		} else if (up && !down && right && left) {
-			setAnimationIfNotSet("up_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, nonDiagSpeed));
-		} else if (up && down && !right && !left) {
-			setAnimationWithUpdate(getAnimationName().replace("_walk", ""), PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, 0));
-		} else if (up && down && !right && left) {
-			setAnimationIfNotSet("left_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(-nonDiagSpeed, 0));
-		} else if (up && down && right && !left) {
-			setAnimationIfNotSet("right_walk", PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(nonDiagSpeed, 0));
-		} else { //  if (up && down && right && left) {
-			setAnimationWithUpdate(getAnimationName().replace("_walk", ""), PLAYER_WALK_ANIM_SPEED);
-			setVelocityIfNotSet(new Vector2(0, 0));
-		}
 
 		sendPositionUpdate();
 
 	}
 
-	private void sendPositionUpdate() {
+	void sendPositionUpdate() {
 		GameMessage.PosUpdateMessage posMsg = new GameMessage.PosUpdateMessage();
 		posMsg.position = getPosition();
 		posMsg.velocity = getVelocity();

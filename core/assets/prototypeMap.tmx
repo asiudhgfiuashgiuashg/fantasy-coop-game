@@ -28,6 +28,9 @@
   <tile id="10">
    <image width="37" height="14" source="prototype/broken_cart_handle.png"/>
    <objectgroup draworder="index">
+    <properties>
+     <property name="flipCutoffY" type="bool" value="true"/>
+    </properties>
     <object id="2" name="hitbox" x="-0.363636" y="10.5455">
      <polygon points="0,0 0.545455,3.27273 36.7273,-8.18182 37.8182,-9.81818 35.0909,-11.0909"/>
     </object>
@@ -211,9 +214,10 @@
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="309" gid="46" x="555.75" y="663.75" width="10" height="6">
+  <object id="309" gid="46" x="557.75" y="663.25" width="10" height="6">
    <properties>
     <property name="solid" type="bool" value="true"/>
+    <property name="visLayer" type="int" value="-1"/>
    </properties>
   </object>
   <object id="311" gid="39" x="544" y="627" width="56" height="73">
@@ -226,9 +230,10 @@
     <property name="solid" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="322" gid="11" x="546.667" y="670.333" width="37" height="14">
+  <object id="322" gid="11" x="547.917" y="670.083" width="37" height="14">
    <properties>
-    <property name="solid" type="bool" value="true"/>
+    <property name="solid" type="bool" value="false"/>
+    <property name="visLayer" type="int" value="-1"/>
    </properties>
   </object>
   <object id="323" gid="39" x="565.667" y="757" width="56" height="73">
