@@ -101,6 +101,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 */
 	@Override
 	public void render() {
+
 		beginRender();
 		TiledMapTileLayer tileLayer = (TiledMapTileLayer) map.getLayers().get("Tile Layer 1");
 		renderTileLayer(tileLayer); // render tiles before entities so tiles
@@ -108,6 +109,8 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		renderEntities();
 		endRender();
 		rayHandler.updateAndRender();
+
+
 		// since debug rendering uses a shape renderer, it must start after
 		// endRender() which calls batch.end(). Otherwise rendering gets
 		// messed up and some textureregions don't draw for some reason...

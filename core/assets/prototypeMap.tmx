@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="24" tileheight="24" nextobjectid="2017">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="24" tileheight="24" nextobjectid="2019">
  <tileset firstgid="1" name="forest_tileset" tilewidth="74" tileheight="73" tilecount="23" columns="0">
   <tile id="4">
    <image width="16" height="23" source="prototype/ranger_placeholder.png"/>
@@ -105,24 +105,24 @@
      </properties>
      <ellipse/>
     </object>
-    <object id="17" name="hitbox" x="10.3636" y="33">
-     <polygon points="0,0 -5.27273,2.90909 -3.18182,7.54545 2.09091,7.36364 3.81818,2.90909"/>
+    <object id="17" name="hitbox" x="10.1619" y="35.25">
+     <polygon points="0,0 -2.88355,1.75246 -1.74007,4.54545 1.14348,4.43593 2.08808,1.75246"/>
     </object>
    </objectgroup>
   </tile>
   <tile id="38">
    <image width="56" height="72" source="prototype/tree0.png"/>
    <objectgroup draworder="index">
-    <object id="2" name="hitbox" x="27.2727" y="71.8182">
-     <polygon points="0,0 -8,-3.81818 -3.27273,-8.36364 5.63636,-7.09091 9.45455,-3.09091"/>
+    <object id="2" name="hitbox" x="27.8188" y="71.4783">
+     <polygon points="0,0 -6.2971,-3.29489 -2.57609,-7.21739 4.43659,-6.11909 7.44203,-2.6673"/>
     </object>
    </objectgroup>
   </tile>
   <tile id="40">
    <image width="43" height="66" source="prototype/tree1.png"/>
    <objectgroup draworder="index">
-    <object id="1" name="hitbox" x="27.6364" y="63.2727">
-     <polygon points="0,0 -5.63636,2 -4.72727,4.18182 0.727273,4.72727 4.36364,5.09091 6.54545,2.90909 7.09091,1.09091 4.36364,-0.181818"/>
+    <object id="1" name="hitbox" x="25.025" y="61.6422">
+     <polygon points="0,0 -4.65,1.56465 -3.9,3.27155 0.6,3.69827 3.6,3.98276 5.4,2.27586 5.85,0.853449 3.6,-0.142241"/>
     </object>
    </objectgroup>
   </tile>

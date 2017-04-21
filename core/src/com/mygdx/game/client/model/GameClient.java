@@ -401,7 +401,6 @@ public class GameClient extends Game {
 	private void setClientMap(String map) {
 		// box2d lights handler
 		rayHandler = new RayHandler(new World(new Vector2(0, 0), false));
-
 		// box2d lights need a rayhandler to be instantiated, so that's why
 		// we pass rayHandler to the loader.
 		clientMap = new ClientTmxLoader().load(map, rayHandler); //TODO let server tell you what to load
