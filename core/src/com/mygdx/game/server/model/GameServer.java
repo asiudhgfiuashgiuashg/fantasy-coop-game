@@ -248,6 +248,7 @@ public class GameServer implements Runnable {
 			entInitMsg.vertices = entity.getVertices();
 			entInitMsg.visLayer = entity.getVisLayer();
 			entInitMsg.mass = entity.getMass();
+			entInitMsg.entityLightList = entity.lights;
 
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
 				entInitMsg.isLocalPlayer = true;

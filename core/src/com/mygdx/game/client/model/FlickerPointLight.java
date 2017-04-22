@@ -4,6 +4,7 @@ import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
@@ -12,6 +13,9 @@ import java.util.Random;
  */
 public class FlickerPointLight extends PointLight {
 
+	// offset vars applied to the position passed into setPosition()
+	private final float xOffset;
+	private final float yOffset;
 	// how many times to flicker per second - zero to not flicker
 	private float flickerRate;
 	// default for flickerDistMult
@@ -41,11 +45,14 @@ public class FlickerPointLight extends PointLight {
 	private float minAlpha;
 	private static final Random rand = new Random();
 
+
 	public FlickerPointLight(RayHandler rayHandler, int rays, Color color,
-							 float distance, float x, float y, float
+							 float distance, float x, float xOffset, float y, float yOffset, float
 									 flickerRate, float flickerDistMult, float
 									 flickerAlphaMult) {
-		super(rayHandler, rays, color, distance, x, y);
+		super(rayHandler, rays, color, distance, x + xOffset, y + yOffset);
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 		this.flickerRate = flickerRate;
 		this.minDistance = distance * flickerDistMult;
 		this.maxDistance = distance;
@@ -57,6 +64,14 @@ public class FlickerPointLight extends PointLight {
 		setStaticLight(true); // optimization
 		setXray(true); // optimization
 		chooseRandomStartingFlicker();
+	}
+
+
+	public FlickerPointLight(RayHandler rayHandler, int rays, Color color,
+							 float distance, float x, float y, float
+									 flickerRate, float flickerDistMult, float
+									 flickerAlphaMult) {
+		this(rayHandler, rays, color, distance, x, 0, y, 0, flickerRate, flickerDistMult, flickerAlphaMult);
 	}
 
 	/**
@@ -83,6 +98,7 @@ public class FlickerPointLight extends PointLight {
 		float distDiff = Gdx.graphics.getDeltaTime() * flickerRate *
 				(maxDistance - minDistance);
 		distDiff = shrinking ? -distDiff : distDiff;
+
 		setDistance(distance + distDiff);
 
 		float alphaDiff = Gdx.graphics.getDeltaTime() * flickerRate *
@@ -116,5 +132,10 @@ public class FlickerPointLight extends PointLight {
 
 	public float getFlickerAlphaMult() {
 		return flickerAlphaMult;
+	}
+
+	@Override
+	public void setPosition(Vector2 position) {
+		super.setPosition(position.add(xOffset, yOffset));
 	}
 }

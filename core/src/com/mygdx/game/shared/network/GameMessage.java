@@ -1,8 +1,9 @@
 package com.mygdx.game.shared.network;
 
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.server.model.entity.DynamicEntity;
-import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.shared.model.EntityLight;
+
+import java.util.List;
 
 public class GameMessage extends Message {
 	public static class PosUpdateMessage extends GameMessage {
@@ -43,6 +44,7 @@ public class GameMessage extends Message {
 		public int visLayer;
 		public boolean isLocalPlayer = false; // whether the client should treat this as local player
 		public float mass;
+		public List<EntityLight> entityLightList;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

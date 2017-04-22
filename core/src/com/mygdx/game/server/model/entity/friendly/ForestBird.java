@@ -1,9 +1,11 @@
 package com.mygdx.game.server.model.entity.friendly;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.PolygonObject;
 import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.shared.model.EntityLight;
 
 import java.util.Random;
 

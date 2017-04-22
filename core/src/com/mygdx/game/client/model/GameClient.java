@@ -420,4 +420,8 @@ public class GameClient extends Game {
 	public CustomTiledMapRenderer getRenderer() {
 		return renderer;
 	}
+
+	public RayHandler getRayHandler() {
+		return rayHandler;
+	}
 }
