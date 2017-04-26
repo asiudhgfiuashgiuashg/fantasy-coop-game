@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.entity.DamageableEntity;
 
 /**
- * an AI who does not attack the player
+ * an AI who does not setAttack the player
  * @author elimonent
  *
  */

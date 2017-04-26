@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.mygdx.game.shared.model.PreferencesConstants;
 
 /**
- * Maintains a map of key codes to user input actions (move, cast spell, attack
+ * Maintains a map of key codes to user input actions (move, cast spell, attacking
  * etc.)
  * 
  * @author Sawyer Harris
@@ -20,6 +20,7 @@ public class Keybinds {
 	private static final int DEFAULT_LEFT = Keys.A;
 	private static final int DEFAULT_DOWN = Keys.S;
 	private static final int DEFAULT_RIGHT = Keys.D;
+	private static final int DEFAULT_ATTACK = Keys.SPACE;
 
 	private HashMap<Integer, Input> map;
 	private Preferences prefs;
@@ -78,6 +79,7 @@ public class Keybinds {
 		set(Input.LEFT, DEFAULT_LEFT);
 		set(Input.DOWN, DEFAULT_DOWN);
 		set(Input.RIGHT, DEFAULT_RIGHT);
+		set(Input.ATTACK, DEFAULT_ATTACK);
 		flush();
 	}
 
@@ -93,6 +95,9 @@ public class Keybinds {
 			set(Input.DOWN, DEFAULT_DOWN);
 		if (prefs.getInteger(Input.RIGHT.toString()) == 0)
 			set(Input.RIGHT, DEFAULT_RIGHT);
+		if (prefs.getInteger(Input.ATTACK.toString()) == 0) {
+			set(Input.ATTACK, DEFAULT_ATTACK);
+		}
 		flush();
 	}
 

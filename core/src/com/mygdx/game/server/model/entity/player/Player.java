@@ -11,7 +11,7 @@ import com.mygdx.game.shared.network.GameMessage;
 /**
  * Basic stuff that every player should have.
  */
-public class Player extends DynamicEntity {
+public abstract class Player extends DynamicEntity {
 
 	public int connectionUid;
 	private static final GameServer server = GameServer.getInstance();
@@ -50,4 +50,11 @@ public class Player extends DynamicEntity {
 			setPosition(position.x, position.y);
 		}
 	}
+
+	/**
+	 * Do stuff when receiving message that a client has primary/basic attacked
+	 *
+	 * @param destination where the attack is directed
+	 */
+	public abstract void attack(Vector2 destination);
 }

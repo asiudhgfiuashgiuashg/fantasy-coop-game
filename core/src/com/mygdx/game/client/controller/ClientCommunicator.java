@@ -141,15 +141,16 @@ public class ClientCommunicator extends Communicator {
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
 					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
 					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(posMsg.entityUID);
-					//System.out.println("got a position upudate message for: " + entity.getUid() + " at " + posMsg.position);
-					if (posMsg.position != null) {
-						entity.setPosition(posMsg.position);
+					if (entity != null) {
+						//System.out.println("got a position upudate message for: " + entity.getUid() + " at " + posMsg.position);
+						if (posMsg.position != null) {
+							entity.setPosition(posMsg.position);
+						}
+						if (posMsg.velocity != null) {
+							entity.setVelocity(posMsg.velocity);
+							//System.out.println("set velocity of " + entity.getUid() + " to " + posMsg.velocity);
+						}
 					}
-					if (posMsg.velocity != null) {
-						entity.setVelocity(posMsg.velocity);
-						//System.out.println("set velocity of " + entity.getUid() + " to " + posMsg.velocity);
-					}
-
 
 
 				} else if (msg instanceof GameMessage.AnimationUpdateMessage) {

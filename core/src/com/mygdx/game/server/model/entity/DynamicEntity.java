@@ -28,13 +28,29 @@ public abstract class DynamicEntity extends Entity implements Actable {
 							boolean solid) {
 		super(uid, position, visLayer, solid);
 		this.lights = new ArrayList<EntityLight>();
+		// Draw on creation
+		draw();
+	}
+
+	/**
+	 * Sets the entity's position along with its hitbox's position
+	 *
+	 * @param position
+	 */
+	@Override
+	public void setPosition(Vector2 position) {
+		if (!getPosition().epsilonEquals(position, .00000001f)) {
+			super.setPosition(position);
+			if (getUid() != null) {
+				draw();
+			}
+		}
 	}
 
 	/**
 	 * Creates a PosUpdateMessage to tell clients to update their view of this
 	 * entity
 	 */
-	@Override
 	public void draw() {
 		GameMessage.PosUpdateMessage posMsg = new GameMessage
 				.PosUpdateMessage();

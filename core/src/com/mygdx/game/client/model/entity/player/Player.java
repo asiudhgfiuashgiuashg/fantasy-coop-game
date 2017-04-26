@@ -19,9 +19,11 @@ public abstract class Player extends DynamicEntity {
 	public boolean down = false;
 	public boolean right = false;
 	public boolean left = false;
+	protected boolean attacking = false;
+	protected boolean moving = false;
 
 	// not used atm
-	private enum Direction {
+	public enum Direction {
 		UP,
 		UP_RIGHT,
 		RIGHT,
@@ -33,24 +35,85 @@ public abstract class Player extends DynamicEntity {
 	}
 
 	// not used atm
-	private Direction direction; // direction the player is moving - used to choose an animation
+	public Direction directionFacing; // directionFacing the player is moving - used to choose an animation
 
 	public Player(String entUid, String className, Vector2 pos, int visLayer) {
 		super(entUid, className, pos, visLayer);
 		setMass(1);
 		this.solid = true;
+		directionFacing = Direction.RIGHT;
 	}
 
 
-	
+	/**
+	 * Do class-specific tick stuff based on inputs
+	 * @param deltaT
+	 */
 	@Override
 	public void tick(float deltaT) {
+		if (!up && !down && !right && !left) {
+			moving = false;
+
+		} else if (!up && !down && !right && left) {
+			directionFacing = Direction.LEFT;
+			moving = true;
+
+		} else if (!up && !down && right && !left) {
+			directionFacing = Direction.RIGHT;
+			moving = true;
+
+		} else if (!up && !down && right && left) {
+			moving = false;
+
+		} else if (!up && down && !right && !left) {
+			directionFacing = Direction.DOWN;
+			moving = true;
+
+		} else if (!up && down && !right && left) {
+			directionFacing = Direction.DOWN_LEFT;
+			moving = true;
+
+		} else if (!up && down && right && !left) {
+			directionFacing = Direction.DOWN_RIGHT;
+			moving = true;
+
+		} else if (!up && down && right && left) {
+			directionFacing = Direction.DOWN;
+			moving = true;
+
+		} else if (up && !down && !right && !left) {
+			directionFacing = Direction.UP;
+			moving = true;
+
+		} else if (up && !down && !right && left) {
+			directionFacing = Direction.UP_LEFT;
+			moving = true;
+
+		} else if (up && !down && right && !left) {
+			directionFacing = Direction.UP_RIGHT;
+			moving = true;
+
+		} else if (up && !down && right && left) {
+			directionFacing = Direction.UP;
+			moving = true;
+
+		} else if (up && down && !right && !left) {
+			moving = false;
+
+		} else if (up && down && !right && left) {
+			directionFacing = Direction.LEFT;
+			moving = true;
+		} else if (up && down && right && !left) {
+			directionFacing = Direction.RIGHT;
+			moving = true;
+		} else { //  if (up && down && right && left) {
+			moving = false;
+		}
+
 		super.tick(deltaT);
-
-
 		sendPositionUpdate();
-
 	}
+
 
 	void sendPositionUpdate() {
 		GameMessage.PosUpdateMessage posMsg = new GameMessage.PosUpdateMessage();
@@ -85,5 +148,14 @@ public abstract class Player extends DynamicEntity {
 		animMsg.frameDuration = getAnimation().getFrameDuration();
 		GameClient.getInstance().sendToServer(animMsg);
 	}
+
+
+	public void setAttack(boolean attack) {
+		if (attack) {
+			GameClient.getInstance().sendToServer(new GameMessage.AttackMessage());
+		}
+		attacking = attack;
+	}
+
 
 }

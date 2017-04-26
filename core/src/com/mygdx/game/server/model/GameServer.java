@@ -6,7 +6,7 @@ import com.mygdx.game.server.controller.ServerCommunicator;
 import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.entity.player.MagePlayer;
 import com.mygdx.game.server.model.entity.player.Player;
-import com.mygdx.game.server.model.entity.player.RangerPlayer;
+import com.mygdx.game.server.model.entity.player.Ranger.RangerPlayer;
 import com.mygdx.game.server.model.entity.player.ShieldPlayer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.server.model.exceptions.ServerNotInitializedException;
@@ -23,7 +23,6 @@ import com.strongjoshua.console.LogLevel;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -240,15 +239,7 @@ public class GameServer implements Runnable {
 	 */
 	private void initDynamicEntitiesOnClients() {
 		for (DynamicEntity entity : map.getDynamicEntities()) {
-			GameMessage.InitDynamicEntityMsg entInitMsg = new GameMessage
-					.InitDynamicEntityMsg();
-			entInitMsg.className = entity.getClass().getSimpleName();
-			entInitMsg.pos = entity.getPosition();
-			entInitMsg.entUid = entity.getUid();
-			entInitMsg.vertices = entity.getVertices();
-			entInitMsg.visLayer = entity.getVisLayer();
-			entInitMsg.mass = entity.getMass();
-			entInitMsg.entityLightList = entity.lights;
+			GameMessage.InitDynamicEntityMsg entInitMsg = getDynamicEntityInitMsg(entity);
 
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
 				entInitMsg.isLocalPlayer = true;
@@ -261,6 +252,21 @@ public class GameServer implements Runnable {
 			}
 
 		}
+	}
+
+
+	public static GameMessage.InitDynamicEntityMsg getDynamicEntityInitMsg(DynamicEntity entity) {
+		GameMessage.InitDynamicEntityMsg entInitMsg = new GameMessage
+				.InitDynamicEntityMsg();
+		entInitMsg.className = entity.getClass().getSimpleName();
+		entInitMsg.pos = entity.getPosition();
+		entInitMsg.entUid = entity.getUid();
+		entInitMsg.vertices = entity.getVertices();
+		entInitMsg.visLayer = entity.getVisLayer();
+		entInitMsg.mass = entity.getMass();
+		entInitMsg.entityLightList = entity.lights;
+
+		return entInitMsg;
 	}
 
 	/**

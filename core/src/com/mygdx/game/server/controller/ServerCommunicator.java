@@ -204,6 +204,14 @@ public class ServerCommunicator extends Communicator {
 				animMsg.entityUID = getPlayerMatchingConnectionUid(cUid, map).getUid();
 				sendToAllExcept(animMsg, cUid);
 			}
+
+			if (msg instanceof GameMessage.AttackMessage) {
+				int cUid = msg.uid;
+				GameMessage.AttackMessage atkMsg = (GameMessage.AttackMessage) msg;
+				GameMap map = GameServer.getInstance().getMap();
+				Player player = getPlayerMatchingConnectionUid(cUid, map);
+				player.attack(atkMsg.destination);
+			}
 		}
 	}
 

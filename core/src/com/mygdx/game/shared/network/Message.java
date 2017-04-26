@@ -1,5 +1,7 @@
 package com.mygdx.game.shared.network;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Network message base class.
  * 

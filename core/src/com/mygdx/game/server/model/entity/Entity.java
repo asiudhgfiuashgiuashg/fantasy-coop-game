@@ -21,8 +21,6 @@ public abstract class Entity extends PolygonObject {
 		this.uid = uid;
 		this.visLayer = visLayer;
 
-		// Draw on creation
-		draw();
 	}
 
 	public Entity(String uid, Vector2 position, int visLayer, boolean solid) {
@@ -40,32 +38,8 @@ public abstract class Entity extends PolygonObject {
 	 */
 	public int visLayer;
 
-	/**
-	 * Creates a PosUpdateMessage to tell clients to update their view of this
-	 * entity
-	 */
-	public void draw() {
-		GameMessage.PosUpdateMessage msg = new GameMessage.PosUpdateMessage();
-		msg.entityUID = uid;
-		msg.position = getPosition();
-		msg.visLayer = visLayer;
-		msg.velocity = getVelocity();
-		server.sendToAll(msg);
-	}
 
 
-	/**
-	 * Sets the entity's position along with its hitbox's position
-	 *
-	 * @param position
-	 */
-	@Override
-	public void setPosition(Vector2 position) {
-		if (!getPosition().epsilonEquals(position, .00000001f)) {
-			super.setPosition(position);
-		}
-		draw();
-	}
 
 
 	/**
@@ -77,17 +51,6 @@ public abstract class Entity extends PolygonObject {
 		return visLayer;
 	}
 
-	/**
-	 * Sets entity's visibility layer
-	 *
-	 * @param visLayer -1, 0, or 1
-	 */
-	public void setVisLayer(int visLayer) {
-		this.visLayer = visLayer;
-
-		// Redraw on visLayer change
-		draw();
-	}
 
 	/**
 	 * Gets entity's uid

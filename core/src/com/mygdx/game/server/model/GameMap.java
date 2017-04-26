@@ -10,7 +10,7 @@ import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.entity.player.MagePlayer;
 import com.mygdx.game.server.model.entity.player.Player;
-import com.mygdx.game.server.model.entity.player.RangerPlayer;
+import com.mygdx.game.server.model.entity.player.Ranger.RangerPlayer;
 import com.mygdx.game.server.model.entity.player.ShieldPlayer;
 import com.mygdx.game.server.model.trigger.Trigger;
 import com.mygdx.game.shared.model.CollideablePolygon;

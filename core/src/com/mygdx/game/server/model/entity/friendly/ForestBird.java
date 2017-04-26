@@ -44,7 +44,6 @@ public class ForestBird extends Friendly {
 	/**
 	 * look in different direction every once in a while
 	 *
-	 * TODO: make bird disappear, change location, and reappear
 	 *
 	 * @param elapsedTime
 	 */

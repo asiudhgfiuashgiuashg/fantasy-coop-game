@@ -28,6 +28,7 @@ public class GameMessage extends Message {
 	}
 	
 	public static class AttackMessage extends GameMessage {
+		public Vector2 destination = new Vector2(0, 0);
 	}
 	
 	public static class SpellCastMessage extends GameMessage {

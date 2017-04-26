@@ -83,7 +83,6 @@ public class CollideablePolygon extends Polygon {
 			setVertices(vertices);
 		}
 
-
 		calcCutoffY();
 	}
 
@@ -298,7 +297,7 @@ public class CollideablePolygon extends Polygon {
 					float startY = getY();
 
 
-					// Try moving in direction
+					// Try moving in directionFacing
 					Vector2 pos = new Vector2(startX, startY);
 					Vector2 addVec = new Vector2(dx);
 					addVec.scl((float) Math.pow(2, -i));

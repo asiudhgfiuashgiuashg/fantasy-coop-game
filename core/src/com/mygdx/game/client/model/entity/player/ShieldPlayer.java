@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class ShieldPlayer extends Player {
 
+
 	public ShieldPlayer(String entUid, String className, Vector2 pos, int visLayer) {
 		super(entUid, className, pos, visLayer);
 		setAnimation("right", 1f);
@@ -68,6 +69,14 @@ public class ShieldPlayer extends Player {
 		}
 
 		super.tick(deltaT);
+	}
 
+	/**
+	 * Shield player specific on-attack stuff here.
+	 * @param attack
+	 */
+	@Override
+	public void setAttack(boolean attack) {
+		super.setAttack(attack);
 	}
 }

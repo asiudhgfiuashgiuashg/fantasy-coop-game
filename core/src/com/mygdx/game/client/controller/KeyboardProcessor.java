@@ -28,6 +28,8 @@ public class KeyboardProcessor extends InputAdapter {
 				localPlayer.left = true;
 			} else if (input == Input.RIGHT) {
 				localPlayer.right = true;
+			} else if (input == Input.ATTACK) {
+				localPlayer.setAttack(true);
 			}
 		}
 
@@ -57,6 +59,8 @@ public class KeyboardProcessor extends InputAdapter {
 				localPlayer.left = false;
 			} else if (input == Input.RIGHT) {
 				localPlayer.right = false;
+			} else if (input == Input.ATTACK) {
+				localPlayer.setAttack(false);
 			}
 		}
 		

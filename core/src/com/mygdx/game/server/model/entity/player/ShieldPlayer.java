@@ -8,4 +8,9 @@ public class ShieldPlayer extends Player {
 		super(uid, position, visLayer, solid);
 	}
 
+	@Override
+	public void attack(Vector2 destination) {
+
+	}
+
 }
