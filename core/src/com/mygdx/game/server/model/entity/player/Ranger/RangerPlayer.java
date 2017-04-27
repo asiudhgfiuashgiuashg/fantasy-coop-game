@@ -13,7 +13,7 @@ public class RangerPlayer extends Player {
 	@Override
 	public void attack(Vector2 destination) {
 		String uid = UniqueIDAssigner.generateDynamicEntityUID(RangerArrow.class.getSimpleName());
-		RangerArrow arrow = new RangerArrow(uid, getPosition(), 0, true, destination);
+		RangerArrow arrow = new RangerArrow(uid, getPosition(), 0, true, destination, getPosition());
 		GameServer.getInstance().getMap().addFriendly(arrow);
 		GameServer.getInstance().sendToAll(GameServer.getDynamicEntityInitMsg(arrow));
 	}

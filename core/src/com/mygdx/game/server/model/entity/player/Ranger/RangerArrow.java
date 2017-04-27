@@ -24,9 +24,14 @@ public class RangerArrow extends Friendly {
 	 * @param solid
 	 * @param destination the position to which the arrow is travelling
 	 */
-	public RangerArrow(String uid, Vector2 position, int visLayer, boolean solid, Vector2 destination) {
+	public RangerArrow(String uid, Vector2 position, int visLayer, boolean solid, Vector2 destination, Vector2 source) {
 		super(uid, position, visLayer, solid);
-		setVelocity(new Vector2(20, 0));
+		float arrowSpeed = 150;
+		float angle = (float) Math.atan2((destination.y - source.y), (destination.x - source.x));
+		float yVel = (float) Math.sin(angle) * arrowSpeed;
+		float xVel = (float) Math.cos(angle) * arrowSpeed;
+
+		setVelocity(new Vector2(xVel, yVel));
 	}
 
 	/*

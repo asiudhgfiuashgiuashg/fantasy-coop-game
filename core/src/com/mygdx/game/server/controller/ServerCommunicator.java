@@ -210,6 +210,7 @@ public class ServerCommunicator extends Communicator {
 				GameMessage.AttackMessage atkMsg = (GameMessage.AttackMessage) msg;
 				GameMap map = GameServer.getInstance().getMap();
 				Player player = getPlayerMatchingConnectionUid(cUid, map);
+				System.out.println("destination: " + atkMsg.destination);
 				player.attack(atkMsg.destination);
 			}
 		}

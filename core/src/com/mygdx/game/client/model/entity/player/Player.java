@@ -1,6 +1,8 @@
 package com.mygdx.game.client.model.entity.player;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.shared.network.GameMessage;
@@ -151,8 +153,12 @@ public abstract class Player extends DynamicEntity {
 
 
 	public void setAttack(boolean attack) {
+		GameMessage.AttackMessage atkMsg = new GameMessage.AttackMessage();
+		Vector3 unprojected3 = GameClient.getInstance().getRenderer().camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+		Vector2 destination = new Vector2(unprojected3.x, unprojected3.y);
+		atkMsg.destination = destination;
 		if (attack) {
-			GameClient.getInstance().sendToServer(new GameMessage.AttackMessage());
+			GameClient.getInstance().sendToServer(atkMsg);
 		}
 		attacking = attack;
 	}

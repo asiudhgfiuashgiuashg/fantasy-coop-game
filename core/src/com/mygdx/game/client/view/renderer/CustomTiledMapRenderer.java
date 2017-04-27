@@ -58,7 +58,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 
 	/* used for debugging */
 	private final BitmapFont font = new BitmapFont();
-	private OrthographicCamera camera;
+	public OrthographicCamera camera;
 
 	public CustomTiledMapRenderer(TiledMap map, Batch batch, RayHandler rayHandler) {
 		super(map, batch);
