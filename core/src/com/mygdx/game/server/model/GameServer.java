@@ -265,6 +265,7 @@ public class GameServer implements Runnable {
 		entInitMsg.visLayer = entity.getVisLayer();
 		entInitMsg.mass = entity.getMass();
 		entInitMsg.entityLightList = entity.lights;
+		entInitMsg.rotation = entity.getRotation();
 
 		return entInitMsg;
 	}

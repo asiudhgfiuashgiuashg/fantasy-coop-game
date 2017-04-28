@@ -137,6 +137,7 @@ public class ClientCommunicator extends Communicator {
 						entity = newEntity;
 					}
 					entity.setLights(initMsg.entityLightList);
+					entity.setRotation(initMsg.rotation);
 
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
 					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;

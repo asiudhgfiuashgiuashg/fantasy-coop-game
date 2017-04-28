@@ -46,6 +46,7 @@ public class GameMessage extends Message {
 		public boolean isLocalPlayer = false; // whether the client should treat this as local player
 		public float mass;
 		public List<EntityLight> entityLightList;
+		public float rotation;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {

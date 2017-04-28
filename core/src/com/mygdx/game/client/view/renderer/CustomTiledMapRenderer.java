@@ -241,7 +241,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private void drawEntityTexture(MapEntity entity) {
 		TextureRegion toDraw = entity.getTextureRegion();
 
-		batch.draw(toDraw, entity.getPos().x, entity.getPos().y, toDraw.getRegionWidth(), toDraw.getRegionHeight());
+		batch.draw(toDraw, entity.getPos().x, entity.getPos().y, 0, 0, toDraw.getRegionWidth(), toDraw.getRegionHeight(), 1, 1, entity.getRotation());
 	}
 
 	@Override

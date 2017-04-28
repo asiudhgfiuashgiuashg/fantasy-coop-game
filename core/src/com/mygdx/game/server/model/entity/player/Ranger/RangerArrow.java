@@ -30,7 +30,7 @@ public class RangerArrow extends Friendly {
 		float angle = (float) Math.atan2((destination.y - source.y), (destination.x - source.x));
 		float yVel = (float) Math.sin(angle) * arrowSpeed;
 		float xVel = (float) Math.cos(angle) * arrowSpeed;
-
+		setRotation(180f + (float) Math.toDegrees(angle));
 		setVelocity(new Vector2(xVel, yVel));
 	}
 

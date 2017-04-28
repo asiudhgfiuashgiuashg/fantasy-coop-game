@@ -48,14 +48,6 @@ public class DynamicEntity extends MapEntity {
 		nameToAnimationMap = spritesheetParser.getAnimations(Gdx.files.internal(animationsImageFileName));
 		this.currAnimation = nameToAnimationMap.get(nameToAnimationMap.keySet().toArray()[0]);
 		setMass(1); // TODO: have server send mass
-
-		setRotation(45);
-	}
-
-	@Override
-	public void setRotation(float degrees) {
-		super.setRotation(degrees);
-		
 	}
 
 	/**
