@@ -17,8 +17,6 @@ public class RangerPlayer extends Player {
 	 */
 	@Override
 	public void tick(float deltaT) {
-		super.tick(deltaT);
-
 		if (directionFacing == Direction.UP) {
 			if (moving) {
 				setAnimationIfNotSet("up_walk", PLAYER_WALK_ANIM_SPEED);
@@ -60,7 +58,7 @@ public class RangerPlayer extends Player {
 				setAnimationIfNotSet("down_walk", PLAYER_WALK_ANIM_SPEED);
 				setVelocityIfNotSet(new Vector2(0, -nonDiagSpeed));
 			} else if (attacking) {
-				setAnimationIfNotSet("down_firing", ATTACK_ANIM_SPEED);
+				setAnimationIfNotSet("left_firing", ATTACK_ANIM_SPEED);
 			} else {
 				setAnimationIfNotSet("down", PLAYER_WALK_ANIM_SPEED);
 			}
@@ -96,6 +94,8 @@ public class RangerPlayer extends Player {
 		if (!moving) {
 			setVelocityIfNotSet(new Vector2(0, 0));
 		}
+
+		super.tick(deltaT);
 
 	}
 
