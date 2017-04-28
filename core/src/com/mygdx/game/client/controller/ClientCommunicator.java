@@ -133,11 +133,15 @@ public class ClientCommunicator extends Communicator {
 						DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
 						newEntity.setVertices(initMsg.vertices);
 						newEntity.setMass(initMsg.mass);
+						if (initMsg.solid) {
+							newEntity.solid = true;
+						}
 						gameClient.addDynamicEntity(newEntity);
 						entity = newEntity;
 					}
 					entity.setLights(initMsg.entityLightList);
 					entity.setRotation(initMsg.rotation);
+					entity.setOrigin(initMsg.originX, initMsg.originY); // what point to rotate hitbox around
 
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
 					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;

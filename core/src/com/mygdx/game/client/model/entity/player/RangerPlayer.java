@@ -1,10 +1,19 @@
 package com.mygdx.game.client.model.entity.player;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.shared.network.GameMessage;
+
+import static com.badlogic.gdx.utils.TimeUtils.millis;
+import static com.badlogic.gdx.utils.TimeUtils.timeSinceMillis;
 
 public class RangerPlayer extends Player {
 
 	private static final float ATTACK_ANIM_SPEED = 0.1f;
+	private static final long TIME_BETWEEN_ARROWS = 800; // auto attack time in milliseconds
+	long timeLastShotArrow = 0;
 
 	public RangerPlayer(String entUid, String className, Vector2 pos, int visLayer) {
 		super(entUid, className, pos, visLayer);
@@ -58,7 +67,7 @@ public class RangerPlayer extends Player {
 				setAnimationIfNotSet("down_walk", PLAYER_WALK_ANIM_SPEED);
 				setVelocityIfNotSet(new Vector2(0, -nonDiagSpeed));
 			} else if (attacking) {
-				setAnimationIfNotSet("left_firing", ATTACK_ANIM_SPEED);
+				setAnimationIfNotSet("down_firing", ATTACK_ANIM_SPEED);
 			} else {
 				setAnimationIfNotSet("down", PLAYER_WALK_ANIM_SPEED);
 			}
@@ -93,6 +102,17 @@ public class RangerPlayer extends Player {
 
 		if (!moving) {
 			setVelocityIfNotSet(new Vector2(0, 0));
+		}
+
+		if (attacking) {
+			if (timeSinceMillis(timeLastShotArrow) > TIME_BETWEEN_ARROWS) {
+				GameMessage.AttackMessage atkMsg = new GameMessage.AttackMessage();
+				Vector3 unprojected3 = GameClient.getInstance().getRenderer().camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+				Vector2 destination = new Vector2(unprojected3.x, unprojected3.y);
+				atkMsg.destination = destination;
+				GameClient.getInstance().sendToServer(atkMsg);
+				timeLastShotArrow = millis();
+			}
 		}
 
 		super.tick(deltaT);

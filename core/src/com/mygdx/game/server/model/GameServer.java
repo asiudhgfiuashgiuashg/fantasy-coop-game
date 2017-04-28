@@ -266,6 +266,8 @@ public class GameServer implements Runnable {
 		entInitMsg.mass = entity.getMass();
 		entInitMsg.entityLightList = entity.lights;
 		entInitMsg.rotation = entity.getRotation();
+		entInitMsg.originX = entity.getOriginX();
+		entInitMsg.originY = entity.getOriginY();
 
 		return entInitMsg;
 	}

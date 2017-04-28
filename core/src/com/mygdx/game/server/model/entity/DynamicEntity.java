@@ -95,4 +95,9 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		float dt = elapsedTime / 1000f;
 		doPhysics(dt, GameServer.getInstance().getMap().getSolidObjects());
 	}
+
+
+	public void setVerticesNoUpdate(float[] vertices) {
+		super.setVertices(vertices);
+	}
 }

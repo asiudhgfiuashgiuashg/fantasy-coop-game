@@ -47,6 +47,8 @@ public class GameMessage extends Message {
 		public float mass;
 		public List<EntityLight> entityLightList;
 		public float rotation;
+		public float originX;
+		public float originY;
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {
