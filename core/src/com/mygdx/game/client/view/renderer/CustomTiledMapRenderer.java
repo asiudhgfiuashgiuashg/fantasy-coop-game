@@ -117,7 +117,9 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		renderEntities();
 		endRender();
 		rayHandler.updateAndRender();
-
+		beginRender();
+		renderDynamicEntityHealthBars(); // needs to happen after lighting so that lighting doesn't affect health bars
+		endRender();
 
 		// since debug rendering uses a shape renderer, it must start after
 		// endRender() which calls batch.end(). Otherwise rendering gets
@@ -145,6 +147,17 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		camera.position.y = GameClient.getInstance().getMap().localPlayer.getY();
 		setView(camera);
 
+	}
+
+	/**
+	 * Needs to be called after lighting effects are applied
+	 */
+	private void renderDynamicEntityHealthBars() {
+		for (DynamicEntity entity: dynamicEntities) {
+			if (entity.hasHealth) {
+				drawHealthBarAt(entity.getX() + entity.getWidth() / 2 - HEALTH_BAR_WIDTH / 2, entity.getY(), entity.getHealthPercentage());
+			}
+		}
 	}
 
 	/**
@@ -244,13 +257,6 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 */
 	private void renderEntity(MapEntity entity) {
 		drawEntityTexture(entity);
-		if (entity instanceof DynamicEntity) {
-			// render health bar
-			DynamicEntity dynEntity = (DynamicEntity) entity;
-			if (dynEntity.hasHealth) {
-				drawHealthBarAt(entity.getX(), entity.getY(), dynEntity.getHealthPercentage());
-			}
-		}
 	}
 
 	 /**

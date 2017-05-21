@@ -123,4 +123,20 @@ public class DynamicEntity extends MapEntity {
 	public float getHealthPercentage() {
 		return ((float) getHealth()) / getMaxHealth();
 	}
+
+	/**
+	 * Uses width of current texture region
+	 * @return
+	 */
+	public float getWidth() {
+		return currTextureRegion.getRegionWidth();
+	}
+
+	/**
+	 * Uses height of current texture region
+	 * @return
+	 */
+	public float getHeight() {
+		return currTextureRegion.getRegionHeight();
+	}
 }
