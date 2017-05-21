@@ -9,8 +9,10 @@ import com.mygdx.game.server.model.entity.DamageableEntity;
  */
 public abstract class Enemy extends DamageableEntity {
 
+
 	protected Enemy(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
+		hasHealth = true; // tell the client to display a health bar
 	}
 
 }

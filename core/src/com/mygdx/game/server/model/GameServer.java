@@ -240,7 +240,6 @@ public class GameServer implements Runnable {
 	private void initDynamicEntitiesOnClients() {
 		for (DynamicEntity entity : map.getDynamicEntities()) {
 			GameMessage.InitDynamicEntityMsg entInitMsg = getDynamicEntityInitMsg(entity);
-
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
 				entInitMsg.isLocalPlayer = true;
 				Player player = (Player) entity;
@@ -268,6 +267,9 @@ public class GameServer implements Runnable {
 		entInitMsg.rotation = entity.getRotation();
 		entInitMsg.originX = entity.getOriginX();
 		entInitMsg.originY = entity.getOriginY();
+		entInitMsg.health = entity.getHealth();
+		entInitMsg.maxHealth = entity.getMaxHealth();
+		entInitMsg.hasHealth = entity.hasHealth;
 
 		return entInitMsg;
 	}

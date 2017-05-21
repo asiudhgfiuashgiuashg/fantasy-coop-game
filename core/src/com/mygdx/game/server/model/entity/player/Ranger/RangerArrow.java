@@ -2,7 +2,10 @@ package com.mygdx.game.server.model.entity.player.Ranger;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.client.model.GameClient;
+import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.shared.model.CollideablePolygon;
 import com.mygdx.game.shared.model.EntityLight;
@@ -16,6 +19,7 @@ import java.util.Random;
  */
 public class RangerArrow extends Friendly {
 
+	private static final int ARROW_DAMAGE = 10;
 	private Random rand = new Random();
 
 	private float[] hitbox = {12, 1, 2, 1, 2, 6, 12, 6};
@@ -39,6 +43,7 @@ public class RangerArrow extends Friendly {
 		setOrigin(7, 7);
 
 		setVerticesNoUpdate(hitbox);
+		setSolid(true);
 
 		//TODO rotate lights with entity clientside
 /*		Color color = Color.GOLDENROD;
@@ -59,6 +64,12 @@ public class RangerArrow extends Friendly {
 
 	@Override
 	public void onBumpInto(CollideablePolygon other) {
+		GameServer.getInstance().getMap().removeDynamicEntity(this);
 
+		// if collide with enemy, damage the enemy
+		if (other instanceof Enemy) {
+			Enemy enemy = (Enemy) other;
+			enemy.removeHealth(ARROW_DAMAGE);
+		}
 	}
 }

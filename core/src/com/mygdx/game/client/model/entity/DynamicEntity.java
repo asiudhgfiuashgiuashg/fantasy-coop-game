@@ -28,6 +28,9 @@ public class DynamicEntity extends MapEntity {
 	private Map<String, Animation> nameToAnimationMap;
 	private TextureRegion currTextureRegion;
 	private Animation currAnimation;
+	private int health; // the current health of this entity
+	private int maxHealth; // the most health this entity can have
+
 	/**
 	 * when the current animation began - needed to get current frame
 	 */
@@ -38,6 +41,7 @@ public class DynamicEntity extends MapEntity {
 
 	private List<CollideablePolygon> solidEntities = new ArrayList<CollideablePolygon>();
 	private String animationName; // name of current animation (sent to server to be distributed to other clients)
+	public boolean hasHealth;
 
 	public DynamicEntity(String entUid, String className, Vector2 pos, int visLayer) {
 		super(visLayer);
@@ -47,6 +51,8 @@ public class DynamicEntity extends MapEntity {
 		String animationsImageFileName = className + "-sheet.png";
 		nameToAnimationMap = spritesheetParser.getAnimations(Gdx.files.internal(animationsImageFileName));
 		this.currAnimation = nameToAnimationMap.get(nameToAnimationMap.keySet().toArray()[0]);
+		health = 10;
+		maxHealth = 100;
 		setMass(1); // TODO: have server send mass
 	}
 
@@ -98,4 +104,23 @@ public class DynamicEntity extends MapEntity {
 		super.setPosition(position);
 	}
 
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public float getHealthPercentage() {
+		return ((float) getHealth()) / getMaxHealth();
+	}
 }

@@ -115,7 +115,7 @@ public class ClientCommunicator extends Communicator {
 			} else if (msg instanceof GameMessage && GameClient.getInstance().getGameState().get() == ClientGameState.GAME) {
 				if (msg instanceof GameMessage.InitDynamicEntityMsg) {
 					GameMessage.InitDynamicEntityMsg initMsg = (GameMessage.InitDynamicEntityMsg) msg;
-					MapEntity entity;
+					DynamicEntity entity;
 					if (initMsg.isLocalPlayer) {
 						String className = initMsg.className;
 						Player player;
@@ -139,9 +139,12 @@ public class ClientCommunicator extends Communicator {
 						gameClient.addDynamicEntity(newEntity);
 						entity = newEntity;
 					}
+					entity.setHealth(initMsg.health);
+					entity.setMaxHealth(initMsg.maxHealth);
 					entity.setLights(initMsg.entityLightList);
 					entity.setRotation(initMsg.rotation);
 					entity.setOrigin(initMsg.originX, initMsg.originY); // what point to rotate hitbox around
+					entity.hasHealth = initMsg.hasHealth;
 
 				} else if (msg instanceof GameMessage.PosUpdateMessage) {
 					GameMessage.PosUpdateMessage posMsg = (GameMessage.PosUpdateMessage) msg;
@@ -166,11 +169,17 @@ public class ClientCommunicator extends Communicator {
 						entity.setAnimation(animationUpdateMessage.animationName, animationUpdateMessage.frameDuration);
 					}
 				} else if (msg instanceof GameMessage.HitboxUpdateMessage) {
-					System.out.println("got a hitbox update");
 					GameMessage.HitboxUpdateMessage hitboxMsg = (GameMessage.HitboxUpdateMessage) msg;
 					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(hitboxMsg.entityUID);
 					entity.setVertices(hitboxMsg.vertices);
 					entity.setPosition(entity.getPos());
+				} else if (msg instanceof GameMessage.HealthUpdateMsg) {
+					GameMessage.HealthUpdateMsg healthMsg = (GameMessage.HealthUpdateMsg) msg;
+					DynamicEntity toUpdate = gameClient.getMap().getDynamicEntityByUid(healthMsg.entUid);
+					toUpdate.setHealth(healthMsg.health);
+				} else if (msg instanceof GameMessage.RemoveDynamicEntityMsg) {
+					GameMessage.RemoveDynamicEntityMsg removeMsg = (GameMessage.RemoveDynamicEntityMsg) msg;
+					GameClient.getInstance().getMap().removeDynamicEntityByUid(removeMsg.entityUID);
 				} else {
 					System.out.println("unhandled network message of type " + msg.getClass());
 				}

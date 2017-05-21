@@ -2,6 +2,7 @@ package com.mygdx.game.client.model.map;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.mygdx.game.client.model.FlickerPointLight;
+import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
 import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.StaticEntity;
@@ -68,4 +69,22 @@ public class ClientTiledMap extends TiledMap {
 		localPlayer = player;
 		addDynamicEntity(player);
 	}
+
+	private void removeDynamicEntity(DynamicEntity entity) {
+		dynamicEntities.remove(entity);
+		removeEntity(entity);
+		GameClient.getInstance().getRenderer().deregisterEntity(entity);
+	}
+
+	public void removeDynamicEntityByUid(String entityUid) {
+		DynamicEntity entity = getDynamicEntityByUid(entityUid);
+		removeDynamicEntity(entity);
+	}
+
+	private void removeEntity(MapEntity entity) {
+		if (solidEntities.contains(entity)) {
+			solidEntities.remove(entity);
+		}
+	}
+
 }

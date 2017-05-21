@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -46,6 +47,13 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	private RayHandler rayHandler; // used to render lights
+
+	// 1x1 texture regions for drawing health bars
+	private static final TextureRegion MISSING_HEALTH_TEXTURE = new TextureRegion(new Texture(Gdx.files.internal("missing_health.png")));
+	private static final TextureRegion HEALTH_TEXTURE = new TextureRegion(new Texture(Gdx.files.internal("health.png")));
+
+	private static final float HEALTH_BAR_HEIGHT = 10;
+	private static final float HEALTH_BAR_WIDTH = 30;
 
 	/*
 	 * The color which covers everything. Move alpha towards zero to make things
@@ -236,6 +244,28 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 */
 	private void renderEntity(MapEntity entity) {
 		drawEntityTexture(entity);
+		if (entity instanceof DynamicEntity) {
+			// render health bar
+			DynamicEntity dynEntity = (DynamicEntity) entity;
+			if (dynEntity.hasHealth) {
+				drawHealthBarAt(entity.getX(), entity.getY(), dynEntity.getHealthPercentage());
+			}
+		}
+	}
+
+	 /**
+	 * draw a health bar with bottom left corner at x, y with healthpercentage % green and (100 - healthpercentage) % red
+	 * @param x
+	 * @param y
+	 * @param healthPercentage
+	 */
+	public void drawHealthBarAt(float x, float y, float healthPercentage) {
+		// draw the remaining health first
+		float healthRemainingWidth = HEALTH_BAR_WIDTH * healthPercentage;
+		batch.draw(HEALTH_TEXTURE, x, y, healthRemainingWidth, HEALTH_BAR_HEIGHT);
+		//draw the missing health
+		float healthMissingWidth = HEALTH_BAR_WIDTH - healthRemainingWidth;
+		batch.draw(MISSING_HEALTH_TEXTURE, x + healthRemainingWidth, y, healthMissingWidth, HEALTH_BAR_HEIGHT);
 	}
 
 	private void drawEntityTexture(MapEntity entity) {

@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model.entity;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.server.model.GameServer;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public abstract class DynamicEntity extends Entity implements Actable {
 
+
 	/**
 	 * Name of entity's current animation
 	 */
@@ -23,11 +25,24 @@ public abstract class DynamicEntity extends Entity implements Actable {
 
 	public List<EntityLight> lights;
 
+	// current health of entity
+	private int health;
+	// the most health that the entity can have.
+	private int maxHealth;
+	private static final int DEFAULT_HEALTH = 80;
+	private static final int DEFAULT_MAX_HEALTH = 100;
+
+	public boolean hasHealth; // whether to care about the health of this entity on the server and client or not
+	 // for example, if hasHealth is set to false in the constructor of a dynamic entity, the client won't render its health bar
+
 
 	protected DynamicEntity(String uid, Vector2 position, int visLayer,
 							boolean solid) {
 		super(uid, position, visLayer, solid);
 		this.lights = new ArrayList<EntityLight>();
+		health = DEFAULT_HEALTH;
+		maxHealth = DEFAULT_MAX_HEALTH;
+		hasHealth = false;
 		// Draw on creation
 		draw();
 	}
@@ -99,5 +114,33 @@ public abstract class DynamicEntity extends Entity implements Actable {
 
 	public void setVerticesNoUpdate(float[] vertices) {
 		super.setVertices(vertices);
+	}
+
+	/**
+	 * Set the health of this dynamic entity and send a network message updating the clients
+	 * @param health
+	 */
+	public void setHealth(int health) {
+		this.health = MathUtils.clamp(health, 0, getMaxHealth());
+		GameMessage.HealthUpdateMsg healthMsg = new GameMessage.HealthUpdateMsg();
+		healthMsg.entUid = getUid();
+		healthMsg.health = health;
+		GameServer.getInstance().sendToAll(healthMsg);
+	}
+
+	/**
+	 * Remove this amount of health from a dynamic entity and send a network message updating the clients
+	 * @param health
+	 */
+	public void removeHealth(int health) {
+		setHealth(this.health - health);
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public int getMaxHealth() {
+		return maxHealth;
 	}
 }

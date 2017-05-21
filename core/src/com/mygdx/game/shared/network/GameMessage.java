@@ -49,11 +49,25 @@ public class GameMessage extends Message {
 		public float rotation;
 		public float originX;
 		public float originY;
+		public int health;
+		public int maxHealth;
+		public boolean hasHealth; // whether the client should care about the health of this thing
+	}
+
+	public static class HealthUpdateMsg extends GameMessage {
+		public int health; // new health
+		public String entUid; // unique entity identifier
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {
 		public String entityUID;
 		public float[] vertices;
 	}
+
+	// tell the client to remove a dynamic entity from the game
+	public static class RemoveDynamicEntityMsg extends GameMessage {
+		public String entityUID;
+	}
+
 	// and many more to come! These are just some examples
 }

@@ -10,10 +10,12 @@ import com.mygdx.game.server.model.entity.enemy.Enemy;
 import com.mygdx.game.server.model.entity.friendly.Friendly;
 import com.mygdx.game.server.model.entity.player.MagePlayer;
 import com.mygdx.game.server.model.entity.player.Player;
+import com.mygdx.game.server.model.entity.player.Ranger.RangerArrow;
 import com.mygdx.game.server.model.entity.player.Ranger.RangerPlayer;
 import com.mygdx.game.server.model.entity.player.ShieldPlayer;
 import com.mygdx.game.server.model.trigger.Trigger;
 import com.mygdx.game.shared.model.CollideablePolygon;
+import com.mygdx.game.shared.network.GameMessage;
 
 /**
  * Represents a game map (one contiguous area) on the server.
@@ -95,7 +97,7 @@ public class GameMap {
 	}
 
 	public List<DynamicEntity> getDynamicEntities() {
-		return dynamicEntities;
+		return new ArrayList(dynamicEntities);
 	}
 
 	public void addEnemy(Enemy enemy) {
@@ -141,5 +143,15 @@ public class GameMap {
 		if (staticEntity.isSolid()) {
 			solidObjects.add(staticEntity);
 		}
+	}
+
+	public void removeDynamicEntity(DynamicEntity entity) {
+		dynamicEntities.remove(entity);
+		solidObjects.remove(entity);
+
+		// tell client to remove dynamic entity
+		GameMessage.RemoveDynamicEntityMsg removeMsg = new GameMessage.RemoveDynamicEntityMsg();
+		removeMsg.entityUID = entity.getUid();
+		GameServer.getInstance().sendToAll(removeMsg);
 	}
 }
