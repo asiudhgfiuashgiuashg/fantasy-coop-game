@@ -21,7 +21,9 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	/**
 	 * Name of entity's current animation
 	 */
-	protected String animationName;
+	public  String animationName;
+
+	public float frameDuration; // how long each frame of the current animation should last
 
 	public List<EntityLight> lights;
 

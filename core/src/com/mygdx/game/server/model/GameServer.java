@@ -240,14 +240,22 @@ public class GameServer implements Runnable {
 	private void initDynamicEntitiesOnClients() {
 		for (DynamicEntity entity : map.getDynamicEntities()) {
 			GameMessage.InitDynamicEntityMsg entInitMsg = getDynamicEntityInitMsg(entity);
+			GameMessage.AnimationUpdateMessage initialAnimMsg = new GameMessage.AnimationUpdateMessage();
+			initialAnimMsg.animationName = entity.animationName;
+			initialAnimMsg.frameDuration = entity.frameDuration;
+			initialAnimMsg.entityUID = entity.getUid();
+
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {
 				entInitMsg.isLocalPlayer = true;
 				Player player = (Player) entity;
 				sendTo(entInitMsg, player.connectionUid);
 				entInitMsg.isLocalPlayer = false;
 				sendToAllExcept(entInitMsg, player.connectionUid);
+				sendToAllExcept(initialAnimMsg, player.connectionUid);
+
 			} else {
-				communicator.sendToAll(entInitMsg);
+				sendToAll(entInitMsg);
+				sendToAll(initialAnimMsg);
 			}
 
 		}

@@ -146,7 +146,6 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 		camera.position.x = GameClient.getInstance().getMap().localPlayer.getX();
 		camera.position.y = GameClient.getInstance().getMap().localPlayer.getY();
 		setView(camera);
-
 	}
 
 	/**

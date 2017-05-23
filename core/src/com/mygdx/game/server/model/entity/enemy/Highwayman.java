@@ -10,12 +10,14 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public class Highwayman extends Enemy {
 
-	private float[] hitbox = {13, -3, 3, -3, 3, 5, 13, 5};
+	private float[] hitbox = {16, 8, 16, 17, 36, 16, 36, 9};
 	private final static float MASS = 1f; // affects movement
 
 	protected Highwayman(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
 		setVerticesNoUpdate(hitbox);
+		animationName = "up_facing_swing";
+		frameDuration = .1f;
 		setMass(MASS);
 	}
 

@@ -428,7 +428,7 @@
    </properties>
    <ellipse/>
   </object>
-  <object id="2021" name="Highwayman" type="Enemy" x="509.023" y="709.466" width="12.5" height="15.25">
+  <object id="2021" name="Highwayman" type="Enemy" x="484.114" y="724.193" width="12.5" height="15.25">
    <properties>
     <property name="solid" type="bool" value="true"/>
    </properties>
