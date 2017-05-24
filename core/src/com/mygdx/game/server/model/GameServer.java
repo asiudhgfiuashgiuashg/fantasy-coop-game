@@ -243,6 +243,7 @@ public class GameServer implements Runnable {
 			GameMessage.AnimationUpdateMessage initialAnimMsg = new GameMessage.AnimationUpdateMessage();
 			initialAnimMsg.animationName = entity.animationName;
 			initialAnimMsg.frameDuration = entity.frameDuration;
+			initialAnimMsg.playMode = entity.animationPlayMode;
 			initialAnimMsg.entityUID = entity.getUid();
 
 			if (entity == getMap().magePlayer || entity == getMap().rangerPlayer || entity == getMap().shieldPlayer) {

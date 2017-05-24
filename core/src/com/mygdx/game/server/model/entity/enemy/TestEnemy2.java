@@ -24,6 +24,7 @@ public class TestEnemy2 extends Enemy {
 		setPosition(position.x, position.y);
 		setVertices(this.hitbox);
 		setMass(1000f);
+		frameDuration = 1f;
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class TestEnemy2 extends Enemy {
 			}
 			timeSinceAnimationChange += elapsedTime;
 
-			sendAnimation(1f);
+			sendAnimation();
 			sentAnimationName = true;
 		}
 		if (timeSinceAnimationChange > 4 * 1000) {

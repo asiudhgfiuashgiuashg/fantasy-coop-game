@@ -1,6 +1,7 @@
 package com.mygdx.game.client.model.entity.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client.model.GameClient;
@@ -130,7 +131,7 @@ public abstract class Player extends DynamicEntity {
 	 * @param animName
 	 */
 	public void setAnimationWithUpdate(String animName, float frameDuration) {
-		setAnimation(animName, frameDuration);
+		setAnimation(animName, frameDuration, Animation.PlayMode.LOOP);
 		sendAnimationUpdate();
 	}
 

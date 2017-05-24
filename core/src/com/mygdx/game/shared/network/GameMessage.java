@@ -1,5 +1,6 @@
 package com.mygdx.game.shared.network;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.shared.model.EntityLight;
 
@@ -17,6 +18,7 @@ public class GameMessage extends Message {
 		public String animationName;
 		public String entityUID;
 		public float frameDuration;
+		public Animation.PlayMode playMode;
 	}
 	
 	public static class MoveMessage extends GameMessage {

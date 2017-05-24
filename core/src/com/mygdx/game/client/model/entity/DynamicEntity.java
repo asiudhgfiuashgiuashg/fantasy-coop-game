@@ -76,10 +76,10 @@ public class DynamicEntity extends MapEntity {
 		return currTextureRegion;
 	}
 
-	public void setAnimation(String animationName, float frameDuration) {
+	public void setAnimation(String animationName, float frameDuration, Animation.PlayMode playMode) {
 		currAnimation = nameToAnimationMap.get(animationName);
 		this.animationName = animationName;
-		currAnimation.setPlayMode(Animation.PlayMode.LOOP);
+		currAnimation.setPlayMode(playMode);
 		currAnimation.setFrameDuration(frameDuration);
 		timeSinceAnimationBegan = 0;
 	}

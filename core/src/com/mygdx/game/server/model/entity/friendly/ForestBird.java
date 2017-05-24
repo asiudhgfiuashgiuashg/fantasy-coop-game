@@ -39,6 +39,7 @@ public class ForestBird extends Friendly {
 	public ForestBird(String uid, Vector2 position, int visLayer, boolean solid) {
 		super(uid, position, visLayer, solid);
 		oldPos = new Vector2(getPosition());
+		frameDuration = 1f;
 	}
 
 	/**
@@ -52,7 +53,7 @@ public class ForestBird extends Friendly {
 		super.act(elapsedTime);
 		if (!setInitialAnimation) { // send the initial animation of the old man
 			this.animationName = "left_facing";
-			sendAnimation(1f);
+			sendAnimation();
 			setInitialAnimation = true;
 			directionDuration = pickDirectionDuration();
 		}
@@ -80,7 +81,7 @@ public class ForestBird extends Friendly {
 				state = BirdState.LEFT_FACING_ON_LEFT;
 			}
 
-			sendAnimation(1f);
+			sendAnimation();
 
 			timeSinceAnimationChange = 0;
 			directionDuration = pickDirectionDuration();

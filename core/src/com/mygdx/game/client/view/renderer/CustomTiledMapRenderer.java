@@ -153,7 +153,7 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 */
 	private void renderDynamicEntityHealthBars() {
 		for (DynamicEntity entity: dynamicEntities) {
-			if (entity.hasHealth) {
+			if (entity.hasHealth && entity.getHealth() > 0) {
 				drawHealthBarAt(entity.getX() + entity.getWidth() / 2 - HEALTH_BAR_WIDTH / 2, entity.getY(), entity.getHealthPercentage());
 			}
 		}

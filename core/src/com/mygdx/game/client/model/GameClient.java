@@ -128,7 +128,8 @@ public class GameClient extends Game {
 	private RayHandler rayHandler;
 
 	private AtomicReference<ClientGameState> gameState = new AtomicReference<ClientGameState>();
-	private boolean skipToGameScreen = false; // for development: skips menu and lobby screens and puts you in a single player game
+	private boolean skipToGameScreen = true; // for development: skips menu and lobby screens and puts you in a single player game
+
 	@Override
 	public void create() {
 		// Load screen resolution preferences

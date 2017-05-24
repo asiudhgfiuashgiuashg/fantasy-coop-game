@@ -21,6 +21,7 @@ public class TestEnemy extends Enemy {
 		super(uid, position, visLayer, solid);
 		setVertices(hitbox);
 		setMass(1000f);
+		frameDuration = 1f;
 	}
 
 	/**
@@ -46,7 +47,7 @@ public class TestEnemy extends Enemy {
 				this.animationName = "blueAnimation";
 			}
 
-			sendAnimation(1f);
+			sendAnimation();
 			sentAnimationName = true;
 		}
 		if (timeSinceAnimationChange > 4 * 1000) {

@@ -117,7 +117,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 50
+    "duration": 300
    },
    "highwayman 15.ase": {
     "frame": { "x": 720, "y": 0, "w": 48, "h": 46 },
@@ -125,7 +125,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 300
+    "duration": 50
    },
    "highwayman 16.ase": {
     "frame": { "x": 768, "y": 0, "w": 48, "h": 46 },
@@ -165,7 +165,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 50
+    "duration": 40
    },
    "highwayman 21.ase": {
     "frame": { "x": 1008, "y": 0, "w": 48, "h": 46 },
@@ -205,7 +205,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 40
+    "duration": 60
    },
    "highwayman 26.ase": {
     "frame": { "x": 1248, "y": 0, "w": 48, "h": 46 },
@@ -221,7 +221,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 60
+    "duration": 300
    },
    "highwayman 28.ase": {
     "frame": { "x": 1344, "y": 0, "w": 48, "h": 46 },
@@ -229,7 +229,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 300
+    "duration": 50
    },
    "highwayman 29.ase": {
     "frame": { "x": 1392, "y": 0, "w": 48, "h": 46 },
@@ -269,7 +269,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 50
+    "duration": 200
    },
    "highwayman 34.ase": {
     "frame": { "x": 1632, "y": 0, "w": 48, "h": 46 },
@@ -277,7 +277,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 200
+    "duration": 50
    },
    "highwayman 35.ase": {
     "frame": { "x": 1680, "y": 0, "w": 48, "h": 46 },
@@ -381,7 +381,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
-    "duration": 50
+    "duration": 150
    },
    "highwayman 48.ase": {
     "frame": { "x": 2304, "y": 0, "w": 48, "h": 46 },
@@ -510,6 +510,22 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
     "sourceSize": { "w": 48, "h": 46 },
     "duration": 150
+   },
+   "highwayman 64.ase": {
+    "frame": { "x": 3072, "y": 0, "w": 48, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
+    "sourceSize": { "w": 48, "h": 46 },
+    "duration": 150
+   },
+   "highwayman 65.ase": {
+    "frame": { "x": 3120, "y": 0, "w": 48, "h": 46 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 48, "h": 46 },
+    "sourceSize": { "w": 48, "h": 46 },
+    "duration": 150
    }
  },
  "meta": {
@@ -517,17 +533,18 @@
   "version": "1.1.12-dev",
   "image": "C:\\Users\\mike\\Documents\\GitHub\\fantasy-coop-game\\core\\assets\\Highwayman-sheet.png",
   "format": "RGBA8888",
-  "size": { "w": 3072, "h": 46 },
+  "size": { "w": 3168, "h": 46 },
   "scale": "1",
   "frameTags": [
    { "name": "down_facing_swing", "from": 0, "to": 12, "direction": "forward" },
-   { "name": "up_facing_swing", "from": 13, "to": 25, "direction": "forward" },
-   { "name": "right_facing_swing", "from": 26, "to": 36, "direction": "forward" },
-   { "name": "left_facing_swing", "from": 37, "to": 47, "direction": "forward" },
-   { "name": "down_walk", "from": 48, "to": 51, "direction": "forward" },
-   { "name": "up_walk", "from": 52, "to": 55, "direction": "forward" },
-   { "name": "right_walk", "from": 56, "to": 59, "direction": "forward" },
-   { "name": "left_walk", "from": 60, "to": 63, "direction": "forward" }
+   { "name": "up_facing_swing", "from": 13, "to": 24, "direction": "forward" },
+   { "name": "right_facing_swing", "from": 25, "to": 35, "direction": "forward" },
+   { "name": "left_facing_swing", "from": 36, "to": 46, "direction": "forward" },
+   { "name": "down_walk", "from": 47, "to": 50, "direction": "forward" },
+   { "name": "up_walk", "from": 51, "to": 54, "direction": "forward" },
+   { "name": "right_walk", "from": 55, "to": 58, "direction": "forward" },
+   { "name": "left_walk", "from": 59, "to": 62, "direction": "forward" },
+   { "name": "death", "from": 63, "to": 65, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }

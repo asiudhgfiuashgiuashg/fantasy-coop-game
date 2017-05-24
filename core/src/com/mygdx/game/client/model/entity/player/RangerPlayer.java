@@ -1,6 +1,7 @@
 package com.mygdx.game.client.model.entity.player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.client.model.GameClient;
@@ -17,7 +18,7 @@ public class RangerPlayer extends Player {
 
 	public RangerPlayer(String entUid, String className, Vector2 pos, int visLayer) {
 		super(entUid, className, pos, visLayer);
-		setAnimation("right", 1f);
+		setAnimation("right", 1f, Animation.PlayMode.LOOP);
 	}
 
 	/**

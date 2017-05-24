@@ -1,5 +1,6 @@
 package com.mygdx.game.server.model.entity;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
@@ -18,12 +19,11 @@ import java.util.List;
 public abstract class DynamicEntity extends Entity implements Actable {
 
 
-	/**
-	 * Name of entity's current animation
-	 */
-	public  String animationName;
 
+	//Name of entity's current animation
+	public String animationName;
 	public float frameDuration; // how long each frame of the current animation should last
+	public Animation.PlayMode animationPlayMode; // whether the animation should loop or stop on the last frame or be reversed etc
 
 	public List<EntityLight> lights;
 
@@ -46,6 +46,8 @@ public abstract class DynamicEntity extends Entity implements Actable {
 		maxHealth = DEFAULT_MAX_HEALTH;
 		hasHealth = false;
 		// Draw on creation
+		animationPlayMode = Animation.PlayMode.LOOP;
+		frameDuration = 1f;
 		draw();
 	}
 
@@ -82,10 +84,12 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	 * Call this if you want to change animations or restart the current one
 	 * (on the client side)
 	 */
-	public void sendAnimation(float frameDuration) {
+	public void sendAnimation() {
 		GameMessage.AnimationUpdateMessage msg = new GameMessage.AnimationUpdateMessage();
 		msg.entityUID = getUid();
 		msg.animationName = animationName;
+		msg.frameDuration = frameDuration;
+		msg.playMode = animationPlayMode;
 		server.sendToAll(msg);
 	}
 

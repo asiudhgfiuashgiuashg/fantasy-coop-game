@@ -27,6 +27,7 @@ public class OldMan extends Friendly {
 		super(uid, position, visLayer, solid);
 		setVertices(hitbox);
 		setMass(MASS);
+		frameDuration = 1f;
 	}
 
 	/**
@@ -39,14 +40,14 @@ public class OldMan extends Friendly {
 		super.act(elapsedTime);
 		if (!setInitialAnimation) { // send the initial animation of the old man
 			this.animationName = "down_facing";
-			sendAnimation(1f);
+			sendAnimation();
 			setInitialAnimation = true;
 			directionDuration = pickDirectionDuration();
 		}
 		timeSinceAnimationChange += elapsedTime;
 		if (timeSinceAnimationChange >= directionDuration) {
 			this.animationName = chooseRandomDirectionAnimation();
-			sendAnimation(1f);
+			sendAnimation();
 			timeSinceAnimationChange = 0;
 			directionDuration = pickDirectionDuration();
 		}
