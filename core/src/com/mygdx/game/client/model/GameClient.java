@@ -29,6 +29,8 @@ import com.mygdx.game.client.view.screen.MenuScreen;
 import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.model.PreferencesConstants;
+import com.mygdx.game.shared.model.lobby.PlayerClass;
+import com.mygdx.game.shared.network.LobbyMessage;
 import com.mygdx.game.shared.network.Message;
 import com.mygdx.game.shared.util.ConcreteCommandExecutor;
 import com.mygdx.game.shared.util.SingletonGUIConsole;
@@ -126,7 +128,7 @@ public class GameClient extends Game {
 	private RayHandler rayHandler;
 
 	private AtomicReference<ClientGameState> gameState = new AtomicReference<ClientGameState>();
-
+	private boolean skipToGameScreen = false; // for development: skips menu and lobby screens and puts you in a single player game
 	@Override
 	public void create() {
 		// Load screen resolution preferences
@@ -171,6 +173,25 @@ public class GameClient extends Game {
 		// Start out in menu
 		gameState.set(ClientGameState.MAIN_MENU);
 		setScreen(menuScreen);
+
+		if (skipToGameScreen) {
+			try {
+				hostServer(12, "test_player");
+			} catch (AlreadyConnectedException e) {
+				e.printStackTrace();
+			} catch (ServerAlreadyInitializedException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		LobbyMessage.ClassAssignmentMessage message = new LobbyMessage.ClassAssignmentMessage();
+		message.playerClass = PlayerClass.RANGER;
+		sendToServer(message);
+
+		LobbyMessage.ReadyStatusMessage readyMsg = new LobbyMessage.ReadyStatusMessage();
+		readyMsg.ready = true;
+		sendToServer(readyMsg);
 	}
 
 	/**

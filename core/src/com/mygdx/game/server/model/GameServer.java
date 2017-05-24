@@ -250,14 +250,13 @@ public class GameServer implements Runnable {
 				Player player = (Player) entity;
 				sendTo(entInitMsg, player.connectionUid);
 				entInitMsg.isLocalPlayer = false;
-				sendToAllExcept(entInitMsg, player.connectionUid);
+				sendToAllExcept(entInitMsg, player .connectionUid);
 				sendToAllExcept(initialAnimMsg, player.connectionUid);
 
 			} else {
 				sendToAll(entInitMsg);
 				sendToAll(initialAnimMsg);
 			}
-
 		}
 	}
 
