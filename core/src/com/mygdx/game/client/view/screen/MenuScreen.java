@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.client.model.GameClient;
@@ -66,7 +67,9 @@ public class MenuScreen extends DebuggableScreen {
 		
 		//The following creates the ui for the MenuScreen, as well as, decides what happens when the host and join buttons are clicked
 		final Label topPane = new Label("Select a Server option", skin);
-		final HorizontalGroup botPane = new HorizontalGroup();
+		final HorizontalGroup serverOptions = new HorizontalGroup();
+		final HorizontalGroup testingOptions = new HorizontalGroup();
+		final VerticalGroup botPane = new VerticalGroup();
 		final TextButton hostButton = new TextButton("Host Server", skin, "default");
 		hostButton.addListener(new ClickListener(){
 			@Override
@@ -151,8 +154,61 @@ public class MenuScreen extends DebuggableScreen {
 				stage.addActor(diagBox);
             }
 		});
-		botPane.addActor(hostButton);
-		botPane.addActor(joinButton);
+		serverOptions.addActor(hostButton);
+		serverOptions.addActor(joinButton);
+		
+		
+		/*
+		 * TODO: Remove the quickOptions horizontalGroup and get rid of the following two buttons
+		 * This is meant to quicken testing.
+		 */
+		
+		final TextButton quickHostButton = new TextButton("Quick Host Server", skin, "default");
+		quickHostButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				try {
+					game.hostServer(1111, "Host");
+				} catch (AlreadyConnectedException e){
+					System.out.println("Neo, you're already in the Matrix");
+				} catch (ServerAlreadyInitializedException e) {
+					console.log(e.getMessage());
+				} catch (IOException e) {
+					console.log(e.getMessage());
+				}
+				
+				if (game.isConnected()) {
+					game.showLobbyScreen();
+				}
+			}
+		});
+		
+		final TextButton quickJoinButton = new TextButton("Quick Join Server", skin, "default");
+		quickJoinButton.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				try {
+					game.connect("localhost", 1111, "Player1");
+				} catch (AlreadyConnectedException e) {
+					console.log(e.getMessage());
+				} catch (NumberFormatException e) {
+					console.log(e.getMessage());
+				} catch (IOException e) {
+					console.log(e.getMessage());
+				}
+				
+				if (game.isConnected()) {
+					game.showLobbyScreen();
+				}
+			}
+		});
+		
+		testingOptions.addActor(quickHostButton);
+		testingOptions.addActor(quickJoinButton);
+		
+		botPane.addActor(serverOptions);
+		botPane.addActor(testingOptions);
+		
 		
 		TextButton resetKeybinds = new TextButton("Reset keybinds", skin);
 		resetKeybinds.addListener(new ClickListener() {
@@ -161,7 +217,7 @@ public class MenuScreen extends DebuggableScreen {
 				game.getKeybinds().reset();
 			}
 		});
-		botPane.addActor(resetKeybinds);
+		serverOptions.addActor(resetKeybinds);
 		
 		final SplitPane pane = new SplitPane(topPane, botPane, true, skin);
 		pane.setFillParent(true);
