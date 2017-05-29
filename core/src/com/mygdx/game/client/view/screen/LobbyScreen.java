@@ -66,8 +66,6 @@ public class LobbyScreen extends DebuggableScreen {
 		});
 		log = new Table(skin);
 		chat = new ScrollPane(log, skin);
-
-		updateChat();
 		
 		VerticalGroup lobbyOptions = new VerticalGroup();
 		HorizontalGroup serverOptions = new HorizontalGroup();
@@ -120,14 +118,18 @@ public class LobbyScreen extends DebuggableScreen {
 		lobby.add(playersTable);
 		lobby.add(lobbyOptions).height(Gdx.graphics.getHeight() * .4f).fill();
 		lobby.row();
-		lobby.add(chat).height(Value.percentHeight(.40f, lobby)).align(Align.left).colspan(2).expandX();
+		lobby.add(chat).height(Value.percentHeight(.40f, lobby)).align(Align.left).colspan(2).expandX().bottom();
 		lobby.row().fill();
 		lobby.add(chatField).height(Gdx.graphics.getHeight() * .2f).width(Gdx.graphics.getWidth()).colspan(2);
 		lobby.setFillParent(true);
 		lobby.setWidth(Gdx.graphics.getWidth());
 		lobby.setHeight(Gdx.graphics.getHeight());
 		
+		chat.layout();
+		chat.setClamp(false);
+		
 		stage.addActor(lobby);
+		updateUI();
 		
 	}
 
@@ -153,13 +155,13 @@ public class LobbyScreen extends DebuggableScreen {
 	@Override
 	public void updateUI() {
 		updatePlayers();
-		//updateChat();
+		updateChat();
 		isLobbyReady();
 	}
 	
 	public void updatePlayers() {
 		ListIterator<ClientLobbyPlayer> playerIterator = lobbyManager.getLobbyPlayers().listIterator();
-		
+		System.out.println("This plays");
 		ClientLobbyPlayer currentPlayer;
 		int counter = 0;
 		while (playerIterator.hasNext()) {
@@ -185,7 +187,9 @@ public class LobbyScreen extends DebuggableScreen {
 			log.row();
 		}
 		log.row();
-		chat.scrollTo(0, 0, 800, 50);
+		chat.layout(); 
+		chat.scrollTo(chat.getX(), chat.getY(), chat.getWidth(), chat.getHeight());
+		chat.updateVisualScroll();
 	}
 	
 	public void sendMessage() {
