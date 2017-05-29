@@ -71,10 +71,13 @@ public class ServerTmxLoader {
 		// need this value to convert the Tiled y values (y axis pointing
 		// down) to in-game y values (y axis pointing up)
 		float mapHeight = root.getFloat("height") * tileHeight;
+		float mapWidth = root.getFloat("width") * tileHeight;
 
 		// TODO: trim .tmx from mapName
 		mapName = fileName;
 		map = new GameMap(mapName);
+		map.height = mapHeight;
+		map.width = mapWidth;
 		tiles = new HashMap<Integer, Tile>();
 
 		loadTileSets(root);

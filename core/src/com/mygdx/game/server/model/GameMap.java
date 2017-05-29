@@ -36,6 +36,8 @@ public class GameMap {
 	private ArrayList<Boundary> boundaries;
 	private ArrayList<CollideablePolygon> solidObjects;
 	protected Rectangle playerSpawn; // where the players spawn
+	public float height; // height in pixels
+	public float width; // width in pixels
 
 	public MagePlayer magePlayer;
 	public RangerPlayer rangerPlayer;

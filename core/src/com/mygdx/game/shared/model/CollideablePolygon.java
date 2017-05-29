@@ -5,11 +5,14 @@ import java.util.List;
 
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.ShortArray;
+import com.mygdx.game.client.model.entity.MapEntity;
+import com.mygdx.game.client.model.entity.DynamicEntity;
+import com.mygdx.game.server.model.entity.Entity;
+import com.mygdx.game.server.model.entity.enemy.Highwayman;
 
 /**
  * A Polygon which can detect collision with other polygons. For collision
- * detection to work, a CollideablePolygon must be convex and the vertices must
- * be specified in counter-clockwise order.
+ * detection and rendering order to work, the vertices must be specified in clockwise order.
  * <p>
  * collision check works in these steps:
  * - see if polygons are close
@@ -82,8 +85,6 @@ public class CollideablePolygon extends Polygon {
 		if (vertices != null) {
 			setVertices(vertices);
 		}
-
-		calcCutoffY();
 	}
 
 	/**
@@ -99,6 +100,7 @@ public class CollideablePolygon extends Polygon {
 			triangleVertices.clear();
 			triangleVertices.addAll(triangulator.computeTriangles(getTransformedVertices()));
 		}
+		calcCutoffY();
 	}
 
 	/**
@@ -171,6 +173,9 @@ public class CollideablePolygon extends Polygon {
 	 * @return
 	 */
 	private void calcCutoffY() {
+		if (this instanceof DynamicEntity) {
+			System.out.println("calculating cutoffY for " + ((DynamicEntity) this).getUid());
+		}
 		float[] vertices = getVertices();
 		boolean crossProductPositive;
 		float highestNookY = 0; // aka the cutoffY
@@ -183,21 +188,47 @@ public class CollideablePolygon extends Polygon {
 		 * Nook points will have negative cross product, non-nooks will have
 		 * positive. If the polygon wrapping (order points are specified) is
 		 * reversed, the opposite will be true.
+		 *
+		 * Set the cutOffY to the y position of the highest nook if any nooks exist
+		 * else (if the polygon is concave) set the cutOffY to the y position of the lowest corner of the hitbox
+		 *
+		 * The cutoffY is used for deciding which entities in a layer should be rendered first (rendering order).
 		 */
+		boolean foundNook = false;
+		float lowestY = 99999999;
 		for (int i = 0; i < vertices.length; i += 2) {
 
 			Vector2 vectorOne = new Vector2(vertices[wrapIndex(i + 2, vertices.length)] - vertices[i], vertices[wrapIndex(i + 3, vertices.length)] - vertices[i + 1]);
 			Vector2 vectorTwo = new Vector2(vertices[wrapIndex(i + 4, vertices.length)] - vertices[wrapIndex(i + 2, vertices.length)], vertices[wrapIndex(i + 5, vertices.length)] - vertices[wrapIndex(i + 3, vertices.length)]);
 			crossProductPositive = vectorOne.crs(vectorTwo) > 0;
 
-			if (!crossProductPositive) { // found nook
-				float nookY = vertices[wrapIndex(i + 3, vertices.length)];
-				if (nookY > highestNookY) {
-					highestNookY = nookY;
-				}
+			if (0 == i) {
+				lowestY = Math.min(vertices[i + 1], vertices[i + 3]);
+			} else {
+				lowestY = Math.min(lowestY, vertices[wrapIndex(i + 1, vertices.length)]);
+				lowestY = Math.min(lowestY, vertices[wrapIndex(i + 3, vertices.length)]);
 			}
+
+			if (crossProductPositive) { // found nook
+				float nookY = vertices[wrapIndex(i + 3, vertices.length)];
+				if (this instanceof DynamicEntity) {
+					System.out.println("evaluuating negative cross product at y " + nookY + " for " + ((DynamicEntity) this).getUid());
+				}
+				if (nookY > highestNookY || !foundNook) {
+					highestNookY = nookY;
+					if (this instanceof DynamicEntity) {
+						System.out.println("found a new highest nook at y " + highestNookY + " for " + ((DynamicEntity) this).getUid());
+					}
+				}
+				foundNook = true;
+			}
+
+
 		}
 		cutoffY = highestNookY;
+		if (!foundNook) {
+			cutoffY = lowestY;
+		}
 	}
 
 

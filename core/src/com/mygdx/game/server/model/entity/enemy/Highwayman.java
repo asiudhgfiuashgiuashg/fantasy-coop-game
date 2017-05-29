@@ -12,7 +12,7 @@ import com.mygdx.game.shared.model.CollideablePolygon;
  */
 public class Highwayman extends Enemy {
 
-	private float[] hitbox = {16, 8, 16, 17, 36, 16, 36, 9};
+	private float[] hitbox = {16, 8, 16, 17, 36, 17, 36, 8};
 	private final static float MASS = 1f; // affects movement
 	private boolean dying; // whether the death sequence has begun (happens when health falls below zero)
 	private long dyingStartTime; // when the death sequence was begun
