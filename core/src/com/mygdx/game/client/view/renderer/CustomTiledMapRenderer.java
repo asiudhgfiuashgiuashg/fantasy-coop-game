@@ -213,23 +213,27 @@ public class CustomTiledMapRenderer extends OrthogonalTiledMapRenderer {
 	 */
 	private void debugDrawCollideablePolygon(CollideablePolygon entity) {
 		if (entity.getTransformedVertices().length > 6) { // don't try to draw if there aren't enough points to draw
-			shapeRenderer.setColor(Color.FIREBRICK);
-			shapeRenderer.polygon(entity.getTransformedVertices());
-
+			// draw triangulated hitbox
 			shapeRenderer.setColor(Color.YELLOW);
 			for (float[] triangle : entity.getTriangles()) {
 				shapeRenderer.polygon(triangle);
 			}
 
+			shapeRenderer.setColor(Color.FIREBRICK);
+			// draw hitbox
+			shapeRenderer.polygon(entity.getTransformedVertices());
+
+			// draw a circle at x, y pos of polygon
+			shapeRenderer.setColor(Color.CORAL);
+			shapeRenderer.circle(entity.getX(), entity.getY(), 1);
+
 			// draw a line representing the cutoffy
 			Rectangle boundingRect = entity.getBoundingRectangle(); // used
 			// to draw ycuttoff line
 			shapeRenderer.setColor(Color.GREEN);
-			shapeRenderer.line(boundingRect.getX(), entity.getTransformedCutoffY(), boundingRect.getX() + boundingRect.getWidth(), entity.getTransformedCutoffY());
+			float length = boundingRect.getWidth() * 2;
+			shapeRenderer.line(boundingRect.getX() - length / 2, entity.getTransformedCutoffY(), boundingRect.getX() + length, entity.getTransformedCutoffY());
 			shapeRenderer.setColor(Color.BLUE);
-			shapeRenderer.rect(boundingRect.x, boundingRect.y, boundingRect.width, boundingRect.height);
-			shapeRenderer.setColor(Color.CORAL);
-			shapeRenderer.circle(entity.getX(), entity.getY(), 1);
 		}
 
 	}

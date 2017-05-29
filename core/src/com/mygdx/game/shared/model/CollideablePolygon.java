@@ -173,9 +173,6 @@ public class CollideablePolygon extends Polygon {
 	 * @return
 	 */
 	private void calcCutoffY() {
-		if (this instanceof DynamicEntity) {
-			System.out.println("calculating cutoffY for " + ((DynamicEntity) this).getUid());
-		}
 		float[] vertices = getVertices();
 		boolean crossProductPositive;
 		float highestNookY = 0; // aka the cutoffY
@@ -211,14 +208,10 @@ public class CollideablePolygon extends Polygon {
 
 			if (crossProductPositive) { // found nook
 				float nookY = vertices[wrapIndex(i + 3, vertices.length)];
-				if (this instanceof DynamicEntity) {
-					System.out.println("evaluuating negative cross product at y " + nookY + " for " + ((DynamicEntity) this).getUid());
-				}
+
 				if (nookY > highestNookY || !foundNook) {
 					highestNookY = nookY;
-					if (this instanceof DynamicEntity) {
-						System.out.println("found a new highest nook at y " + highestNookY + " for " + ((DynamicEntity) this).getUid());
-					}
+
 				}
 				foundNook = true;
 			}
