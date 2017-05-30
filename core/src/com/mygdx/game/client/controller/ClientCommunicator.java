@@ -166,6 +166,9 @@ public class ClientCommunicator extends Communicator {
 
 					DynamicEntity entity = gameClient.getMap().getDynamicEntityByUid(animationUpdateMessage.entityUID);
 					if (animationUpdateMessage.animationName != null) {
+						if (animationUpdateMessage.playMode == null) {
+							System.out.println("NULL playmode for " + entity.getUid());
+						}
 						entity.setAnimation(animationUpdateMessage.animationName, animationUpdateMessage.frameDuration, animationUpdateMessage.playMode);
 					}
 				} else if (msg instanceof GameMessage.HitboxUpdateMessage) {

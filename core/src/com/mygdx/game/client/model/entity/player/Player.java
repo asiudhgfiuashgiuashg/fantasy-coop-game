@@ -130,25 +130,34 @@ public abstract class Player extends DynamicEntity {
 	 * Set animation and send the animation name to server (used for local player)
 	 * @param animName
 	 */
-	public void setAnimationWithUpdate(String animName, float frameDuration) {
-		setAnimation(animName, frameDuration, Animation.PlayMode.LOOP);
+	public void setAnimationWithUpdate(String animName, float frameDuration, Animation.PlayMode playMode) {
+		setAnimation(animName, frameDuration, playMode);
 		sendAnimationUpdate();
+	}
+
+	public void setAnimationWithUpdate(String animName, float frameDuration) {
+		setAnimationWithUpdate(animName, frameDuration, Animation.PlayMode.LOOP);
 	}
 
 	/**
 	 * SetAnimationWithUpdate() only if not on that animation already
 	 * @param animName
 	 */
-	protected void setAnimationIfNotSet(String animName, float frameDuration) {
+	protected void setAnimationIfNotSet(String animName, float frameDuration, Animation.PlayMode playMode) {
 		if (!animName.equals(getAnimationName())) {
-			setAnimationWithUpdate(animName, frameDuration);
+			setAnimationWithUpdate(animName, frameDuration, playMode);
 		}
+	}
+
+	protected void setAnimationIfNotSet(String animName, float frameDuration) {
+		setAnimationIfNotSet(animName, frameDuration, Animation.PlayMode.LOOP);
 	}
 
 	protected void sendAnimationUpdate() {
 		GameMessage.AnimationUpdateMessage animMsg = new GameMessage.AnimationUpdateMessage();
 		animMsg.animationName = getAnimationName();
 		animMsg.frameDuration = getAnimation().getFrameDuration();
+		animMsg.playMode = getAnimation().getPlayMode();
 		GameClient.getInstance().sendToServer(animMsg);
 	}
 

@@ -161,7 +161,6 @@ public class LobbyScreen extends DebuggableScreen {
 	
 	public void updatePlayers() {
 		ListIterator<ClientLobbyPlayer> playerIterator = lobbyManager.getLobbyPlayers().listIterator();
-		System.out.println("This plays");
 		ClientLobbyPlayer currentPlayer;
 		int counter = 0;
 		while (playerIterator.hasNext()) {
