@@ -11,6 +11,8 @@ import com.mygdx.game.shared.model.PreferencesConstants;
 /**
  * Maintains a map of key codes to user input actions (move, cast spell, attacking
  * etc.)
+ * To add new keybinds, you must add a static value at the top, an enum value at the 
+ * bottom, a value in the initilizeBinds method, and another one in the reset
  * 
  * @author Sawyer Harris
  *
@@ -21,6 +23,7 @@ public class Keybinds {
 	private static final int DEFAULT_DOWN = Keys.S;
 	private static final int DEFAULT_RIGHT = Keys.D;
 	private static final int DEFAULT_ATTACK = Keys.SPACE;
+	private static final int DEFAULT_INTERACT = Keys.F;
 
 	private HashMap<Integer, Input> map;
 	private Preferences prefs;
@@ -80,6 +83,7 @@ public class Keybinds {
 		set(Input.DOWN, DEFAULT_DOWN);
 		set(Input.RIGHT, DEFAULT_RIGHT);
 		set(Input.ATTACK, DEFAULT_ATTACK);
+		set(Input.INTERACT, DEFAULT_INTERACT);
 		flush();
 	}
 
@@ -98,6 +102,9 @@ public class Keybinds {
 		if (prefs.getInteger(Input.ATTACK.toString()) == 0) {
 			set(Input.ATTACK, DEFAULT_ATTACK);
 		}
+		if (prefs.getInteger(Input.INTERACT.toString()) == 0) {
+			set(Input.INTERACT, DEFAULT_INTERACT);
+		}
 		flush();
 	}
 
@@ -108,6 +115,6 @@ public class Keybinds {
 	 *
 	 */
 	public enum Input {
-		UP, LEFT, DOWN, RIGHT, ATTACK, SPELL1, SPELL2, SPELL3, SPELL4, POTION
+		UP, LEFT, DOWN, RIGHT, ATTACK, INTERACT, SPELL1, SPELL2, SPELL3, SPELL4, POTION
 	}
 }

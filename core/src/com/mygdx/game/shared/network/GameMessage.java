@@ -55,7 +55,7 @@ public class GameMessage extends Message {
 		public int maxHealth;
 		public boolean hasHealth; // whether the client should care about the health of this thing
 	}
-
+	
 	public static class HealthUpdateMsg extends GameMessage {
 		public int health; // new health
 		public String entUid; // unique entity identifier

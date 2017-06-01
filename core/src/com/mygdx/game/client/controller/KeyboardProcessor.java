@@ -30,6 +30,8 @@ public class KeyboardProcessor extends InputAdapter {
 				localPlayer.right = true;
 			} else if (input == Input.ATTACK) {
 				localPlayer.setAttack(true);
+			} else if (input == Input.INTERACT) {
+				localPlayer.interact();
 			}
 		}
 

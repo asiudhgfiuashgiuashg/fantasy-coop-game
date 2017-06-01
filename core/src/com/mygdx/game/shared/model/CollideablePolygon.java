@@ -69,6 +69,7 @@ public class CollideablePolygon extends Polygon {
 
 	// list of triangles resulting from triangulation (used for collision checking)
 	private List<float[]> triangles;
+	
 
 
 	/**
@@ -222,6 +223,20 @@ public class CollideablePolygon extends Polygon {
 		if (!foundNook) {
 			cutoffY = lowestY;
 		}
+	}
+	
+	/**
+	 * 
+	 * Calculates the distance between two different CollideablePolygons.
+	 * This method uses the center of the CollideablePolygon as its point of reference.
+	 *
+	 * @param other
+	 * @return
+	 */
+	public float calcDistance(CollideablePolygon other) {
+		Vector2 temp1 = new Vector2(this.getBoundingRectangle().getWidth()/2.0f, this.getBoundingRectangle().getHeight()/2.0f);
+		Vector2 temp2 = new Vector2(other.getBoundingRectangle().getWidth()/2.0f, other.getBoundingRectangle().getHeight()/2.0f);
+		return temp1.dst(temp2);
 	}
 
 
@@ -426,6 +441,7 @@ public class CollideablePolygon extends Polygon {
 	public void setMass(float mass) {
 		this.mass = mass;
 	}
+	
 
 	/**
 	 * Returns a copy of the entity's velocity vector
@@ -464,5 +480,6 @@ public class CollideablePolygon extends Polygon {
 	public void setNetForce(Vector2 netForce) {
 		this.netForce = netForce;
 	}
+
 
 }
