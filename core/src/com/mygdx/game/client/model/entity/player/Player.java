@@ -171,8 +171,28 @@ public abstract class Player extends DynamicEntity {
 	public void setAttack(boolean attack) {
 		attacking = attack;
 	}
-	
+
+	/**
+	 * Finds the closest Dynamic Entity  and tells the server what the player is interacting with so the server can tell the interaction target it's being interacted with
+	 */
 	public void interact() {
+		DynamicEntity closestEntity = getClosestEntity();
+		
+		if(closestEntity != null) {
+			//System.out.println("You are interacting with: " + closestEntity.getUid());
+			GameMessage.InteractionMsg intMsg = new GameMessage.InteractionMsg();
+			intMsg.entityUID = closestEntity.getUid();
+			GameClient.getInstance().sendToServer(intMsg);
+		} else {
+			//System.out.println("What'chu doin!? There ain't nothin here, foo!");
+		}
+	}
+
+	/**
+	 * Helper method for interaction with other Dynamic Entities by the local player
+	 * @return null if no dynamic entity close enough, closest dynamic entity otherwise
+	 */
+	private DynamicEntity getClosestEntity() {
 		ClientTiledMap map = GameClient.getInstance().getMap();
 		DynamicEntity closestEntity = null;
 		float closestDistance = 0f;
@@ -193,12 +213,7 @@ public abstract class Player extends DynamicEntity {
 				}
 			}
 		}
-		
-		if(closestEntity != null) {
-			System.out.println("You are interacting with: " + closestEntity.getClass());
-		} else {
-			System.out.println("What'chu doin!? There ain't nothin here, foo!");
-		}
+		return closestEntity;
 	}
 
 }

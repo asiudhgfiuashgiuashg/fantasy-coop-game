@@ -2,13 +2,15 @@ package com.mygdx.game.shared.network;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.shared.model.DialogueLine;
 import com.mygdx.game.shared.model.EntityLight;
 
 import java.util.List;
 
 public class GameMessage extends Message {
+	public String entityUID; // many messages use this field to identify the target of the message
+
 	public static class PosUpdateMessage extends GameMessage {
-		public String entityUID;
 		public Vector2 position;
 		public int visLayer;
 		public Vector2 velocity;
@@ -16,7 +18,6 @@ public class GameMessage extends Message {
 
 	public static class AnimationUpdateMessage extends GameMessage {
 		public String animationName;
-		public String entityUID;
 		public float frameDuration;
 		public Animation.PlayMode playMode;
 	}
@@ -41,7 +42,6 @@ public class GameMessage extends Message {
 	public static class InitDynamicEntityMsg extends GameMessage {
 		public String className;
 		public Vector2 pos;
-		public String entUid;
 		public boolean solid;
 		public float[] vertices;
 		public int visLayer;
@@ -58,17 +58,25 @@ public class GameMessage extends Message {
 	
 	public static class HealthUpdateMsg extends GameMessage {
 		public int health; // new health
-		public String entUid; // unique entity identifier
 	}
 
 	public static class HitboxUpdateMessage extends GameMessage {
-		public String entityUID;
 		public float[] vertices;
 	}
 
 	// tell the client to remove a dynamic entity from the game
 	public static class RemoveDynamicEntityMsg extends GameMessage {
-		public String entityUID;
+
+	}
+
+	// tells the server that a client has interacted with a dynamic entity
+	public static class InteractionMsg extends GameMessage {
+
+	}
+
+	// used to tell the client that an NPC is saying something that should be displayed.
+	public static class SayMsg extends GameMessage {
+		public DialogueLine dialogueLine;
 	}
 
 	// and many more to come! These are just some examples

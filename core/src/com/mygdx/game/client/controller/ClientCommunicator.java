@@ -9,7 +9,6 @@ import com.esotericsoftware.kryonet.Listener;
 import com.mygdx.game.client.model.ClientGameState;
 import com.mygdx.game.client.model.GameClient;
 import com.mygdx.game.client.model.entity.DynamicEntity;
-import com.mygdx.game.client.model.entity.MapEntity;
 import com.mygdx.game.client.model.entity.player.MagePlayer;
 import com.mygdx.game.client.model.entity.player.Player;
 import com.mygdx.game.client.model.entity.player.RangerPlayer;
@@ -20,7 +19,6 @@ import com.mygdx.game.client.model.lobby.ClientLobbyPlayer;
 import com.mygdx.game.server.model.GameServer;
 import com.mygdx.game.server.model.exceptions.ServerAlreadyInitializedException;
 import com.mygdx.game.shared.controller.Communicator;
-import com.mygdx.game.shared.model.CollideablePolygon;
 import com.mygdx.game.shared.network.GameMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChatMessage;
 import com.mygdx.game.shared.network.LobbyMessage.ChooseUsernameMessage;
@@ -120,17 +118,17 @@ public class ClientCommunicator extends Communicator {
 						String className = initMsg.className;
 						Player player;
 						if (className.equals("RangerPlayer")) {
-							player = new RangerPlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+							player = new RangerPlayer(initMsg.entityUID, initMsg.className, initMsg.pos, 0);
 						} else if (className.equals("MagePlayer")) {
-							player = new MagePlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+							player = new MagePlayer(initMsg.entityUID, initMsg.className, initMsg.pos, 0);
 						} else { // "SHIELDPLAYER"
-							player = new ShieldPlayer(initMsg.entUid, initMsg.className, initMsg.pos, 0);
+							player = new ShieldPlayer(initMsg.entityUID, initMsg.className, initMsg.pos, 0);
 						}
 						player.setVertices(initMsg.vertices);
 						gameClient.addLocalPlayer(player);
 						entity = player;
 					} else {
-						DynamicEntity newEntity = new DynamicEntity(initMsg.entUid, initMsg.className, initMsg.pos, initMsg.visLayer);
+						DynamicEntity newEntity = new DynamicEntity(initMsg.entityUID, initMsg.className, initMsg.pos, initMsg.visLayer);
 						newEntity.setVertices(initMsg.vertices);
 						newEntity.setMass(initMsg.mass);
 						if (initMsg.solid) {
@@ -178,11 +176,14 @@ public class ClientCommunicator extends Communicator {
 					entity.setPosition(entity.getPos());
 				} else if (msg instanceof GameMessage.HealthUpdateMsg) {
 					GameMessage.HealthUpdateMsg healthMsg = (GameMessage.HealthUpdateMsg) msg;
-					DynamicEntity toUpdate = gameClient.getMap().getDynamicEntityByUid(healthMsg.entUid);
+					DynamicEntity toUpdate = gameClient.getMap().getDynamicEntityByUid(healthMsg.entityUID);
 					toUpdate.setHealth(healthMsg.health);
 				} else if (msg instanceof GameMessage.RemoveDynamicEntityMsg) {
 					GameMessage.RemoveDynamicEntityMsg removeMsg = (GameMessage.RemoveDynamicEntityMsg) msg;
 					GameClient.getInstance().getMap().removeDynamicEntityByUid(removeMsg.entityUID);
+				} else if (msg instanceof GameMessage.SayMsg) {
+					GameMessage.SayMsg sayMsg = (GameMessage.SayMsg) msg;
+					System.out.println("got say msg from " + sayMsg.entityUID + " saying " + sayMsg.dialogueLine.msg);
 				} else {
 					System.out.println("unhandled network message of type " + msg.getClass());
 				}

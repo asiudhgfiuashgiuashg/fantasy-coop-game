@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.mygdx.game.server.model.GameMap;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.server.model.entity.DynamicEntity;
 import com.mygdx.game.server.model.entity.player.Player;
 import com.mygdx.game.server.model.lobby.ServerLobbyManager;
 import com.mygdx.game.server.model.lobby.ServerLobbyPlayer;
@@ -211,6 +212,17 @@ public class ServerCommunicator extends Communicator {
 				GameMap map = GameServer.getInstance().getMap();
 				Player player = getPlayerMatchingConnectionUid(cUid, map);
 				player.attack(atkMsg.destination);
+			}
+
+			if (msg instanceof GameMessage.InteractionMsg) {
+				GameMessage.InteractionMsg intMsg = (GameMessage.InteractionMsg) msg;
+				DynamicEntity target = GameServer.getInstance().getMap().getDynamicEntityByUid(intMsg.entityUID);
+				int cUid = msg.uid; // the connection uid of the player who interacted with something
+				GameMap map = GameServer.getInstance().getMap();
+				Player player = getPlayerMatchingConnectionUid(cUid, map);
+				if (target != null) {
+					target.onInteractionFrom(player);
+				}
 			}
 		}
 	}

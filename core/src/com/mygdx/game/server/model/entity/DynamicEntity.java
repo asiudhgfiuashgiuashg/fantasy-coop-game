@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.server.model.Actable;
 import com.mygdx.game.server.model.GameServer;
+import com.mygdx.game.server.model.entity.player.Player;
 import com.mygdx.game.shared.model.EntityLight;
 import com.mygdx.game.shared.network.GameMessage;
 
@@ -129,7 +130,7 @@ public abstract class DynamicEntity extends Entity implements Actable {
 	public void setHealth(int health) {
 		this.health = MathUtils.clamp(health, 0, getMaxHealth());
 		GameMessage.HealthUpdateMsg healthMsg = new GameMessage.HealthUpdateMsg();
-		healthMsg.entUid = getUid();
+		healthMsg.entityUID = getUid();
 		healthMsg.health = health;
 		GameServer.getInstance().sendToAll(healthMsg);
 	}
@@ -148,5 +149,13 @@ public abstract class DynamicEntity extends Entity implements Actable {
 
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+
+	/**
+	 * Called when a player chooses to interact with this dynamic entity.
+	 * @param player the player who is interacting with this dynamic entity.
+	 */
+	public void onInteractionFrom(Player player) {
+		//System.out.println("received interaction from " + player.getUid());
 	}
 }

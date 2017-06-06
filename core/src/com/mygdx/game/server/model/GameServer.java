@@ -267,7 +267,7 @@ public class GameServer implements Runnable {
 				.InitDynamicEntityMsg();
 		entInitMsg.className = entity.getClass().getSimpleName();
 		entInitMsg.pos = entity.getPosition();
-		entInitMsg.entUid = entity.getUid();
+		entInitMsg.entityUID = entity.getUid();
 		entInitMsg.vertices = entity.getVertices();
 		entInitMsg.visLayer = entity.getVisLayer();
 		entInitMsg.mass = entity.getMass();

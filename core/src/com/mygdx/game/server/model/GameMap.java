@@ -156,4 +156,18 @@ public class GameMap {
 		removeMsg.entityUID = entity.getUid();
 		GameServer.getInstance().sendToAll(removeMsg);
 	}
+
+	/**
+	 * Used for interaction with a dynamic entity by client.
+	 * The client gives the server the uid of the entity it wants to interact with.
+	 * @return The Dynamic Entity whose uid matches the requested Uid, null if it doesn't exist.
+	 */
+	public DynamicEntity getDynamicEntityByUid(String uid) {
+		for (DynamicEntity entity: dynamicEntities) {
+			if (entity.getUid().equalsIgnoreCase(uid)) {
+				return entity;
+			}
+		}
+		return null;
+	}
 }
