@@ -446,4 +446,8 @@ public class GameClient extends Game {
 	public RayHandler getRayHandler() {
 		return rayHandler;
 	}
+
+	public GameScreen getGameScreen() {
+		return gameScreen;
+	}
 }

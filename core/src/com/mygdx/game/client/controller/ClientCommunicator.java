@@ -183,7 +183,7 @@ public class ClientCommunicator extends Communicator {
 					GameClient.getInstance().getMap().removeDynamicEntityByUid(removeMsg.entityUID);
 				} else if (msg instanceof GameMessage.SayMsg) {
 					GameMessage.SayMsg sayMsg = (GameMessage.SayMsg) msg;
-					System.out.println("got say msg from " + sayMsg.entityUID + " saying " + sayMsg.dialogueLine.msg);
+					GameClient.getInstance().getGameScreen().displayDialogue(sayMsg.dialogueLine);
 				} else {
 					System.out.println("unhandled network message of type " + msg.getClass());
 				}
